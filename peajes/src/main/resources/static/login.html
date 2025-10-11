@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Login Propietario</title>
+    <link rel="stylesheet" href="/login.css" />
+    <script src="vistaWeb.js"></script>
+  </head>
+  <body>
+    <script src="utilesVista.js"></script>
+    <main class="login-container">
+      <form action="/accesopropietario/login" method="post" class="login-card" autocomplete="off">
+        <h1>Ingreso Propietario</h1>
+
+        <label for="cedula">Cédula</label>
+        <input id="cedula" name="cedula" type="text" placeholder="Ingrese su cédula" required />
+
+        <label for="contrasena">Contraseña</label>
+        <input id="contrasena" name="contrasena" type="password" placeholder="Ingrese su contraseña" required />
+
+        <div class="actions">
+          <button type="submit">Ingresar</button>
+        </div>
+
+        <p id="message" class="message" aria-live="polite"></p>
+      </form>
+    </main>
+
+  </body>
+
+  <script>
+    async function mostrar_error(mensaje) {
+      await mostrarMensaje(mensaje);
+    }
+
+  </script>
+
+</html>
