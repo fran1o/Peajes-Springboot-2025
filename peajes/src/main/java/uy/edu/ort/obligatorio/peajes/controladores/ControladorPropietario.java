@@ -25,9 +25,7 @@ public class ControladorPropietario {
             return Respuesta.lista(new Respuesta("error", "Credenciales invalidas"));
         }
 
-        return Respuesta.lista(new Respuesta("OK", "homePropietario.html"));
-
-        
+        return Respuesta.lista(new Respuesta("loginExitoso", "homePropietario.html"));
     }
 
 }
