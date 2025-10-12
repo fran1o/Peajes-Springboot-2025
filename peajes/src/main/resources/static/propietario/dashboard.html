@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tablero de Control del Propietario</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f7fa;
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: linear-gradient(135deg, #2c3e50, #4a6491);
+            color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        h1 {
+            font-size: 2.2rem;
+            margin-bottom: 10px;
+        }
+        
+        h2 {
+            font-size: 1.6rem;
+            margin: 25px 0 15px;
+            color: #2c3e50;
+            border-bottom: 2px solid #eaeaea;
+            padding-bottom: 8px;
+        }
+        
+        h3 {
+            font-size: 1.3rem;
+            margin: 20px 0 10px;
+            color: #3498db;
+        }
+        
+        .summary-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        
+        .summary-table th {
+            background-color: #3498db;
+            color: white;
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+        }
+        
+        .summary-table td {
+            padding: 15px;
+            background-color: white;
+            border-bottom: 1px solid #eaeaea;
+        }
+        
+        .bonus-section {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        
+        .bonus-list {
+            list-style-type: none;
+            margin-bottom: 20px;
+        }
+        
+        .bonus-list li {
+            padding: 8px 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        
+        .bonus-list li:last-child {
+            border-bottom: none;
+        }
+        
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        
+        .data-table th {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px 10px;
+            text-align: left;
+            font-weight: 600;
+        }
+        
+        .data-table td {
+            padding: 12px 10px;
+            border-bottom: 1px solid #eaeaea;
+            background-color: white;
+        }
+        
+        .data-table tr:nth-child(even) td {
+            background-color: #f9f9f9;
+        }
+        
+        .data-table tr:hover td {
+            background-color: #f0f7ff;
+        }
+        
+        .notifications {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        
+        .notification-list {
+            list-style-type: none;
+        }
+        
+        .notification-list li {
+            padding: 12px 15px;
+            border-bottom: 1px solid #eaeaea;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .notification-list li:last-child {
+            border-bottom: none;
+        }
+        
+        .delete-btn {
+            background-color: #e74c3c;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background-color 0.3s;
+        }
+        
+        .delete-btn:hover {
+            background-color: #c0392b;
+        }
+        
+        .status-active {
+            color: #27ae60;
+            font-weight: 600;
+        }
+        
+        .balance {
+            color: #2c3e50;
+            font-weight: 700;
+            font-size: 1.1rem;
+        }
+        
+        .bonus-amount {
+            color: #e74c3c;
+            font-weight: 600;
+        }
+        
+        .paid-amount {
+            color: #27ae60;
+            font-weight: 600;
+        }
+        
+        @media (max-width: 768px) {
+            .data-table {
+                display: block;
+                overflow-x: auto;
+            }
+            
+            h1 {
+                font-size: 1.8rem;
+            }
+            
+            h2 {
+                font-size: 1.4rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Tablero de Control del Propietario</h1>
+        </header>
+        
+        <section>
+            <h2>Resumen del Propietario</h2>
+            <table class="summary-table">
+                <thead>
+                    <tr>
+                        <th>NOMBRE COMPLETO</th>
+                        <th>ESTADO</th>
+                        <th>SALDO ACTUAL</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Juan Pérez</td>
+                        <td class="status-active">Activo</td>
+                        <td class="balance">$ 2.540,00</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+        
+        <section class="bonus-section">
+            <h3>Bonificaciones Asignadas</h3>
+            <ul class="bonus-list">
+                <li>Bonificación</li>
+                <li>Puesto</li>
+                <li>Fecha asignada</li>
+            </ul>
+            
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Trabajador</th>
+                        <th>Peaje Norte</th>
+                        <th>2025-01-10</th>
+                        <th>2025-03-02</th>
+                        <th colspan="4">Vehículos Registrados</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td></td>
+                        <td>Peaje Centro</td>
+                        <td></td>
+                        <td></td>
+                        <td>Matrícula</td>
+                        <td>Modelo</td>
+                        <td>Color</td>
+                        <td>Tránsitos</td>
+                        <td>Monte Total</td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td>SAB1234</td>
+                        <td>Sedán</td>
+                        <td>Azul</td>
+                        <td>12</td>
+                        <td class="balance">$ 1.240,00</td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td>SCD5678</td>
+                        <td>SUV</td>
+                        <td>Gris</td>
+                        <td>8</td>
+                        <td class="balance">$ 980,00</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+        
+        <section>
+            <h2>Tránsitos Realizados</h2>
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Puesto</th>
+                        <th>Matrícula</th>
+                        <th>Categoría</th>
+                        <th>Monte Tarifa</th>
+                        <th>Bonificación</th>
+                        <th>Monte Bonificación</th>
+                        <th>Monte Pagado</th>
+                        <th>Fecha</th>
+                        <th>Hora</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Peaje Sur</td>
+                        <td>SAB1234</td>
+                        <td>Motocicleta</td>
+                        <td class="balance">$ 120,00</td>
+                        <td>Frecuente</td>
+                        <td class="bonus-amount">-$ 24,00</td>
+                        <td class="paid-amount">$ 96,00</td>
+                        <td>2025-09-19</td>
+                        <td>18:45</td>
+                    </tr>
+                    <tr>
+                        <td>Peaje Norte</td>
+                        <td>SCD5678</td>
+                        <td>Camión</td>
+                        <td class="balance">$ 180,00</td>
+                        <td>Trabajador</td>
+                        <td class="bonus-amount">-$ 36,00</td>
+                        <td class="paid-amount">$ 144,00</td>
+                        <td>2025-09-18</td>
+                        <td>08:22</td>
+                    </tr>
+                    <tr>
+                        <td>Peaje Centro</td>
+                        <td>SAB1234</td>
+                        <td>Motocicleta</td>
+                        <td class="balance">$ 120,00</td>
+                        <td>Frecuente</td>
+                        <td class="bonus-amount">-$ 24,00</td>
+                        <td class="paid-amount">$ 96,00</td>
+                        <td>2025-09-17</td>
+                        <td>19:05</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+        
+        <section class="notifications">
+            <h2>Notificaciones del Sistema</h2>
+            <ul class="notification-list">
+                <li>
+                    <span>Borrar notificaciones</span>
+                    <button class="delete-btn">Borrar</button>
+                </li>
+            </ul>
+        </section>
+    </div>
+</body>
+</html>
