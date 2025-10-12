@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Login Propietario</title>
+    <link rel="stylesheet" href="/login.css" />
+    <script src="vistaWeb.js"></script>
+  </head>
+  <body>
+    <script src="utilesVista.js"></script>
+    <main class="login-container">
+      <form id="formLogin" action="/accesopropietario/login" method="POST" class="login-card" autocomplete="off">
+        <h1>Ingreso Administrador</h1>
+
+        <label for="cedula">Cédula</label>
+        <input id="cedula" name="cedula" type="text" placeholder="Ingrese su cédula" required />
+
+        <label for="contrasena">Contraseña</label>
+        <input id="contrasena" name="contrasena" type="password" placeholder="Ingrese su contraseña" required />
+
+        <button type="submit">Ingresar</button>
+        
+        <p id="message" class="message" aria-live="polite"></p>
+      </form>
+    </main>
+
+  </body>
+
+  <script>
+
+    const formLogin = document.getElementById('formLogin');
+
+    formLogin.addEventListener('submit', function(e) {
+            e.preventDefault();
+            submit("/accesopropietario/login",serializarFormulario('formLogin'));
+          
+        });
+
+    async function mostrar_error(mensaje){
+            await mostrarMensaje(mensaje);
+        }
+
+    function mostrar_loginExitoso(url){  
+            window.location.href = url; 
+    }
+  </script>
+
+</html>

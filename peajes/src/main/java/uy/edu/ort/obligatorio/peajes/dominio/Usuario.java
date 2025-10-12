@@ -23,5 +23,6 @@ public abstract class Usuario {
     public String getContrasena() {
         return contrasena;
     }
+
     
 }

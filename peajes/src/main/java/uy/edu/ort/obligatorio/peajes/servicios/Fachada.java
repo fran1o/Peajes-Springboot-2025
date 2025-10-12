@@ -1,5 +1,6 @@
 package uy.edu.ort.obligatorio.peajes.servicios;
 
+import uy.edu.ort.obligatorio.peajes.dominio.Administrador;
 import uy.edu.ort.obligatorio.peajes.dominio.Usuario;
 
 public class Fachada {

@@ -3,15 +3,15 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Login Propietario</title>
+    <title>Login Administrador</title>
     <link rel="stylesheet" href="/login.css" />
     <script src="vistaWeb.js"></script>
   </head>
   <body>
     <script src="utilesVista.js"></script>
     <main class="login-container">
-      <form id="formLogin" action="/accesopropietario/login" method="POST" class="login-card" autocomplete="off">
-        <h1>Ingreso Propietario</h1>
+      <form id="formLogin" action="/accesoadmin/login" method="POST" class="login-card" autocomplete="off">
+        <h1>Ingreso Administrador</h1>
 
         <label for="cedula">Cédula</label>
         <input id="cedula" name="cedula" type="text" placeholder="Ingrese su cédula" required />
@@ -33,7 +33,7 @@
 
     formLogin.addEventListener('submit', function(e) {
             e.preventDefault();
-            submit("/accesopropietario/login",serializarFormulario('formLogin'));
+            submit("/accesoadmin/login",serializarFormulario('formLogin'));
           
         });
 
