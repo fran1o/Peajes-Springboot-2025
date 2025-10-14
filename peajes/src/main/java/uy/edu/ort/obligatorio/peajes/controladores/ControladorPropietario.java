@@ -16,13 +16,13 @@ import uy.edu.ort.obligatorio.peajes.utils.Respuesta;
 @RestController
 @RequestMapping("/propietario")
 public class ControladorPropietario {
-     
+     private Usuario usuarioLogueado = null;
 
 
     @PostMapping("/login")
     public List<Respuesta> login(@RequestParam String cedula, @RequestParam String contrasena) throws UsuarioException{
 
-        Usuario usuario = Fachada.getInstancia().login(cedula, contrasena);
+        usuarioLogueado = Fachada.getInstancia().login(cedula, contrasena);
         return Respuesta.lista(new Respuesta("loginExitoso", "homePropietario.html"));
         
     }
