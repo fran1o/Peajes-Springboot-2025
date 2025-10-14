@@ -16,6 +16,22 @@ public class Puesto {
         tarifas = new ArrayList<>();
         transitos = new ArrayList<>();
     }
+
+    public String getNombre() {
+        return nombre;
+    }
+
+    public String getDireccion() {
+        return direccion;
+    }
+
+    public List<Tarifa> getTarifas() {
+        return tarifas;
+    }
+    public List<Transito> getTransitos(){
+        return transitos;
+    }
+    
      
     
 }

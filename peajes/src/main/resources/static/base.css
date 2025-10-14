@@ -1,0 +1,52 @@
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 30px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.1);
+    overflow: hidden;
+}
+
+th, td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+    color: #333;
+}
+
+th {
+    background-color: #f1f1f1;
+    font-weight: 600;
+    user-select: none;
+}
+
+tbody tr:hover {
+    background-color: #f0f0f0;
+    cursor: pointer;
+}
+select {
+    padding: 10px;
+    font-size: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background-color: white;
+    color: #333;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    transition: border-color 0.3s ease;
+    outline: none;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+select:focus {
+    border-color: #0057b8;
+    box-shadow: 0 0 5px rgba(0, 87, 184, 0.5);
+}
+
+select:disabled {
+    background-color: #eee;
+    color: #999;
+    cursor: not-allowed;
+}

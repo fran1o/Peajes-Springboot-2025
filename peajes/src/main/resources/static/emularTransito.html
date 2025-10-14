@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Administrador</title>
+    <script src="vistaWeb.js"></script>
+    <link rel="stylesheet" href="base.css">
+    <link rel="stylesheet" href="emularTransito.css">
+</head>
+<body>
+    <script src="utilesVista.js"></script>
+    <h1>Emular puestos</h1>
+    <p>Seleccione un puesto, verifique sus tarifas, ingrese una matricula y emule un tránsito.</p>
+
+    <main class="login-container">
+    <form id="formLogin" action="/admin/emularTransito" method="POST" class="login-card" autocomplete="off">
+        <h3>Puesto</h3>
+        <div id="tablaPuestos"></div>
+
+        <h3>Matricula</h3>
+        <input id="matricula" name="matricula" type="text" placeholder="Ej: ABC1234" required />
+
+        <h3>Fecha y hora del transito</h3>
+        <input id="fechayhora" name="fechayhora" type="text" placeholder="Ej: 2025-1-19 19:30" required />
+
+        <h3>Tarifas del puesto</h3>
+        <div id="tablaTarifas"></div>
+        <button type="submit">Emular transito</button>
+        
+        <p id="message" class="message" aria-live="polite"></p>
+      </form>
+    </main>
+</body>
+
+<script>
+    urlIniciarVista  = "/admin/cargarPuestos";
+    urlIniciarVista = "/admin/cargarTarifas";
+    const tablaPuestos = document.getElementById('tablaPuestos');
+    const tablaTarifas = document.getElementById('tablaTarifas');
+
+    function mostrar_puestos(puestos) {
+            alert("Puestos cargados: " + puestos.length);
+            tablaPuestos.innerHTML = crearListaDesdeJson({
+                data: puestos,
+                campoMostrar: "nombre",
+                campoValor: "id",
+                onSelectItem: (indice, puesto) => {
+                    console.log("Seleccionado:", puesto.nombre, "-", puesto.direccion);
+                    
+                }
+            });
+    }
+
+
+    function mostrar_tarifas(tarifas) {
+            
+            tablaTarifas.innerHTML = crearTablaDesdeJson(tarifas);
+    }
+</script>
+</html>

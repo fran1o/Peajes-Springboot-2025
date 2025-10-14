@@ -4,13 +4,13 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Login Administrador</title>
-    <link rel="stylesheet" href="/login.css" />
+    <link rel="stylesheet" href="login.css" />
     <script src="vistaWeb.js"></script>
   </head>
   <body>
     <script src="utilesVista.js"></script>
     <main class="login-container">
-      <form id="formLogin" action="/accesoadmin/login" method="POST" class="login-card" autocomplete="off">
+      <form id="formLogin" action="/admin/login" method="POST" class="login-card" autocomplete="off">
         <h1>Ingreso Administrador</h1>
 
         <label for="cedula">Cédula</label>
@@ -33,11 +33,11 @@
 
     formLogin.addEventListener('submit', function(e) {
             e.preventDefault();
-            submit("/accesoadmin/login",serializarFormulario('formLogin'));
+            submit("/admin/login",serializarFormulario('formLogin'));
           
         });
 
-    async function mostrar_error(mensaje){
+    async function excepcionDeAplicacion(mensaje){
             await mostrarMensaje(mensaje);
         }
 
