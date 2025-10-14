@@ -35,12 +35,11 @@
 
 <script>
     urlIniciarVista  = "/admin/cargarPuestos";
-    urlIniciarVista = "/admin/cargarTarifas";
     const tablaPuestos = document.getElementById('tablaPuestos');
     const tablaTarifas = document.getElementById('tablaTarifas');
 
     function mostrar_puestos(puestos) {
-            alert("Puestos cargados: " + puestos.length);
+
             tablaPuestos.innerHTML = crearListaDesdeJson({
                 data: puestos,
                 campoMostrar: "nombre",
