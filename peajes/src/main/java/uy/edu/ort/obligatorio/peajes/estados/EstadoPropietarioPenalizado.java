@@ -2,7 +2,7 @@ package uy.edu.ort.obligatorio.peajes.estados;
 
 import uy.edu.ort.obligatorio.peajes.interfaces.EstadoPropietario;
 
-public class EstadoPropietarioHabilitado implements EstadoPropietario{
+public class EstadoPropietarioPenalizado implements EstadoPropietario{
 
     @Override
     public boolean estaDeshabilitado() {
@@ -11,7 +11,7 @@ public class EstadoPropietarioHabilitado implements EstadoPropietario{
 
     @Override
     public boolean estaHabilitado() {
-        return true;
+        return false;
     }
 
     @Override
@@ -21,7 +21,6 @@ public class EstadoPropietarioHabilitado implements EstadoPropietario{
 
     @Override
     public boolean estaPenalizado() {
-        return false;
+        return true;
     }
-    
 }

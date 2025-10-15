@@ -18,4 +18,9 @@ public class EstadoPropietarioSuspendido implements EstadoPropietario{
     public boolean estaSuspendido() {
         return true;
     }
+
+    @Override
+    public boolean estaPenalizado() {
+        return false;
+    }
 }

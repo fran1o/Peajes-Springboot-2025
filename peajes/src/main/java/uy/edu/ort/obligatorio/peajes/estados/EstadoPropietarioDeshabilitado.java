@@ -18,4 +18,9 @@ public class EstadoPropietarioDeshabilitado implements EstadoPropietario{
     public boolean estaSuspendido() {
         return false;
     }
+
+    @Override
+    public boolean estaPenalizado() {
+        return false;
+    }
 }
