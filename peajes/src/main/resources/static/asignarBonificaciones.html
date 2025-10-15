@@ -1,0 +1,172 @@
+<!doctype html>
+<html lang="es">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Asignar Bonificaciones - Administrador</title>
+    <link rel="stylesheet" href="base.css" />
+    <script src="vistaWeb.js"></script>
+</head>
+<body>
+    <script src="utilesVista.js"></script>
+    <main class="container">
+        <h1>Asignar Bonificaciones</h1>
+
+        <section>
+            <h2>Buscar Propietario</h2>
+            <label for="cedula">Cédula:</label>
+            <input id="cedula" type="text" placeholder="Ingrese cédula del propietario" />
+            <button id="btnBuscar">Buscar</button>
+        </section>
+
+        <section id="propietarioSection" style="display: none;">
+            <h2>Información del Propietario</h2>
+            <p><strong>Nombre:</strong> <span id="nombreCompleto"></span></p>
+            <p><strong>Estado:</strong> <span id="estado"></span></p>
+
+            <h3>Bonificaciones Asignadas</h3>
+            <table id="tablaBonificacionesAsignadas">
+                <thead>
+                    <tr>
+                        <th>Bonificación</th>
+                        <th>Puesto</th>
+                    </tr>
+                </thead>
+                <tbody id="bonificacionesBody"></tbody>
+            </table>
+        </section>
+
+        <section id="asignarSection" style="display: none;">
+            <h2>Asignar Nueva Bonificación</h2>
+            
+            <h3>Seleccione Bonificación</h3>
+            <select id="selectBonificacion">
+                <option value="">Seleccione una bonificación</option>
+            </select>
+
+            <h3>Seleccione Puesto</h3>
+            <select id="selectPuesto">
+                <option value="">Seleccione un puesto</option>
+            </select>
+
+            <button id="btnAsignar">Asignar Bonificación</button>
+        </section>
+    </main>
+</body>
+
+<script>
+    var urlIniciarVista = "/admin/cargarBonificaciones";
+    var parametrosInicioVista = "";
+
+    const btnBuscar = document.getElementById('btnBuscar');
+    const btnAsignar = document.getElementById('btnAsignar');
+    const propietarioSection = document.getElementById('propietarioSection');
+    const asignarSection = document.getElementById('asignarSection');
+    const selectBonificacion = document.getElementById('selectBonificacion');
+    const selectPuesto = document.getElementById('selectPuesto');
+    const bonificacionesBody = document.getElementById('bonificacionesBody');
+    
+    let cedulaActual = '';
+    let bonificacionesCargadas = false;
+    let puestosCargados = false;
+
+    function mostrar_bonificaciones(bonificaciones) {
+        selectBonificacion.innerHTML = '<option value="">Seleccione una bonificación</option>';
+        bonificaciones.forEach(bonif => {
+            const option = document.createElement('option');
+            option.value = bonif.tipo;
+            option.textContent = bonif.nombre;
+            selectBonificacion.appendChild(option);
+        });
+        bonificacionesCargadas = true;
+        cargarPuestosInicial();
+    }
+
+    function cargarPuestosInicial() {
+        if (!puestosCargados) {
+            submit("/admin/cargarPuestos", "");
+        }
+    }
+
+    function mostrar_puestos(puestos) {
+        selectPuesto.innerHTML = '<option value="">Seleccione un puesto</option>';
+        puestos.forEach(puesto => {
+            const option = document.createElement('option');
+            option.value = puesto.nombre;
+            option.textContent = puesto.nombre + ' - ' + puesto.direccion;
+            selectPuesto.appendChild(option);
+        });
+        puestosCargados = true;
+    }
+
+    btnBuscar.addEventListener('click', function() {
+        const cedula = document.getElementById('cedula').value;
+        if (!cedula) {
+            alert('Por favor ingrese una cédula');
+            return;
+        }
+        cedulaActual = cedula;
+        submit("/admin/buscarPropietario", "cedula=" + encodeURIComponent(cedula));
+    });
+
+    function mostrar_nombreCompleto(nombre) {
+        document.getElementById('nombreCompleto').textContent = nombre;
+        propietarioSection.style.display = 'block';
+        asignarSection.style.display = 'block';
+    }
+
+    function mostrar_estado(estado) {
+        document.getElementById('estado').textContent = estado;
+    }
+
+    function mostrar_bonificaciones(bonificaciones) {
+        bonificacionesBody.innerHTML = '';
+        if (bonificaciones.length === 0) {
+            bonificacionesBody.innerHTML = '<tr><td colspan="2">No tiene bonificaciones asignadas</td></tr>';
+            return;
+        }
+        bonificaciones.forEach(bonif => {
+            const row = bonificacionesBody.insertRow();
+            row.insertCell(0).textContent = bonif.bonificacion;
+            row.insertCell(1).textContent = bonif.puesto;
+        });
+    }
+
+    btnAsignar.addEventListener('click', function() {
+        const bonificacionTipo = selectBonificacion.value;
+        const puestoNombre = selectPuesto.value;
+
+        if (!bonificacionTipo) {
+            alert('Debe especificar una bonificación');
+            return;
+        }
+
+        if (!puestoNombre) {
+            alert('Debe especificar un puesto');
+            return;
+        }
+
+        const params = "cedula=" + encodeURIComponent(cedulaActual) + 
+                      "&bonificacionTipo=" + encodeURIComponent(bonificacionTipo) + 
+                      "&puestoNombre=" + encodeURIComponent(puestoNombre);
+        
+        submit("/admin/asignarBonificacion", params);
+    });
+
+    function mostrar_resultado(mensaje) {
+        alert(mensaje);
+        selectBonificacion.value = '';
+        selectPuesto.value = '';
+        submit("/admin/buscarPropietario", "cedula=" + encodeURIComponent(cedulaActual));
+    }
+
+    async function excepcionDeAplicacion(mensaje) {
+        alert(mensaje);
+        if (mensaje === "no existe el propietario") {
+            propietarioSection.style.display = 'none';
+            asignarSection.style.display = 'none';
+        }
+    }
+</script>
+
+</html>

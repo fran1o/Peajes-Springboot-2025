@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="es">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Cambiar Estado - Administrador</title>
+    <link rel="stylesheet" href="base.css" />
+    <script src="vistaWeb.js"></script>
+</head>
+<body>
+    <script src="utilesVista.js"></script>
+    <main class="container">
+        <h1>Cambiar Estado del Propietario</h1>
+
+        <section>
+            <h2>Buscar Propietario</h2>
+            <label for="cedula">Cédula:</label>
+            <input id="cedula" type="text" placeholder="Ingrese cédula del propietario" />
+            <button id="btnBuscar">Buscar</button>
+        </section>
+
+        <section id="propietarioSection" style="display: none;">
+            <h2>Información del Propietario</h2>
+            <p><strong>Nombre:</strong> <span id="nombreCompleto"></span></p>
+            <p><strong>Estado Actual:</strong> <span id="estadoActual"></span></p>
+
+            <h3>Seleccione Nuevo Estado</h3>
+            <select id="selectEstado">
+                <option value="">Seleccione un estado</option>
+            </select>
+
+            <button id="btnCambiar">Cambiar Estado</button>
+        </section>
+    </main>
+</body>
+
+<script>
+    var urlIniciarVista = "/admin/cargarEstados";
+    var parametrosInicioVista = "";
+
+    const btnBuscar = document.getElementById('btnBuscar');
+    const btnCambiar = document.getElementById('btnCambiar');
+    const propietarioSection = document.getElementById('propietarioSection');
+    const selectEstado = document.getElementById('selectEstado');
+    
+    let cedulaActual = '';
+    let estadoActualValue = '';
+
+    function mostrar_estados(estados) {
+        selectEstado.innerHTML = '<option value="">Seleccione un estado</option>';
+        estados.forEach(estado => {
+            const option = document.createElement('option');
+            option.value = estado.nombre;
+            option.textContent = estado.nombre;
+            selectEstado.appendChild(option);
+        });
+    }
+
+    btnBuscar.addEventListener('click', function() {
+        const cedula = document.getElementById('cedula').value;
+        if (!cedula) {
+            alert('Por favor ingrese una cédula');
+            return;
+        }
+        cedulaActual = cedula;
+        submit("/admin/buscarPropietario", "cedula=" + encodeURIComponent(cedula));
+    });
+
+    function mostrar_nombreCompleto(nombre) {
+        document.getElementById('nombreCompleto').textContent = nombre;
+        propietarioSection.style.display = 'block';
+    }
+
+    function mostrar_estado(estado) {
+        document.getElementById('estadoActual').textContent = estado;
+        estadoActualValue = estado;
+        selectEstado.value = estado;
+    }
+
+    btnCambiar.addEventListener('click', function() {
+        const nuevoEstado = selectEstado.value;
+
+        if (!nuevoEstado) {
+            alert('Por favor seleccione un nuevo estado');
+            return;
+        }
+
+        if (nuevoEstado === estadoActualValue) {
+            alert('El propietario ya esta en estado ' + estadoActualValue);
+            return;
+        }
+
+        const params = "cedula=" + encodeURIComponent(cedulaActual) + 
+                      "&nuevoEstado=" + encodeURIComponent(nuevoEstado);
+        
+        submit("/admin/cambiarEstado", params);
+    });
+
+    function mostrar_resultado(mensaje) {
+        alert(mensaje);
+        submit("/admin/buscarPropietario", "cedula=" + encodeURIComponent(cedulaActual));
+    }
+
+    async function excepcionDeAplicacion(mensaje) {
+        alert(mensaje);
+        if (mensaje === "no existe el propietario") {
+            propietarioSection.style.display = 'none';
+        }
+    }
+</script>
+
+</html>
