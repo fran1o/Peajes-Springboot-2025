@@ -3,9 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Administrador</title>
+    <title>Emular transito</title>
     <script src="vistaWeb.js"></script>
-    <link rel="stylesheet" href="base.css">
     <link rel="stylesheet" href="emularTransito.css">
 </head>
 <body>
@@ -15,16 +14,16 @@
 
     <main class="login-container">
     <form id="formLogin" action="/admin/emularTransito" method="POST" class="login-card" autocomplete="off">
-        <h3>Puesto</h3>
+        <label for="puestos">Puestos</label>
         <div id="tablaPuestos"></div>
 
-        <h3>Matricula</h3>
+        <label for="matricula">Matricula</label>
         <input id="matricula" name="matricula" type="text" placeholder="Ej: ABC1234" required />
 
-        <h3>Fecha y hora del transito</h3>
+        <label for="fechayhora">Fecha y hora el transito</label>
         <input id="fechayhora" name="fechayhora" type="text" placeholder="Ej: 2025-1-19 19:30" required />
 
-        <h3>Tarifas del puesto</h3>
+        <label for="tarifas">Tarifas del puesto</label>
         <div id="tablaTarifas"></div>
         <button type="submit">Emular transito</button>
         
@@ -47,8 +46,14 @@
                 onSelectItem: (indice, puesto) => {
                     console.log("Seleccionado:", puesto.nombre, "-", puesto.direccion);
                     
+                    
                 }
             });
+    }
+
+    function mostrar_noHayPuestoSeleccionado(noHayPuestoSeleccionado) {
+        alert("hola");
+        tablaTarifas.innerHTML = noHayPuestoSeleccionado;
     }
 
 

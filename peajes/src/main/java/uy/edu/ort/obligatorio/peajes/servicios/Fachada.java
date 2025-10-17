@@ -43,5 +43,11 @@ public class Fachada {
         servicioPuestos.agregarPuesto(puesto);
     }
 
+    public void logout(Usuario usuario) {
+        if(usuario instanceof Administrador) {
+            servicioUsuarios.logout((Administrador) usuario);
+        }
+    }
+
     
 }

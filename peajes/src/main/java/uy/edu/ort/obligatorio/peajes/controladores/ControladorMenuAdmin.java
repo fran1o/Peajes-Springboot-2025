@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.SessionAttribute;
 
 import jakarta.servlet.http.HttpSession;
 import uy.edu.ort.obligatorio.peajes.dominio.Usuario;
+import uy.edu.ort.obligatorio.peajes.servicios.Fachada;
 import uy.edu.ort.obligatorio.peajes.utils.Respuesta;
 
 import java.util.List;
@@ -35,6 +36,7 @@ public class ControladorMenuAdmin {
         if(usuario != null) {
             sessionHttp.removeAttribute("usuarioLogueado");
             sessionHttp.invalidate();
+            Fachada.getInstancia().logout(usuario);
         }
         return Respuesta.lista(new Respuesta("usuarioNoConectado", "loginAdmin.html"));
     }

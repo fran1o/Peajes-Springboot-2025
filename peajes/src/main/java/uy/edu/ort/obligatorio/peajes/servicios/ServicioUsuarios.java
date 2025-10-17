@@ -67,5 +67,10 @@ public class ServicioUsuarios {
 
         return usuarioEncontrado;   
     }
+
+    public void logout(Administrador usuario) {
+        usuario.setEstaLogueado(false);
+        administradoresLogueados.remove(usuario);
+    }
     
 }

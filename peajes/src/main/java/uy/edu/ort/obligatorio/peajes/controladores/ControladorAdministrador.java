@@ -1,5 +1,6 @@
 package uy.edu.ort.obligatorio.peajes.controladores;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.web.bind.annotation.PostMapping;
@@ -8,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.servlet.http.HttpSession;
+import uy.edu.ort.obligatorio.peajes.dominio.Puesto;
 import uy.edu.ort.obligatorio.peajes.dominio.Usuario;
 import uy.edu.ort.obligatorio.peajes.dtos.PuestoDto;
 import uy.edu.ort.obligatorio.peajes.excepciones.UsuarioException;
@@ -19,6 +21,8 @@ import uy.edu.ort.obligatorio.peajes.utils.Respuesta;
 public class ControladorAdministrador {
 
     private Usuario usuarioLogueado = null;
+    private List<PuestoDto> puestos;
+
 
     @PostMapping("/login")
     public List<Respuesta> login(HttpSession sessionHttp, @RequestParam String cedula, @RequestParam String contrasena) throws UsuarioException{
@@ -32,16 +36,20 @@ public class ControladorAdministrador {
     
     @PostMapping("/cargarPuestos")
     public List<Respuesta> cargarPuestos() {
-       return Respuesta.lista(puestos());
+        return Respuesta.lista(puestos());
     }
     
     private Respuesta puestos() {
-        return new Respuesta("puestos", PuestoDto.listaDtos(Fachada.getInstancia().getPuestos()));
+        puestos = PuestoDto.listaDtos(Fachada.getInstancia().getPuestos());
+        return new Respuesta("puestos", puestos);
     }
 
-    /*
+    
     @PostMapping("/cargarTarifas")
-    public List<Respuesta> cargartarifas(@RequestParam PuestoDto puestoDto) {
+    public List<Respuesta> cargarTarifas(@RequestParam PuestoDto puestoDto) {
+        if(puestoDto == null) {
+            return Respuesta.lista(new Respuesta("noHayPuestoSeleccionado", "No se ha seleccionado un puesto"));
+        }
        return Respuesta.lista(tarifas(puestoDto));
     }
 
@@ -54,6 +62,6 @@ public class ControladorAdministrador {
             }
         }
         return new Respuesta("puestos", "No se encontraron tarifas para el puesto seleccionado");
-    } */
+    } 
     
 }
