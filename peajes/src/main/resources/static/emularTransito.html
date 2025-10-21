@@ -3,63 +3,140 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Emular transito</title>
+    <title>Emular Tránsito - Administrador</title>
     <script src="vistaWeb.js"></script>
     <link rel="stylesheet" href="emularTransito.css">
 </head>
 <body>
     <script src="utilesVista.js"></script>
-    <h1>Emular puestos</h1>
-    <p>Seleccione un puesto, verifique sus tarifas, ingrese una matricula y emule un tránsito.</p>
+    <h1>Emular Tránsito</h1>
+    <p>Seleccione un puesto, verifique sus tarifas, ingrese una matrícula y emule un tránsito.</p>
 
-    <main class="login-container">
-    <form id="formLogin" action="/admin/emularTransito" method="POST" class="login-card" autocomplete="off">
-        <label for="puestos">Puestos</label>
-        <div id="tablaPuestos"></div>
+    <main class="container">
+        <section>
+            <h3>Puesto</h3>
+            <select id="selectPuesto" name="puestoNombre">
+                <option value="">Seleccione un puesto</option>
+            </select>
 
-        <label for="matricula">Matricula</label>
-        <input id="matricula" name="matricula" type="text" placeholder="Ej: ABC1234" required />
+            <h3>Tarifas del puesto</h3>
+            <table id="tablaTarifas">
+                <thead>
+                    <tr>
+                        <th>Categoría</th>
+                        <th>Monto</th>
+                    </tr>
+                </thead>
+                <tbody id="tarifasBody"></tbody>
+            </table>
 
-        <label for="fechayhora">Fecha y hora el transito</label>
-        <input id="fechayhora" name="fechayhora" type="text" placeholder="Ej: 2025-1-19 19:30" required />
+            <h3>Matrícula</h3>
+            <input id="matricula" name="matricula" type="text" placeholder="Ej: ABC1234" />
 
-        <label for="tarifas">Tarifas del puesto</label>
-        <div id="tablaTarifas"></div>
-        <button type="submit">Emular transito</button>
-        
-        <p id="message" class="message" aria-live="polite"></p>
-      </form>
+            <h3>Fecha y hora del tránsito</h3>
+            <input id="fechaHora" name="fechaHora" type="datetime-local" />
+
+            <button id="btnEmular">Emular Tránsito</button>
+        </section>
+
+        <section id="resultadoSection" style="display: none;">
+            <h2>Resultado del Tránsito</h2>
+            <p><strong>Propietario:</strong> <span id="propietarioNombre"></span></p>
+            <p><strong>Estado:</strong> <span id="estado"></span></p>
+            <p><strong>Categoría:</strong> <span id="categoria"></span></p>
+            <p><strong>Bonificación:</strong> <span id="bonificacion"></span></p>
+            <p><strong>Costo:</strong> $<span id="costo"></span></p>
+            <p><strong>Saldo:</strong> $<span id="saldo"></span></p>
+        </section>
     </main>
 </body>
 
 <script>
-    urlIniciarVista  = "/admin/cargarPuestos";
-    const tablaPuestos = document.getElementById('tablaPuestos');
-    const tablaTarifas = document.getElementById('tablaTarifas');
+    var urlIniciarVista = "/admin/cargarPuestos";
+    var parametrosInicioVista = "";
+    
+    const selectPuesto = document.getElementById('selectPuesto');
+    const tarifasBody = document.getElementById('tarifasBody');
+    const btnEmular = document.getElementById('btnEmular');
+    const resultadoSection = document.getElementById('resultadoSection');
 
     function mostrar_puestos(puestos) {
-
-            tablaPuestos.innerHTML = crearListaDesdeJson({
-                data: puestos,
-                campoMostrar: "nombre",
-                campoValor: "id",
-                onSelectItem: (indice, puesto) => {
-                    console.log("Seleccionado:", puesto.nombre, "-", puesto.direccion);
-                    
-                    
-                }
-            });
+        selectPuesto.innerHTML = '<option value="">Seleccione un puesto</option>';
+        puestos.forEach(puesto => {
+            const option = document.createElement('option');
+            option.value = puesto.nombre;
+            option.textContent = puesto.nombre + ' - ' + puesto.direccion;
+            selectPuesto.appendChild(option);
+        });
     }
 
-    function mostrar_noHayPuestoSeleccionado(noHayPuestoSeleccionado) {
-        alert("hola");
-        tablaTarifas.innerHTML = noHayPuestoSeleccionado;
-    }
-
+    selectPuesto.addEventListener('change', function() {
+        const puestoNombre = this.value;
+        if (puestoNombre) {
+            submit("/admin/cargarTarifas", "puestoNombre=" + encodeURIComponent(puestoNombre));
+        } else {
+            tarifasBody.innerHTML = '';
+        }
+    });
 
     function mostrar_tarifas(tarifas) {
-            
-            tablaTarifas.innerHTML = crearTablaDesdeJson(tarifas);
+        tarifasBody.innerHTML = '';
+        if (tarifas.length === 0) {
+            tarifasBody.innerHTML = '<tr><td colspan="2">No hay tarifas para este puesto</td></tr>';
+            return;
+        }
+        tarifas.forEach(tarifa => {
+            const row = tarifasBody.insertRow();
+            row.insertCell(0).textContent = tarifa.categoria;
+            row.insertCell(1).textContent = '$' + tarifa.monto.toFixed(2);
+        });
+    }
+
+    btnEmular.addEventListener('click', function() {
+        const matricula = document.getElementById('matricula').value;
+        const puestoNombre = selectPuesto.value;
+        const fechaHora = document.getElementById('fechaHora').value;
+
+        if (!matricula || !puestoNombre || !fechaHora) {
+            alert('Por favor complete todos los campos');
+            return;
+        }
+
+        const params = "matricula=" + encodeURIComponent(matricula) + 
+                      "&puestoNombre=" + encodeURIComponent(puestoNombre) + 
+                      "&fechaHora=" + encodeURIComponent(fechaHora);
+        
+        submit("/admin/emularTransito", params);
+    });
+
+    function mostrar_propietarioNombre(nombre) {
+        document.getElementById('propietarioNombre').textContent = nombre;
+        resultadoSection.style.display = 'block';
+    }
+
+    function mostrar_estado(estado) {
+        document.getElementById('estado').textContent = estado;
+    }
+
+    function mostrar_categoria(categoria) {
+        document.getElementById('categoria').textContent = categoria;
+    }
+
+    function mostrar_bonificacion(bonificacion) {
+        document.getElementById('bonificacion').textContent = bonificacion || 'Ninguna';
+    }
+
+    function mostrar_costo(costo) {
+        document.getElementById('costo').textContent = costo.toFixed(2);
+    }
+
+    function mostrar_saldo(saldo) {
+        document.getElementById('saldo').textContent = saldo.toFixed(2);
+    }
+
+    async function excepcionDeAplicacion(mensaje) {
+        alert(mensaje);
+        resultadoSection.style.display = 'none';
     }
 </script>
 </html>

@@ -34,8 +34,26 @@ public class Puesto {
     public List<Tarifa> getTarifas() {
         return tarifas;
     }
+
     public List<Transito> getTransitos(){
         return transitos;
+    }
+
+    public void registrarTransito(Transito transito) {
+        transitos.add(transito);
+    }
+
+    public Tarifa buscarTarifaPorCategoria(Categoria categoria) {
+        for (Tarifa tarifa : tarifas) {
+            if (tarifa.getCategoria().equals(categoria)) {
+                return tarifa;
+            }
+        }
+        return null;
+    }
+
+    public void agregarTarifa(Tarifa tarifa) {
+        tarifas.add(tarifa);
     }
     
      
