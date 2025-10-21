@@ -12,7 +12,7 @@
 			<label id="nombreCompleto"> </label>
 			<button onclick="cargarContenido('emularTransito.html')">Emular transito</button>
 			<button onclick="cargarContenido('asignarBonificaciones.html')">Asignar Bonificaciones</button>
-            <button onclick="cargarContenido('cambiarEstadoPropietario.html')">Cambiar estado de Propietario</button>
+            <button onclick="cargarContenido('cambiarEstado.html')">Cambiar estado de Propietario</button>
 			<button onclick="logout()">Salir</button>
 		</div>
 		<div class="content">
@@ -32,10 +32,14 @@
 				submit("/menuAdmin/logout", null);
            } 
 
-        function mostrar_resultado(mensaje){
-            window.location.href = 'loginAdmin.html';
-        }
-        
-    </script>
-</body>
-</html>	
+		   function mostrar_usuarioNoConectado(urlDestino){
+				window.location.href = urlDestino;
+			}
+			
+		 function mostrar_vistaConectada(nombreCompleto){
+			  spnNombreCompleto.innerHTML = nombreCompleto.toUpperCase();
+		}
+			
+		</script>
+	</body>
+	</html>	

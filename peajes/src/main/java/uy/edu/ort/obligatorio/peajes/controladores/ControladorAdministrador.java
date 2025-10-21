@@ -64,26 +64,6 @@ public class ControladorAdministrador {
         return new Respuesta("puestos", puestos);
     }
 
-    
-    @PostMapping("/cargarTarifas")
-    public List<Respuesta> cargarTarifas(@RequestParam PuestoDto puestoDto) {
-        if(puestoDto == null) {
-            return Respuesta.lista(new Respuesta("noHayPuestoSeleccionado", "No se ha seleccionado un puesto"));
-        }
-       return Respuesta.lista(tarifas(puestoDto));
-    }
-
-    private Respuesta tarifas(@RequestParam PuestoDto puestoDto) {
-        if(puestoDto != null) {
-            for(PuestoDto p : PuestoDto.listaDtos(Fachada.getInstancia().getPuestos())) {
-                if(p.equals(puestoDto)) {
-                    return new Respuesta("tarifas", p.getTarifas());
-                }
-            }
-        }       
-        return new Respuesta("puestos", PuestoDto.listaDtos(Fachada.getInstancia().getPuestos()));
-    }
-
     @PostMapping("/cargarTarifas")
     public List<Respuesta> cargarTarifas(@RequestParam String puestoNombre) {
         for (Puesto puesto : Fachada.getInstancia().getPuestos()) {
