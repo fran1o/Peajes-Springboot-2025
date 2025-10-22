@@ -1,39 +1,45 @@
 <!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Administrador - Principal</title>
-    <link rel="stylesheet" href="menu.css">
-    <script src='vistaWeb.js'></script>
-</head>
-<body>
-    <div class="sidebar">
-        <h2>Menú Administrador</h2>
-        <label id="nombreCompleto"></label>
-        <button onclick="cargarContenido('emularTransito.html')">Emular Tránsito</button>
-        <button onclick="cargarContenido('asignarBonificaciones.html')">Asignar Bonificaciones</button>
-        <button onclick="cargarContenido('cambiarEstado.html')">Cambiar Estado Propietario</button>
-        <button onclick="logout()">Salir</button>
-    </div>
-    <div class="content">
-        <iframe id="contenidoFrame" src="bienvenidoAdmin.html" frameborder="0"></iframe>
-    </div>
-    <script>
-        const spnNombreCompleto = document.getElementById("nombreCompleto");
-        
-        function cargarContenido(pagina) {
-            document.getElementById('contenidoFrame').src = pagina;
-        }
-        
-        function logout() {
-            submit("/admin/logout", "");
-        } 
+	<html lang="es">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>Administrador - Principal</title>
+		<link rel="stylesheet" href="menu.css">
+		<script src='vistaWeb.js'></script>
+	</head>
+	<body>
+		<div class="sidebar">
+			<label id="nombreCompleto"> </label>
+			<button onclick="cargarContenido('emularTransito.html')">Emular transito</button>
+			<button onclick="cargarContenido('asignarBonificaciones.html')">Asignar Bonificaciones</button>
+            <button onclick="cargarContenido('cambiarEstado.html')">Cambiar estado de Propietario</button>
+			<button onclick="logout()">Salir</button>
+		</div>
+		<div class="content">
+			<iframe id="contenidoFrame" src="bienvenidoAdmin.html" frameborder="0">
+                
+            </iframe>
+		</div>
+		<script>
+			urlIniciarVista="/menuAdmin/vistaConectada";
+	    	const spnNombreCompleto = document.getElementById("nombreCompleto");
+			
+			function cargarContenido(pagina) {
+				document.getElementById('contenidoFrame').src = pagina;
+			}
+			
+			function logout() {
+				submit("/menuAdmin/logout", null);
+           } 
 
-        function mostrar_resultado(mensaje){
-            window.location.href = 'loginAdmin.html';
-        }
-        
-    </script>
-</body>
-</html>	
+		   function mostrar_usuarioNoConectado(urlDestino){
+				window.location.href = urlDestino;
+			}
+			
+		 function mostrar_vistaConectada(nombreCompleto){
+			  spnNombreCompleto.innerHTML = nombreCompleto.toUpperCase();
+		}
+			
+		</script>
+	</body>
+	</html>	

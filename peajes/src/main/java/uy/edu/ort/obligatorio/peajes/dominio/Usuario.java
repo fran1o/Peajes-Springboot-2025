@@ -1,5 +1,6 @@
 package uy.edu.ort.obligatorio.peajes.dominio;
 
+import uy.edu.ort.obligatorio.peajes.excepciones.UsuarioException;
 import uy.edu.ort.obligatorio.peajes.interfaces.EstadoPropietario;
 
 public abstract class Usuario {
@@ -23,6 +24,11 @@ public abstract class Usuario {
     public String getContrasena() {
         return contrasena;
     }
+
+    public abstract void logout() throws UsuarioException;
+
+    public abstract boolean validarLogin() throws UsuarioException;
+    
 
     
 }

@@ -17,11 +17,11 @@ import uy.edu.ort.obligatorio.peajes.interfaces.EstadoPropietario;
 public class ServicioUsuarios {
 
     private List<Usuario> usuarios;
-    private List<Usuario> administradoresLogueados;
+    private List<Usuario> usuariosLogueados;
 
     public ServicioUsuarios() {
         this.usuarios = new ArrayList<>();
-        this.administradoresLogueados = new ArrayList<>();
+        this.usuariosLogueados = new ArrayList<>();
     }
 
     public void agregarUsuario(Usuario usuario) {
@@ -38,16 +38,6 @@ public class ServicioUsuarios {
         for (Usuario u : usuarios) {
             if (u.getCedula().equals(cedula) && u.getContrasena().equals(contrasena)) {
                 usuarioEncontrado = u;
-                if (u instanceof Administrador) {
-                    Administrador admin = (Administrador) u;
-                    if (administradoresLogueados.contains(admin)) {
-                        admin.setEstaLogueado(true);
-
-                    } else {
-                        administradoresLogueados.add(admin);
-                    }
-
-                }
                 break;
             }
         }
@@ -55,25 +45,19 @@ public class ServicioUsuarios {
         if (usuarioEncontrado == null) {
             throw new UsuarioException("Acceso denegado");
         }
-        if (usuarioEncontrado != null && usuarioEncontrado instanceof Propietario) {
-            Propietario propietario = (Propietario) usuarioEncontrado;
 
-            if (propietario.getEstado().estaDeshabilitado()) {
-                throw new UsuarioException("Usuario deshabilitado, no puede ingresar al sistema");
-            }
-        }
-
-        if (usuarioEncontrado != null && usuarioEncontrado instanceof Administrador) {
-            Administrador admin = (Administrador) usuarioEncontrado;
-
-            if (admin.estaLogueado()) {
-                throw new UsuarioException("Ud. ya esta logueado");
-            }
+        if(usuarioEncontrado.validarLogin()){
+            usuariosLogueados.add(usuarioEncontrado);
         }
 
         return usuarioEncontrado;
     }
 
+    public void logout(Usuario usuario) throws UsuarioException {
+        usuario.logout();
+        usuariosLogueados.remove(usuario);
+    }
+    
     public Vehiculo buscarVehiculoPorMatricula(String matricula) {
         for (Usuario usuario : usuarios) {
             if (usuario instanceof Propietario) {

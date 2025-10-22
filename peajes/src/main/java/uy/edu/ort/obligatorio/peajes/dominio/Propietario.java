@@ -3,6 +3,7 @@ package uy.edu.ort.obligatorio.peajes.dominio;
 import java.util.ArrayList;
 import java.util.List;
 
+import uy.edu.ort.obligatorio.peajes.excepciones.UsuarioException;
 import uy.edu.ort.obligatorio.peajes.interfaces.EstadoPropietario;
 
 public class Propietario extends Usuario {
@@ -110,6 +111,21 @@ public class Propietario extends Usuario {
 
     public void agregarBonificacion(Bonificacion bonificacion) {
         bonificaciones.add(bonificacion);
+    }
+
+    @Override
+    public void logout() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'logout'");
+    }
+
+    @Override
+    public boolean validarLogin() throws UsuarioException {
+        if (estado.estaDeshabilitado()) {
+                throw new UsuarioException("Usuario deshabilitado, no puede ingresar al sistema");
+        }
+
+        return true;
     }
     
 }

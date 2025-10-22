@@ -1,5 +1,7 @@
 package uy.edu.ort.obligatorio.peajes.dominio;
 
+import uy.edu.ort.obligatorio.peajes.excepciones.UsuarioException;
+
 public class Administrador extends Usuario {
 
     private boolean estaLogueado;
@@ -16,5 +18,22 @@ public class Administrador extends Usuario {
     public void setEstaLogueado(boolean estaLogueado) {
         this.estaLogueado = estaLogueado;
     }
+
+    @Override
+    public void logout() {
+        this.estaLogueado = false;
+    }
+
+    @Override
+    public boolean validarLogin() throws UsuarioException {
+        if(estaLogueado) {
+            throw new UsuarioException("Ud. ya esta logueado");
+        } else {
+            estaLogueado = true;
+        }
+
+        return true;
+    }
+    
 
 }

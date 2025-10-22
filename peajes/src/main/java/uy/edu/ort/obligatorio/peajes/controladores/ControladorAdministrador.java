@@ -1,8 +1,12 @@
 package uy.edu.ort.obligatorio.peajes.controladores;
 
+
+import java.util.ArrayList;
+
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
+
 import java.util.List;
 import java.util.Map;
 
@@ -12,6 +16,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.servlet.http.HttpSession;
+
+import uy.edu.ort.obligatorio.peajes.dominio.Puesto;
 import uy.edu.ort.obligatorio.peajes.dominio.Administrador;
 import uy.edu.ort.obligatorio.peajes.dominio.Bonificacion;
 import uy.edu.ort.obligatorio.peajes.dominio.BonificacionExonerados;
@@ -36,17 +42,26 @@ import uy.edu.ort.obligatorio.peajes.utils.Respuesta;
 @RequestMapping("/admin")
 public class ControladorAdministrador {
 
+
+    private Usuario usuarioLogueado = null;
+    private List<PuestoDto> puestos;
+
     @PostMapping("/login")
-    public List<Respuesta> login(HttpSession session, @RequestParam String cedula, @RequestParam String contrasena)
-            throws UsuarioException {
-        Usuario usuarioLogueado = Fachada.getInstancia().login(cedula, contrasena);
+    public List<Respuesta> login(HttpSession session, @RequestParam String cedula, @RequestParam String contrasena) throws UsuarioException {
+        usuarioLogueado = Fachada.getInstancia().login(cedula, contrasena);
         session.setAttribute("usuarioLogueado", usuarioLogueado);
         return Respuesta.lista(new Respuesta("loginExitoso", "menuAdmin.html"));
     }
 
     @PostMapping("/cargarPuestos")
     public List<Respuesta> cargarPuestos() {
-        return Respuesta.lista(new Respuesta("puestos", PuestoDto.listaDtos(Fachada.getInstancia().getPuestos())));
+
+        return Respuesta.lista(puestos());
+    }
+    
+    private Respuesta puestos() {
+        puestos = PuestoDto.listaDtos(Fachada.getInstancia().getPuestos());
+        return new Respuesta("puestos", puestos);
     }
 
     @PostMapping("/cargarTarifas")
@@ -59,12 +74,14 @@ public class ControladorAdministrador {
                     tarifaMap.put("categoria", tarifa.getCategoria().getNombre());
                     tarifaMap.put("monto", tarifa.getMonto());
                     tarifas.add(tarifaMap);
+
                 }
                 return Respuesta.lista(new Respuesta("tarifas", tarifas));
             }
         }
-        return Respuesta.lista(new Respuesta("tarifas", new ArrayList<>()));
-    }
+
+        return Respuesta.lista(new Respuesta("puestos", "No se encontraron tarifas para el puesto seleccionado"));
+    } 
 
     @PostMapping("/emularTransito")
     public List<Respuesta> emularTransito(@RequestParam String matricula, @RequestParam String puestoNombre,

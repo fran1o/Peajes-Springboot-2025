@@ -49,6 +49,13 @@ public class Fachada {
         servicioPuestos.agregarPuesto(puesto);
     }
 
+    public void logout(Usuario usuario) throws UsuarioException {
+        servicioUsuarios.logout(usuario);
+
+    }
+
+    
+
     public Vehiculo buscarVehiculoPorMatricula(String matricula) {
         return servicioUsuarios.buscarVehiculoPorMatricula(matricula);
     }
