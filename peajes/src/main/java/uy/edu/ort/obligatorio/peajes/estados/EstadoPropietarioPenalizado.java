@@ -23,4 +23,9 @@ public class EstadoPropietarioPenalizado implements EstadoPropietario{
     public boolean estaPenalizado() {
         return true;
     }
+
+    @Override
+    public String getNombreEstado() {
+        return "Penalizado";
+    }
 }

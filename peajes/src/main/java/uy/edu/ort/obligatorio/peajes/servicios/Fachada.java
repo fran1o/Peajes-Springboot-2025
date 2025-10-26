@@ -74,7 +74,9 @@ public class Fachada {
     }
 
     public Transito emularTransito(String matricula, Puesto puesto, LocalDateTime fechaHora) throws UsuarioException {
-        return servicioTransitos.emularTransito(matricula, puesto, fechaHora, servicioUsuarios);
+        Vehiculo vehiculo = servicioUsuarios.buscarVehiculoPorMatricula(matricula);
+        Propietario propietario = servicioUsuarios.buscarPropietarioPorVehiculo(vehiculo);
+        return servicioTransitos.emularTransito(matricula, puesto, fechaHora, vehiculo, propietario);
     }
 
     public List<Transito> getTransitosPorPropietario(Propietario propietario) {

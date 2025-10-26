@@ -115,16 +115,7 @@ public class ControladorPropietario {
     }
 
     private String obtenerNombreEstado(Propietario propietario) {
-        if (propietario.getEstado().estaHabilitado()) {
-            return "Habilitado";
-        } else if (propietario.getEstado().estaDeshabilitado()) {
-            return "Deshabilitado";
-        } else if (propietario.getEstado().estaSuspendido()) {
-            return "Suspendido";
-        } else if (propietario.getEstado().estaPenalizado()) {
-            return "Penalizado";
-        }
-        return "Desconocido";
+        return propietario.getEstado().getNombreEstado();
     }
 
 }

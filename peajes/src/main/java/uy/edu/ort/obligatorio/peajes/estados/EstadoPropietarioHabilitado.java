@@ -23,5 +23,10 @@ public class EstadoPropietarioHabilitado implements EstadoPropietario{
     public boolean estaPenalizado() {
         return false;
     }
+
+    @Override
+    public String getNombreEstado() {
+        return "Deshabilitado";
+    }
     
 }

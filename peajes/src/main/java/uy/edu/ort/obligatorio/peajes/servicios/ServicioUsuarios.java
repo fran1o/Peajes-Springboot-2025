@@ -4,9 +4,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-import uy.edu.ort.obligatorio.peajes.dominio.Administrador;
 import uy.edu.ort.obligatorio.peajes.dominio.Bonificacion;
-import uy.edu.ort.obligatorio.peajes.dominio.Notificacion;
 import uy.edu.ort.obligatorio.peajes.dominio.Propietario;
 import uy.edu.ort.obligatorio.peajes.dominio.Puesto;
 import uy.edu.ort.obligatorio.peajes.dominio.Usuario;
@@ -57,7 +55,7 @@ public class ServicioUsuarios {
         usuario.logout();
         usuariosLogueados.remove(usuario);
     }
-    
+
     public Vehiculo buscarVehiculoPorMatricula(String matricula) {
         for (Usuario usuario : usuarios) {
             if (usuario instanceof Propietario) {
@@ -87,22 +85,9 @@ public class ServicioUsuarios {
     public void cambiarEstadoPropietario(String cedula, EstadoPropietario nuevoEstado) throws UsuarioException {
         Propietario propietario = buscarPropietarioPorCedula(cedula);
         if (propietario == null) {
-            throw new UsuarioException("no existe el propietario");
+            throw new UsuarioException("No existe el propietario");
         }
-
-        String nombreEstadoActual = obtenerNombreEstado(propietario.getEstado());
-        String nombreNuevoEstado = obtenerNombreEstado(nuevoEstado);
-
-        if (propietario.getEstado().getClass().equals(nuevoEstado.getClass())) {
-            throw new UsuarioException("El propietario ya esta en estado " + nombreEstadoActual);
-        }
-
         propietario.setEstado(nuevoEstado);
-        Notificacion notificacion = new Notificacion(
-                LocalDateTime.now(),
-                "Se ha cambiado tu estado en el sistema. Tu estado actual es " + nombreNuevoEstado,
-                propietario);
-        propietario.agregarNotificacion(notificacion);
     }
 
     public void asignarBonificacion(String cedulaPropietario, Bonificacion bonificacion, Puesto puesto,
@@ -132,17 +117,5 @@ public class ServicioUsuarios {
         propietario.agregarBonificacion(bonificacion);
     }
 
-    private String obtenerNombreEstado(EstadoPropietario estado) {
-        if (estado.estaHabilitado()) {
-            return "Habilitado";
-        } else if (estado.estaDeshabilitado()) {
-            return "Deshabilitado";
-        } else if (estado.estaSuspendido()) {
-            return "Suspendido";
-        } else if (estado.estaPenalizado()) {
-            return "Penalizado";
-        }
-        return "Desconocido";
-    }
 
 }
