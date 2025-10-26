@@ -23,4 +23,9 @@ public class EstadoPropietarioSuspendido implements EstadoPropietario{
     public boolean estaPenalizado() {
         return false;
     }
+
+    @Override
+    public String getNombreEstado() {
+        return "Suspendido";
+    }
 }

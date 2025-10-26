@@ -22,13 +22,11 @@ public class ServicioTransitos {
     }
 
     public Transito emularTransito(String matricula, Puesto puesto, LocalDateTime fechaHora,
-            ServicioUsuarios servicioUsuarios) throws UsuarioException {
-        Vehiculo vehiculo = servicioUsuarios.buscarVehiculoPorMatricula(matricula);
+            Vehiculo vehiculo, Propietario propietario) throws UsuarioException {
+
         if (vehiculo == null) {
             throw new UsuarioException("No existe el vehículo");
         }
-
-        Propietario propietario = servicioUsuarios.buscarPropietarioPorVehiculo(vehiculo);
 
         if (propietario.getEstado().estaDeshabilitado()) {
             throw new UsuarioException("El propietario del vehículo está deshabilitado, no puede realizar tránsitos");

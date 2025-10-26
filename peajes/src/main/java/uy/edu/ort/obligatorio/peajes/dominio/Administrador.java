@@ -26,6 +26,7 @@ public class Administrador extends Usuario {
 
     @Override
     public boolean validarLogin() throws UsuarioException {
+        
         if(estaLogueado) {
             throw new UsuarioException("Ud. ya esta logueado");
         } else {

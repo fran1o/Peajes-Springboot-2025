@@ -1,5 +1,6 @@
 package uy.edu.ort.obligatorio.peajes.dominio;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -41,8 +42,15 @@ public class Propietario extends Usuario {
         return estado;
     }
 
-    public void setEstado(EstadoPropietario estado) {
-        this.estado = estado;
+    public void setEstado(EstadoPropietario nuevoEstado) throws UsuarioException {
+
+        if (estado.equals(nuevoEstado)) {
+            throw new UsuarioException("El propietario ya esta en estado " + estado.getNombreEstado());
+        }
+        Notificacion notificacion = new Notificacion(LocalDateTime.now(),"Se ha cambiado tu estado en el sistema. Tu estado actual es " + nuevoEstado.getNombreEstado(),
+                this);
+        agregarNotificacion(notificacion);
+        this.estado = nuevoEstado;
     }
 
     public List<Vehiculo> getVehiculos() {

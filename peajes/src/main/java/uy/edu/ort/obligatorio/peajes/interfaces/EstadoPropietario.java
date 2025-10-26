@@ -6,5 +6,6 @@ public interface EstadoPropietario {
     boolean estaHabilitado();
     boolean estaSuspendido();
     boolean estaPenalizado();
+    String getNombreEstado();
     
 }
