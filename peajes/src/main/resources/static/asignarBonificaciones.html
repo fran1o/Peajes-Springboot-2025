@@ -137,12 +137,12 @@
         const puestoNombre = selectPuesto.value;
 
         if (!bonificacionTipo) {
-            alert('Debe especificar una bonificación');
+            mostrarMensaje('Debe especificar una bonificación');
             return;
         }
 
         if (!puestoNombre) {
-            alert('Debe especificar un puesto');
+            mostrarMensaje('Debe especificar un puesto');
             return;
         }
 
@@ -161,7 +161,7 @@
     }
 
     async function excepcionDeAplicacion(mensaje) {
-        alert(mensaje);
+        await mostrarMensaje(mensaje);
         if (mensaje === "no existe el propietario") {
             propietarioSection.style.display = 'none';
             asignarSection.style.display = 'none';

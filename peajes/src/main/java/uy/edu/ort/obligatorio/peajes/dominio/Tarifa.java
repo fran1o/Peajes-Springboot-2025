@@ -4,9 +4,9 @@ public class Tarifa {
     private double monto;
     private Categoria categoria;
 
-    public Tarifa(double monto, Categoria categoria) {
-        this.monto = monto;
+    public Tarifa(Categoria categoria, double monto) {
         this.categoria = categoria;
+        this.monto = monto;
     }
 
     public double getMonto() {

@@ -3,14 +3,19 @@ package uy.edu.ort.obligatorio.peajes.dtos;
 import java.util.ArrayList;
 import java.util.List;
 
+import lombok.Getter;
 import uy.edu.ort.obligatorio.peajes.dominio.Puesto;
 import uy.edu.ort.obligatorio.peajes.dominio.Tarifa;
 import uy.edu.ort.obligatorio.peajes.dominio.Transito;
 
 public class PuestoDto {
+    @Getter
     private String nombre;
+    @Getter
     private String direccion;
+    @Getter
     private List<Tarifa> tarifas;
+    @Getter
     private List<Transito> transitos;
     
 
@@ -21,19 +26,6 @@ public class PuestoDto {
         transitos = new ArrayList<>();
     }
 
-    public String getNombre() {
-        return nombre;
-    }
-
-    public String getDireccion() {
-        return direccion;
-    }
-    public List<Tarifa> getTarifas() {
-        return tarifas;
-    }
-    public List<Transito> getTransitos(){
-        return transitos;
-    }
     public static List<PuestoDto> listaDtos(List<Puesto> puestos) {
         List<PuestoDto> lista = new ArrayList<>();
         for (Puesto p : puestos) {

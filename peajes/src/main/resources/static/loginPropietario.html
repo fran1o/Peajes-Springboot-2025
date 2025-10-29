@@ -10,7 +10,7 @@
   <body>
     <script src="utilesVista.js"></script>
     <main class="login-container">
-      <form id="formLogin" action="/propietario/login" method="POST" class="login-card" autocomplete="off">
+      <form id="formLogin" action="/acceso/loginPropietario" method="POST" class="login-card" autocomplete="off">
         <h1>Ingreso Propietario</h1>
 
         <label for="cedula">Cédula</label>
@@ -33,7 +33,7 @@
 
     formLogin.addEventListener('submit', function(e) {
             e.preventDefault();
-            submit("/propietario/login",serializarFormulario('formLogin'));
+            submit("/acceso/loginPropietario",serializarFormulario('formLogin'));
           
         });
 

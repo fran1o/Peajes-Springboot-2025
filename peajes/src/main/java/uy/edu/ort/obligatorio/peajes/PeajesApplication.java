@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.kafka.KafkaProperties.Admin;
 
 import uy.edu.ort.obligatorio.peajes.dominio.Administrador;
 import uy.edu.ort.obligatorio.peajes.dominio.Bonificacion;
@@ -37,20 +38,23 @@ public class PeajesApplication {
 		Categoria motocicleta = new Categoria("Motocicleta");
 
 		// Datos de prueba usuarios
-		Usuario admin1 = new Administrador("12345678", "Usuario Administrador", "admin.123");
-		Usuario admin2 = new Administrador("87654321", "Admin Secundario", "admin.456");
-		Propietario propietario1 = new Propietario("23456789", "Usuario Propietario", "prop.123", 500, 2000,
+		Administrador admin1 = new Administrador("12345678", "Usuario Administrador", "admin.123");
+		Administrador admin2 = new Administrador("87654321", "Admin Secundario", "admin.456");
+		Propietario propietario1 = new Propietario("23456789", "Usuario Propietario", "prop.123", 500, 1000,
 				new EstadoPropietarioHabilitado());
-		Propietario propietario2 = new Propietario("34567890", "Usuario Propietario 2", "prop2.123", 300, 1500,
+		Propietario propietario2 = new Propietario("34567890", "Usuario Propietario 2", "prop2.123", 300, 15,
 				new EstadoPropietarioSuspendido());
 		Propietario propietario3 = new Propietario("45678901", "Usuario Propietario 3", "prop3.123", 400, 1000,
 				new EstadoPropietarioPenalizado());
+		Propietario propietario4 = new Propietario("49429904", "Usuario Propietario 4", "prop3.123", 400, 1000,
+				new EstadoPropietarioDeshabilitado());
 
-		Fachada.getInstancia().agregarUsuario(admin1);
-		Fachada.getInstancia().agregarUsuario(admin2);
-		Fachada.getInstancia().agregarUsuario(propietario1);
-		Fachada.getInstancia().agregarUsuario(propietario2);
-		Fachada.getInstancia().agregarUsuario(propietario3);
+		Fachada.getInstancia().agregarAdministrador(admin1);
+		Fachada.getInstancia().agregarAdministrador(admin2);
+		Fachada.getInstancia().agregarPropietario(propietario1);
+		Fachada.getInstancia().agregarPropietario(propietario2);
+		Fachada.getInstancia().agregarPropietario(propietario3);
+		Fachada.getInstancia().agregarPropietario(propietario4);
 
 		// Datos de prueba puestos
 		Puesto puesto1 = new Puesto("Puesto 101", "Acceso Norte");
@@ -84,45 +88,45 @@ public class PeajesApplication {
 		Fachada.getInstancia().agregarPuesto(puesto10);
 
 		// Tarifas para cada puesto
-		puesto1.agregarTarifa(new Tarifa(100, automovil));
-		puesto1.agregarTarifa(new Tarifa(200, camion));
-		puesto1.agregarTarifa(new Tarifa(50, motocicleta));
+		puesto1.agregarTarifa(new Tarifa( automovil, 100));
+		puesto1.agregarTarifa(new Tarifa(camion, 200));
+		puesto1.agregarTarifa(new Tarifa(motocicleta, 50));
 
-		puesto2.agregarTarifa(new Tarifa(120, automovil));
-		puesto2.agregarTarifa(new Tarifa(240, camion));
-		puesto2.agregarTarifa(new Tarifa(60, motocicleta));
+		puesto2.agregarTarifa(new Tarifa(automovil,120));
+		puesto2.agregarTarifa(new Tarifa(camion, 240));
+		puesto2.agregarTarifa(new Tarifa(motocicleta, 60));
 
-		puesto3.agregarTarifa(new Tarifa(110, automovil));
-		puesto3.agregarTarifa(new Tarifa(220, camion));
-		puesto3.agregarTarifa(new Tarifa(55, motocicleta));
+		puesto3.agregarTarifa(new Tarifa(automovil, 110));
+		puesto3.agregarTarifa(new Tarifa(camion, 220));
+		puesto3.agregarTarifa(new Tarifa(motocicleta, 55));
 
-		puesto4.agregarTarifa(new Tarifa(130, automovil));
-		puesto4.agregarTarifa(new Tarifa(260, camion));
-		puesto4.agregarTarifa(new Tarifa(65, motocicleta));
+		puesto4.agregarTarifa(new Tarifa(automovil, 130));
+		puesto4.agregarTarifa(new Tarifa(camion, 260));
+		puesto4.agregarTarifa(new Tarifa(motocicleta, 65));
 
-		puesto5.agregarTarifa(new Tarifa(140, automovil));
-		puesto5.agregarTarifa(new Tarifa(280, camion));
-		puesto5.agregarTarifa(new Tarifa(70, motocicleta));
+		puesto5.agregarTarifa(new Tarifa(automovil,140));
+		puesto5.agregarTarifa(new Tarifa(camion, 280));
+		puesto5.agregarTarifa(new Tarifa(motocicleta, 70));
 
-		puesto6.agregarTarifa(new Tarifa(150, automovil));
-		puesto6.agregarTarifa(new Tarifa(300, camion));
-		puesto6.agregarTarifa(new Tarifa(75, motocicleta));
+		puesto6.agregarTarifa(new Tarifa(automovil,150));
+		puesto6.agregarTarifa(new Tarifa(camion,300));
+		puesto6.agregarTarifa(new Tarifa(motocicleta,75));
 
-		puesto7.agregarTarifa(new Tarifa(160, automovil));
-		puesto7.agregarTarifa(new Tarifa(320, camion));
-		puesto7.agregarTarifa(new Tarifa(80, motocicleta));
+		puesto7.agregarTarifa(new Tarifa(automovil,160));
+		puesto7.agregarTarifa(new Tarifa(camion, 320));
+		puesto7.agregarTarifa(new Tarifa(motocicleta, 80));
 
-		puesto8.agregarTarifa(new Tarifa(170, automovil));
-		puesto8.agregarTarifa(new Tarifa(340, camion));
-		puesto8.agregarTarifa(new Tarifa(85, motocicleta));
+		puesto8.agregarTarifa(new Tarifa(automovil, 170));
+		puesto8.agregarTarifa(new Tarifa(camion, 340));
+		puesto8.agregarTarifa(new Tarifa(motocicleta, 85));
 
-		puesto9.agregarTarifa(new Tarifa(180, automovil));
-		puesto9.agregarTarifa(new Tarifa(360, camion));
-		puesto9.agregarTarifa(new Tarifa(90, motocicleta));
+		puesto9.agregarTarifa(new Tarifa(automovil, 180));
+		puesto9.agregarTarifa(new Tarifa(camion, 360));
+		puesto9.agregarTarifa(new Tarifa(motocicleta, 90));
 
-		puesto10.agregarTarifa(new Tarifa(190, automovil));
-		puesto10.agregarTarifa(new Tarifa(380, camion));
-		puesto10.agregarTarifa(new Tarifa(95, motocicleta));
+		puesto10.agregarTarifa(new Tarifa(automovil, 190));
+		puesto10.agregarTarifa(new Tarifa(camion, 380));
+		puesto10.agregarTarifa(new Tarifa(motocicleta, 95));
 
 		// Vehiculos
 		Vehiculo vehiculo1 = new Vehiculo("ABC1234", "Toyota Corolla", "Blanco", automovil, propietario1);
@@ -130,12 +134,16 @@ public class PeajesApplication {
 		Vehiculo vehiculo3 = new Vehiculo("GHI9012", "Yamaha MT-07", "Rojo", motocicleta, propietario1);
 		Vehiculo vehiculo4 = new Vehiculo("JKL3456", "Mercedes Actros", "Azul", camion, propietario2);
 		Vehiculo vehiculo5 = new Vehiculo("MNO7890", "Ford Ranger", "Gris", automovil, propietario2);
+		Vehiculo vehiculo6 = new Vehiculo("UYU1234", "Fiat 147", "Azul", automovil, propietario3);
+		Vehiculo vehiculo7 = new Vehiculo("ARG1234", "Fiat Uno Sport", "Blanco", automovil, propietario4);
 
 		propietario1.agregarVehiculo(vehiculo1);
 		propietario1.agregarVehiculo(vehiculo2);
 		propietario1.agregarVehiculo(vehiculo3);
 		propietario2.agregarVehiculo(vehiculo4);
 		propietario2.agregarVehiculo(vehiculo5);
+		propietario3.agregarVehiculo(vehiculo6);
+		propietario4.agregarVehiculo(vehiculo7);
 
 		// Bonificaciones
 		Bonificacion bonifExonerados = new BonificacionExonerados();

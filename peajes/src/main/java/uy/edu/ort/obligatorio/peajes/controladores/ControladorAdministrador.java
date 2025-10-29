@@ -4,6 +4,7 @@ package uy.edu.ort.obligatorio.peajes.controladores;
 import java.util.ArrayList;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -29,6 +30,7 @@ import uy.edu.ort.obligatorio.peajes.dominio.Tarifa;
 import uy.edu.ort.obligatorio.peajes.dominio.Transito;
 import uy.edu.ort.obligatorio.peajes.dominio.Usuario;
 import uy.edu.ort.obligatorio.peajes.dtos.PuestoDto;
+import uy.edu.ort.obligatorio.peajes.dtos.TarifaDto;
 import uy.edu.ort.obligatorio.peajes.estados.EstadoPropietarioDeshabilitado;
 import uy.edu.ort.obligatorio.peajes.estados.EstadoPropietarioHabilitado;
 import uy.edu.ort.obligatorio.peajes.estados.EstadoPropietarioPenalizado;
@@ -37,21 +39,12 @@ import uy.edu.ort.obligatorio.peajes.excepciones.UsuarioException;
 import uy.edu.ort.obligatorio.peajes.interfaces.EstadoPropietario;
 import uy.edu.ort.obligatorio.peajes.servicios.Fachada;
 import uy.edu.ort.obligatorio.peajes.utils.Respuesta;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @RestController
 @RequestMapping("/admin")
 public class ControladorAdministrador {
-
-
-    private Usuario usuarioLogueado = null;
-    private List<PuestoDto> puestos;
-
-    @PostMapping("/login")
-    public List<Respuesta> login(HttpSession session, @RequestParam String cedula, @RequestParam String contrasena) throws UsuarioException {
-        usuarioLogueado = Fachada.getInstancia().login(cedula, contrasena);
-        session.setAttribute("usuarioLogueado", usuarioLogueado);
-        return Respuesta.lista(new Respuesta("loginExitoso", "menuAdmin.html"));
-    }
 
     @PostMapping("/cargarPuestos")
     public List<Respuesta> cargarPuestos() {
@@ -60,22 +53,16 @@ public class ControladorAdministrador {
     }
     
     private Respuesta puestos() {
-        puestos = PuestoDto.listaDtos(Fachada.getInstancia().getPuestos());
+        List<PuestoDto> puestos = PuestoDto.listaDtos(Fachada.getInstancia().getPuestos());
         return new Respuesta("puestos", puestos);
     }
 
     @PostMapping("/cargarTarifas")
     public List<Respuesta> cargarTarifas(@RequestParam String puestoNombre) {
-        for (Puesto puesto : Fachada.getInstancia().getPuestos()) {
+        List<PuestoDto> puestos = PuestoDto.listaDtos(Fachada.getInstancia().getPuestos());
+        for (PuestoDto puesto : puestos) {
             if (puesto.getNombre().equals(puestoNombre)) {
-                List<Map<String, Object>> tarifas = new ArrayList<>();
-                for (Tarifa tarifa : puesto.getTarifas()) {
-                    Map<String, Object> tarifaMap = new HashMap<>();
-                    tarifaMap.put("categoria", tarifa.getCategoria().getNombre());
-                    tarifaMap.put("monto", tarifa.getMonto());
-                    tarifas.add(tarifaMap);
-
-                }
+                List<TarifaDto> tarifas = TarifaDto.listaDtos(puesto.getTarifas());
                 return Respuesta.lista(new Respuesta("tarifas", tarifas));
             }
         }
@@ -84,17 +71,17 @@ public class ControladorAdministrador {
     } 
 
     @PostMapping("/emularTransito")
-    public List<Respuesta> emularTransito(@RequestParam String matricula, @RequestParam String puestoNombre,
-            @RequestParam String fechaHora) throws UsuarioException {
+    public List<Respuesta> emularTransito(@RequestParam String matricula, @RequestParam String puestoNombre, @RequestParam String fechaHora) throws UsuarioException {
         Puesto puesto = null;
         for (Puesto p : Fachada.getInstancia().getPuestos()) {
-            if (p.getNombre().equals(puestoNombre)) {
+            if (p.getNombre().trim().equalsIgnoreCase(puestoNombre.trim())) {
                 puesto = p;
                 break;
             }
         }
 
-        LocalDateTime fecha = LocalDateTime.parse(fechaHora);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm");
+        LocalDateTime fecha = LocalDateTime.parse(fechaHora, formatter);
         Transito transito = Fachada.getInstancia().emularTransito(matricula, puesto, fecha);
 
         Propietario propietario = transito.getVehiculo().getPropietario();
@@ -141,7 +128,7 @@ public class ControladorAdministrador {
     public List<Respuesta> buscarPropietario(@RequestParam String cedula) throws UsuarioException {
         Propietario propietario = Fachada.getInstancia().buscarPropietarioPorCedula(cedula);
         if (propietario == null) {
-            throw new UsuarioException("no existe el propietario");
+            throw new UsuarioException("No existe el propietario");
         }
 
         String estado = obtenerNombreEstado(propietario.getEstado());
