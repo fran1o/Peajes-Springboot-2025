@@ -24,10 +24,6 @@ public class ServicioTransitos {
     public Transito emularTransito(String matricula, Puesto puesto, LocalDateTime fechaHora,
             Vehiculo vehiculo, Propietario propietario) throws UsuarioException {
 
-        if (vehiculo == null) {
-            throw new UsuarioException("No existe el vehículo");
-        }
-
         if (propietario.getEstado().estaDeshabilitado()) {
             throw new UsuarioException("El propietario del vehículo está deshabilitado, no puede realizar tránsitos");
         }

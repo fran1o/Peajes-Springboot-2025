@@ -4,11 +4,96 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Propietario</title>
-    <script>
-        window.location.href = 'tableroPropietario.html';
-    </script>
+    <script src="vistaWeb.js"></script>
 </head>
 <body>
-    <h1>Redirigiendo...</h1>
+    <script src="utilesVista.js"></script>
+
+    <main class="container">
+
+        <h1>Dashboard del Propietario</h1>
+        <section class="info-section">
+            <h2>Información Personal</h2>
+            <p><strong>Nombre:</strong> <span id="nombreCompleto"></span></p>
+            <p><strong>Estado:</strong> <span id="estado"></span></p>
+            <p><strong>Saldo Actual:</strong> $<span id="saldoActual"></span></p>
+        </section>
+
+        <section class="bonificaciones-section">
+            <h2>Bonificaciones Asignadas</h2>
+            <table id="tablaBonificaciones"> </table>
+        </section>
+
+        <section class="vehiculos-section">
+            <h2>Mis Vehículos</h2>
+            <table id="tablaVehiculos">
+            </table>
+        </section>
+
+        <section class="transitos-section">
+            <h2>Historial de Tránsitos</h2>
+            <table id="tablaTransitos">
+                
+            </table>
+        </section>
+
+        <section class="notificaciones-section">
+            <h2>Notificaciones</h2>
+            <button id="btnBorrarNotificaciones">Borrar Notificaciones</button>
+            <table id="tablaNotificaciones">
+            </table>
+        </section>
+    </main>
+    
 </body>
+
+    <script>
+
+        var urlIniciarVista = "/propietario/cargarVistaInicial";
+        var parametrosInicioVista = "";
+        const tablaBonificaciones = document.getElementById('tablaBonificaciones');
+        const tablaVehiculos = document.getElementById('tablaVehiculos');
+        const tablaTransitos = document.getElementById('tablaTransitos');
+        const tablaNotificaciones = document.getElementById('tablaNotificaciones');
+
+        
+
+        function mostrar_nombreCompleto(nombre) {
+            document.getElementById('nombreCompleto').textContent = nombre;
+        }
+
+        function mostrar_estado(estado) {
+            document.getElementById('estado').textContent = estado;
+        }
+
+        function mostrar_saldoActual(saldo) {
+            document.getElementById('saldoActual').textContent = saldo.toFixed(2);
+        }
+        
+        function mostrar_bonificaciones(bonificaciones) {
+            tablaBonificaciones.innerHTML = crearTablaDesdeJson(bonificaciones);
+        }
+        
+        function mostrar_vehiculos(vehiculos) {
+            tablaVehiculos.innerHTML = crearTablaDesdeJson(vehiculos);
+
+        }
+
+        function mostrar_transitos(transitos) {
+            tablaTransitos.innerHTML = crearTablaDesdeJson(transitos);
+        }
+
+        function mostrar_notificaciones(notificaciones) {
+            tablaNotificaciones.innerHTML = crearTablaDesdeJson(notificaciones);
+            document.getElementById('btnBorrarNotificaciones').addEventListener('click', function() {
+            submit("/propietario/borrarNotificaciones", "");
+            });
+        }
+
+        
+        
+        
+
+        
+    </script>
 </html>

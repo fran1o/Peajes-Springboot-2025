@@ -2,69 +2,77 @@ package uy.edu.ort.obligatorio.peajes.servicios;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
+import lombok.Getter;
+import uy.edu.ort.obligatorio.peajes.dominio.Administrador;
 import uy.edu.ort.obligatorio.peajes.dominio.Bonificacion;
 import uy.edu.ort.obligatorio.peajes.dominio.Propietario;
 import uy.edu.ort.obligatorio.peajes.dominio.Puesto;
+import uy.edu.ort.obligatorio.peajes.dominio.Sesion;
 import uy.edu.ort.obligatorio.peajes.dominio.Usuario;
 import uy.edu.ort.obligatorio.peajes.dominio.Vehiculo;
 import uy.edu.ort.obligatorio.peajes.excepciones.UsuarioException;
 import uy.edu.ort.obligatorio.peajes.interfaces.EstadoPropietario;
 
 public class ServicioUsuarios {
-
-    private List<Usuario> usuarios;
-    private List<Usuario> usuariosLogueados;
+    @Getter
+    private List<Sesion> sesionesActivas;
+    @Getter
+    private List<Administrador> administradores;
+    @Getter
+    private List<Propietario> propietarios;
 
     public ServicioUsuarios() {
-        this.usuarios = new ArrayList<>();
-        this.usuariosLogueados = new ArrayList<>();
+        this.propietarios = new ArrayList<>();
+        this.sesionesActivas = new ArrayList<>();
+        this.administradores = new ArrayList<>();
     }
 
-    public void agregarUsuario(Usuario usuario) {
-        usuarios.add(usuario);
+    public void agregarAdministrador(Administrador admin) {
+        administradores.add(admin);
     }
 
-    public List<Usuario> getUsuarios() {
-        return usuarios;
+    public void agregarPropietario(Propietario propietario) {
+        propietarios.add(propietario);
+    }   
+
+    public Administrador loginAdministrador(String cedula, String contrasenia) throws UsuarioException {
+        Administrador usuario = (Administrador) login(cedula, contrasenia, administradores, "Acceso denegado");
+        if(usuario.validarLogin()){
+            Sesion sesion = new Sesion(usuario);
+            sesion.setFechaInicio(new Date());
+            sesionesActivas.add(sesion);
+        }
+        return usuario;
     }
 
-    public Usuario login(String cedula, String contrasena) throws UsuarioException {
-        Usuario usuarioEncontrado = null;
+    public Propietario loginPropietario(String cedula, String contrasenia) throws UsuarioException {
+        return (Propietario) login(cedula, contrasenia, propietarios, "Acceso denegado");
+    }
 
-        for (Usuario u : usuarios) {
-            if (u.getCedula().equals(cedula) && u.getContrasena().equals(contrasena)) {
-                usuarioEncontrado = u;
-                break;
+    private Usuario login(String cedula, String contrasenia, List<? extends Usuario> usuarios, String mensajeLoginIncorrecto) throws UsuarioException {
+        for(Usuario usuario : usuarios) {
+            if(usuario.getCedula().equals(cedula) && usuario.esContrasenaValida(contrasenia)) {
+                return usuario;
             }
         }
-
-        if (usuarioEncontrado == null) {
-            throw new UsuarioException("Acceso denegado");
-        }
-
-        if(usuarioEncontrado.validarLogin()){
-            usuariosLogueados.add(usuarioEncontrado);
-        }
-
-        return usuarioEncontrado;
+        throw new UsuarioException(mensajeLoginIncorrecto);
     }
+
 
     public void logout(Usuario usuario) throws UsuarioException {
         usuario.logout();
-        usuariosLogueados.remove(usuario);
+        sesionesActivas.remove(usuario);
     }
 
     public Vehiculo buscarVehiculoPorMatricula(String matricula) {
-        for (Usuario usuario : usuarios) {
-            if (usuario instanceof Propietario) {
-                Propietario propietario = (Propietario) usuario;
+        for (Propietario propietario : propietarios) {
                 Vehiculo vehiculo = propietario.buscarVehiculo(matricula);
                 if (vehiculo != null) {
                     return vehiculo;
                 }
-            }
         }
         return null;
     }
@@ -74,9 +82,9 @@ public class ServicioUsuarios {
     }
 
     public Propietario buscarPropietarioPorCedula(String cedula) {
-        for (Usuario usuario : usuarios) {
-            if (usuario instanceof Propietario && usuario.getCedula().equals(cedula)) {
-                return (Propietario) usuario;
+        for (Propietario propietario : propietarios) {
+            if (propietario.getCedula().equals(cedula)) {
+                return propietario;
             }
         }
         return null;

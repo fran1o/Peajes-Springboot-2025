@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+	<html lang="es">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>Administrador - Principal</title>
+		<link rel="stylesheet" href="menu.css">
+		<script src='vistaWeb.js'></script>
+	</head>
+	<body>
+		<div class="sidebar">
+			<label id="nombreCompleto"> </label>
+			<button onclick="logout()">Salir</button>
+		</div>
+		<div class="content">
+			<iframe id="contenidoFrame" src="homePropietario.html" frameborder="0">
+                
+            </iframe>
+		</div>
+		<script>
+	    	const spnNombreCompleto = document.getElementById("nombreCompleto");
+			
+			function cargarContenido(pagina) {
+				document.getElementById('contenidoFrame').src = pagina;
+			}
+			
+			function logout() {
+				submit("/menuPropietario/logout", null);
+           } 
+
+		   function mostrar_usuarioNoConectado(urlDestino){
+				window.location.href = urlDestino;
+			}
+			
+		 function mostrar_vistaConectada(nombreCompleto){
+			  spnNombreCompleto.innerHTML = nombreCompleto.toUpperCase();
+		}
+			
+		</script>
+	</body>
+	</html>	

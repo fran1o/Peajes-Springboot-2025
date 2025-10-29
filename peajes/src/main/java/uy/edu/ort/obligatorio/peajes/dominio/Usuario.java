@@ -21,8 +21,8 @@ public abstract class Usuario {
         return nombreCompleto;
     }
 
-    public String getContrasena() {
-        return contrasena;
+    public boolean esContrasenaValida(String contrasenia) {
+        return this.contrasena.equals(contrasenia);
     }
 
     public abstract void logout() throws UsuarioException;

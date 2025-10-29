@@ -1,84 +1,66 @@
-table {
+/* Estilo general del contenedor */
+.container {
+    max-width: 600px;
+    margin: auto;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Títulos más lindos */
+h1 {
+    font-size: 2rem;
+    color: #0b254a;
+    text-align: center;
+    margin-bottom: 15px;
+}
+
+h3 {
+    font-size: 1.2rem;
+    color: #0b254a;
+    margin-top: 20px;
+}
+
+/* Inputs alineados */
+input, select {
     width: 100%;
-    border-collapse: collapse;
-    margin-top: 30px;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: white;
-    border-radius: 8px;
-    box-shadow: 0 2px 12px rgba(0,0,0,0.1);
-    overflow: hidden;
-}
-
-th, td {
-    padding: 12px;
-    text-align: left;
-    border-bottom: 1px solid #ddd;
-    color: #333;
-}
-
-th {
-    background-color: #f1f1f1;
-    font-weight: 600;
-    user-select: none;
-}
-
-tbody tr:hover {
-    background-color: #f0f0f0;
-    cursor: pointer;
-}
-select {
-    padding: 10px;
-    font-size: 1rem;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    background-color: white;
-    color: #333;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    transition: border-color 0.3s ease;
+    padding: 10px 12px;
+    border: 1px solid #d7e0ef;
+    border-radius: 6px;
+    font-size: 14px;
     outline: none;
-    width: 100%;
-    box-sizing: border-box;
+    margin-bottom: 15px;
 }
 
-select:focus {
+input:focus {
     border-color: #0057b8;
     box-shadow: 0 0 5px rgba(0, 87, 184, 0.5);
 }
 
-select:disabled {
-    background-color: #eee;
-    color: #999;
-    cursor: not-allowed;
+/* Botón bien separado y centrado */
+button {
+    display: block;
+    width: 200px;
+    margin: 25px auto 0 auto; /* auto para centrar */
+    background-color: #0057b8;
+    color: white;
+    border: none;
+    padding: 12px;
+    border-radius: 8px;
+    font-weight: bold;
+    font-size: 1rem;
+    cursor: pointer;
 }
 
-
-.login-container{width:100%;max-width:420px;padding:24px;}
-.login-card{
-  background:var(--card);
-  border-radius:10px;
-  box-shadow:0 6px 20px rgba(20,40,80,0.08);
-  padding:28px;
-  display:flex;
-  flex-direction:column;
-  gap:12px;
-}
-.login-card h1{margin:0 0 6px 0;font-size:20px;color:#0b254a}
-label{font-size:13px;color:var(--muted);}
-input[type=text], input[type=password]{
-  padding:10px 12px;
-  border:1px solid #d7e0ef;
-  border-radius:6px;
-  font-size:14px;
-  outline:none;
-}
-input[type=text]:focus, input[type=password]:focus{border-color:var(--primary);box-shadow:0 0 0 4px rgba(13,110,253,0.06)}
-.actions{display:flex;justify-content:flex-end;margin-top:8px}
-button{background:var(--primary);color:#fff;border:none;padding:10px 16px;border-radius:8px;font-weight:600;cursor:pointer}
-button:active{transform:translateY(1px)}
-.message{color:#c00;font-size:13px;min-height:18px;margin:6px 0 0 0}
-
-@media (max-width:420px){
-  .login-card{padding:20px}
+/* Hover con onda */
+button:hover {
+    background-color: #003d82;
 }
 
+p {
+    text-align: center;
+    max-width: 600px;
+    margin: 0 auto 20px auto;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #333;
+    font-size: 1rem;
+}
 

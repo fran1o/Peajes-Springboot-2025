@@ -13,31 +13,25 @@
     <p>Seleccione un puesto, verifique sus tarifas, ingrese una matrícula y emule un tránsito.</p>
 
     <main class="container">
-        <section>
-            <h3>Puesto</h3>
-            <select id="selectPuesto" name="puestoNombre">
-                <option value="">Seleccione un puesto</option>
-            </select>
+        <form id="formEmular" action="/admin/emularTransito" method="post">
+            <section>
+                <h3>Puesto</h3>
+                <select id="selectPuesto" name="puestoNombre">
+                    <option value="">Seleccione un puesto</option>
+                </select>
 
-            <h3>Tarifas del puesto</h3>
-            <table id="tablaTarifas">
-                <thead>
-                    <tr>
-                        <th>Categoría</th>
-                        <th>Monto</th>
-                    </tr>
-                </thead>
-                <tbody id="tarifasBody"></tbody>
-            </table>
+                <h3>Tarifas del puesto</h3>
+                <table id="tablaTarifas"></table>
 
-            <h3>Matrícula</h3>
-            <input id="matricula" name="matricula" type="text" placeholder="Ej: ABC1234" />
+                <h3>Matrícula</h3>
+                <input id="matricula" name="matricula" type="text" placeholder="Ej: ABC1234" required />
 
-            <h3>Fecha y hora del tránsito</h3>
-            <input id="fechaHora" name="fechaHora" type="datetime-local" />
+                <h3>Fecha y hora del tránsito</h3>
+                <input id="fechaHora" name="fechaHora" type="datetime-local" required />
 
-            <button id="btnEmular">Emular Tránsito</button>
-        </section>
+                <button type="submit">Emular Tránsito</button>
+            </section>
+        </form>
 
         <section id="resultadoSection" style="display: none;">
             <h2>Resultado del Tránsito</h2>
@@ -49,6 +43,8 @@
             <p><strong>Saldo:</strong> $<span id="saldo"></span></p>
         </section>
     </main>
+
+    <p id="message" class="message" aria-live="polite"></p>
 </body>
 
 <script>
@@ -56,9 +52,14 @@
     var parametrosInicioVista = "";
     
     const selectPuesto = document.getElementById('selectPuesto');
-    const tarifasBody = document.getElementById('tarifasBody');
-    const btnEmular = document.getElementById('btnEmular');
+    const tablaTarifas = document.getElementById('tablaTarifas');
+    const formEmular = document.getElementById('formEmular');
     const resultadoSection = document.getElementById('resultadoSection');
+
+    async function excepcionDeAplicacion(mensaje){
+            await mostrarMensaje(mensaje);
+            resultadoSection.style.display = 'none';
+    }
 
     function mostrar_puestos(puestos) {
         selectPuesto.innerHTML = '<option value="">Seleccione un puesto</option>';
@@ -75,39 +76,19 @@
         if (puestoNombre) {
             submit("/admin/cargarTarifas", "puestoNombre=" + encodeURIComponent(puestoNombre));
         } else {
-            tarifasBody.innerHTML = '';
+            tablaTarifas.innerHTML = '';
         }
     });
 
     function mostrar_tarifas(tarifas) {
-        tarifasBody.innerHTML = '';
-        if (tarifas.length === 0) {
-            tarifasBody.innerHTML = '<tr><td colspan="2">No hay tarifas para este puesto</td></tr>';
-            return;
-        }
-        tarifas.forEach(tarifa => {
-            const row = tarifasBody.insertRow();
-            row.insertCell(0).textContent = tarifa.categoria;
-            row.insertCell(1).textContent = '$' + tarifa.monto.toFixed(2);
-        });
+        tablaTarifas.innerHTML=crearTablaDesdeJson(tarifas);
     }
 
-    btnEmular.addEventListener('click', function() {
-        const matricula = document.getElementById('matricula').value;
-        const puestoNombre = selectPuesto.value;
-        const fechaHora = document.getElementById('fechaHora').value;
-
-        if (!matricula || !puestoNombre || !fechaHora) {
-            alert('Por favor complete todos los campos');
-            return;
-        }
-
-        const params = "matricula=" + encodeURIComponent(matricula) + 
-                      "&puestoNombre=" + encodeURIComponent(puestoNombre) + 
-                      "&fechaHora=" + encodeURIComponent(fechaHora);
-        
-        submit("/admin/emularTransito", params);
-    });
+    formEmular.addEventListener('submit', function(e) {
+            e.preventDefault();
+            submit("/admin/emularTransito",serializarFormulario('formEmular'));
+          
+        });
 
     function mostrar_propietarioNombre(nombre) {
         document.getElementById('propietarioNombre').textContent = nombre;
@@ -134,9 +115,6 @@
         document.getElementById('saldo').textContent = saldo.toFixed(2);
     }
 
-    async function excepcionDeAplicacion(mensaje) {
-        alert(mensaje);
-        resultadoSection.style.display = 'none';
-    }
+
 </script>
 </html>
