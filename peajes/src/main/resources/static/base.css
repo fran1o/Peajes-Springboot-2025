@@ -1,0 +1,127 @@
+/* Estilo general del contenedor */
+.container {
+    max-width: 900px;
+    margin: 20px auto;
+    padding: 20px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #ffffff;
+}
+
+/* Títulos más lindos */
+h1 {
+    font-size: 2rem;
+    color: #0b254a;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+h2 {
+    font-size: 1.5rem;
+    color: #0b254a;
+    margin-top: 30px;
+    margin-bottom: 15px;
+}
+
+h3 {
+    font-size: 1.2rem;
+    color: #0b254a;
+    margin-top: 20px;
+    margin-bottom: 10px;
+}
+
+/* Secciones */
+section {
+    margin-bottom: 30px;
+    padding: 20px;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    border: 1px solid #e9ecef;
+}
+
+/* Inputs y selects alineados */
+input, select {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #d7e0ef;
+    border-radius: 6px;
+    font-size: 14px;
+    outline: none;
+    margin-bottom: 15px;
+    box-sizing: border-box;
+}
+
+input:focus, select:focus {
+    border-color: #0057b8;
+    box-shadow: 0 0 5px rgba(0, 87, 184, 0.5);
+}
+
+label {
+    display: block;
+    margin-bottom: 8px;
+    color: #333;
+    font-weight: 500;
+}
+
+/* Botones */
+button {
+    background-color: #0057b8;
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-weight: bold;
+    font-size: 1rem;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+button:hover {
+    background-color: #003d82;
+}
+
+button:active {
+    transform: translateY(1px);
+}
+
+/* Párrafos */
+p {
+    color: #333;
+    font-size: 1rem;
+    line-height: 1.6;
+    margin-bottom: 10px;
+}
+
+/* Tablas */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 15px;
+    background-color: white;
+    border-radius: 6px;
+    overflow: hidden;
+}
+
+th, td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #e9ecef;
+}
+
+th {
+    background-color: #f8f9fa;
+    font-weight: bold;
+    color: #0b254a;
+}
+
+tr:hover {
+    background-color: #f8f9fa;
+}
+
+/* Mensajes */
+.message {
+    color: #c00;
+    font-size: 13px;
+    min-height: 18px;
+    margin: 6px 0 0 0;
+}
+

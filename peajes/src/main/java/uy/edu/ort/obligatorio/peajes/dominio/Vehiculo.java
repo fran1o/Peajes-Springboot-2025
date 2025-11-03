@@ -82,5 +82,9 @@ public class Vehiculo {
         }
         return total;
     }
-    
+
+    public void agregarTransito(Transito transito) {
+        transitos.add(transito);
+    }
+
 }

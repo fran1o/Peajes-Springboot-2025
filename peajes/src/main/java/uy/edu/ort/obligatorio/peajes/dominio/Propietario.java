@@ -16,10 +16,11 @@ public class Propietario extends Usuario {
     private EstadoPropietario estado;
     private List<Notificacion> notificaciones;
 
-    public Propietario(String cedula, String nombreCompleto, String contrasena, double saldoMinimo, double saldoActual, EstadoPropietario estado) {
+    public Propietario(String cedula, String nombreCompleto, String contrasena, double saldoMinimo, double saldoActual,
+            EstadoPropietario estado) {
         super(cedula, nombreCompleto, contrasena);
         this.saldoMinimo = saldoMinimo;
-        this.saldoActual = saldoActual; 
+        this.saldoActual = saldoActual;
         this.estado = estado;
         this.vehiculos = new ArrayList<>();
         this.bonificaciones = new ArrayList<>();
@@ -47,7 +48,8 @@ public class Propietario extends Usuario {
         if (estado.equals(nuevoEstado)) {
             throw new UsuarioException("El propietario ya esta en estado " + estado.getNombreEstado());
         }
-        Notificacion notificacion = new Notificacion(LocalDateTime.now(),"Se ha cambiado tu estado en el sistema. Tu estado actual es " + nuevoEstado.getNombreEstado(),
+        Notificacion notificacion = new Notificacion(LocalDateTime.now(),
+                "Se ha cambiado tu estado en el sistema. Tu estado actual es " + nuevoEstado.getNombreEstado(),
                 this);
         agregarNotificacion(notificacion);
         this.estado = nuevoEstado;
@@ -130,11 +132,73 @@ public class Propietario extends Usuario {
     @Override
     public boolean validarLogin() throws UsuarioException {
         if (estado.estaDeshabilitado()) {
-                throw new UsuarioException("Usuario deshabilitado, no puede ingresar al sistema");
+            throw new UsuarioException("Usuario deshabilitado, no puede ingresar al sistema");
         }
 
         return true;
     }
-    
-}
 
+    public void validarPuedeRealizarTransito() throws UsuarioException {
+        if (estado.estaDeshabilitado()) {
+            throw new UsuarioException("El propietario del vehículo está deshabilitado, no puede realizar tránsitos");
+        }
+        if (estado.estaSuspendido()) {
+            throw new UsuarioException("El propietario del vehículo está suspendido, no puede realizar tránsitos");
+        }
+    }
+
+    public void validarSaldoSuficiente(double monto) throws UsuarioException {
+        if (saldoActual < monto) {
+            throw new UsuarioException("Saldo insuficiente: " + saldoActual);
+        }
+    }
+
+    public double calcularMontoConBonificacion(Vehiculo vehiculo, Puesto puesto, double montoTarifa,
+            LocalDateTime fechaHora) {
+        double montoBonificacion = calcularMontoBonificacion(vehiculo, puesto, montoTarifa, fechaHora);
+        return montoTarifa - montoBonificacion;
+    }
+
+    public double calcularMontoBonificacion(Vehiculo vehiculo, Puesto puesto, double montoTarifa,
+            LocalDateTime fechaHora) {
+        if (estado.estaPenalizado()) {
+            return 0;
+        }
+
+        Bonificacion bonificacion = buscarBonificacionPorPuesto(puesto);
+        if (bonificacion != null) {
+            Transito transitoTemp = new Transito(vehiculo, puesto, fechaHora, montoTarifa, 0);
+            return bonificacion.calcularDescuento(transitoTemp);
+        }
+
+        return 0;
+    }
+
+    public void crearNotificacionesTransito(Vehiculo vehiculo, Puesto puesto) {
+        if (!estado.estaPenalizado()) {
+            Notificacion notificacionTransito = new Notificacion(
+                    LocalDateTime.now(),
+                    "Pasaste por el puesto " + puesto.getNombre() + " con el vehículo " + vehiculo.getMatricula(),
+                    this);
+            agregarNotificacion(notificacionTransito);
+
+            if (saldoActual < saldoMinimo) {
+                Notificacion notificacionSaldo = new Notificacion(
+                        LocalDateTime.now(),
+                        "Tu saldo actual es de $ " + saldoActual
+                                + " Te recomendamos hacer una recarga",
+                        this);
+                agregarNotificacion(notificacionSaldo);
+            }
+        }
+    }
+
+    public List<Transito> getTransitos() {
+        List<Transito> transitosPropietario = new ArrayList<>();
+        for (Vehiculo vehiculo : vehiculos) {
+            transitosPropietario.addAll(vehiculo.getTransitos());
+        }
+        return transitosPropietario;
+    }
+
+}

@@ -94,9 +94,46 @@ function manejarError(status, text, url, data){
      } catch (e) {
                 console.error("url:" + url + "  data: " + data);
                 console.error("Error en submit:" + status, text);
-                document.body.innerHTML = '';
-                alert("Se produjo un error, detalles en consola");
+                
+                // Detectar si es un error de autenticación
+                if (esErrorDeAutenticacion(status, url)) {
+                    manejarErrorAutenticacion(url);
+                } else {
+                    document.body.innerHTML = '';
+                    alert("Se produjo un error, detalles en consola");
+                }
      }
+}
+
+// Determina si el error es por falta de autenticación
+function esErrorDeAutenticacion(status, url) {
+    // Códigos de estado que indican problemas de autenticación
+    if (status === 401 || status === 403) {
+        return true;
+    }
+    
+    // URLs que requieren autenticación
+    const rutasProtegidas = ['/admin/', '/propietario/', '/menuAdmin/', '/menuPropietario/'];
+    return rutasProtegidas.some(ruta => url.includes(ruta));
+}
+
+// Maneja el error de autenticación mostrando mensaje y redirigiendo
+function manejarErrorAutenticacion(url) {
+    alert("No está logueado");
+    redirigirAlLogin(url);
+}
+
+// Redirige al login apropiado según la URL
+function redirigirAlLogin(url) {
+    let loginUrl = 'loginAdmin.html'; // Por defecto
+    
+    if (url.includes('/admin/') || url.includes('/menuAdmin/') || url.includes('/administrador')) {
+        loginUrl = 'loginAdmin.html';
+    } else if (url.includes('/propietario/') || url.includes('/menuPropietario/')) {
+        loginUrl = 'loginPropietario.html';
+    }
+    
+    window.location.href = loginUrl;
 }
 
 // Por cada respuesta llama a la función "mostrar_" correspondiente
