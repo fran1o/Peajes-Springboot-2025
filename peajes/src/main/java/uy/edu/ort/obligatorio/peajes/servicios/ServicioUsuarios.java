@@ -36,11 +36,11 @@ public class ServicioUsuarios {
 
     public void agregarPropietario(Propietario propietario) {
         propietarios.add(propietario);
-    }   
+    }
 
     public Administrador loginAdministrador(String cedula, String contrasenia) throws UsuarioException {
         Administrador usuario = (Administrador) login(cedula, contrasenia, administradores, "Acceso denegado");
-        if(usuario.validarLogin()){
+        if (usuario.validarLogin()) {
             Sesion sesion = new Sesion(usuario);
             sesion.setFechaInicio(new Date());
             sesionesActivas.add(sesion);
@@ -52,33 +52,29 @@ public class ServicioUsuarios {
         return (Propietario) login(cedula, contrasenia, propietarios, "Acceso denegado");
     }
 
-    private Usuario login(String cedula, String contrasenia, List<? extends Usuario> usuarios, String mensajeLoginIncorrecto) throws UsuarioException {
-        for(Usuario usuario : usuarios) {
-            if(usuario.getCedula().equals(cedula) && usuario.esContrasenaValida(contrasenia)) {
+    private Usuario login(String cedula, String contrasenia, List<? extends Usuario> usuarios,
+            String mensajeLoginIncorrecto) throws UsuarioException {
+        for (Usuario usuario : usuarios) {
+            if (usuario.getCedula().equals(cedula) && usuario.esContrasenaValida(contrasenia)) {
                 return usuario;
             }
         }
         throw new UsuarioException(mensajeLoginIncorrecto);
     }
 
-
     public void logout(Usuario usuario) throws UsuarioException {
         usuario.logout();
-        sesionesActivas.remove(usuario);
+        sesionesActivas.removeIf(sesion -> sesion.getUsuario().equals(usuario));
     }
 
     public Vehiculo buscarVehiculoPorMatricula(String matricula) {
         for (Propietario propietario : propietarios) {
-                Vehiculo vehiculo = propietario.buscarVehiculo(matricula);
-                if (vehiculo != null) {
-                    return vehiculo;
-                }
+            Vehiculo vehiculo = propietario.buscarVehiculo(matricula);
+            if (vehiculo != null) {
+                return vehiculo;
+            }
         }
         return null;
-    }
-
-    public Propietario buscarPropietarioPorVehiculo(Vehiculo vehiculo) {
-        return vehiculo.getPropietario();
     }
 
     public Propietario buscarPropietarioPorCedula(String cedula) {
@@ -124,6 +120,5 @@ public class ServicioUsuarios {
         bonificacion.setFechaAsignacion(fecha);
         propietario.agregarBonificacion(bonificacion);
     }
-
 
 }
