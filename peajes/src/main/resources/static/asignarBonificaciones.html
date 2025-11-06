@@ -13,6 +13,21 @@
         <h1>Asignar Bonificaciones</h1>
 
         <section>
+            
+            <h3>Bonificaciones definidas</h3>
+            <select id="selectBonificacion" name="bonificacionNombre">
+                <option value="">Seleccione una bonificación</option>
+            </select>
+
+            <h3>Puestos definidos</h3>
+            <select id="selectPuesto" name="puestoNombre">
+                    <option value="">Seleccione un puesto</option>
+            </select>
+
+            <button id="btnAsignar">Asignar bonificacion</button>
+        </section>
+
+        <section>
             <h2>Buscar Propietario</h2>
             <label for="cedula">Cédula:</label>
             <input id="cedula" type="text" placeholder="Ingrese cédula del propietario" />
@@ -36,56 +51,27 @@
             </table>
         </section>
 
-        <section id="asignarSection" style="display: none;">
-            <h2>Asignar Nueva Bonificación</h2>
-            
-            <h3>Seleccione Bonificación</h3>
-            <select id="selectBonificacion">
-                <option value="">Seleccione una bonificación</option>
-            </select>
-
-            <h3>Seleccione Puesto</h3>
-            <select id="selectPuesto">
-                <option value="">Seleccione un puesto</option>
-            </select>
-
-            <button id="btnAsignar">Asignar Bonificación</button>
-        </section>
+        
     </main>
 </body>
 
 <script>
-    var urlIniciarVista = "/admin/cargarBonificaciones";
-    var parametrosInicioVista = "";
+    var urlIniciarVista = "/admin/cargarBonificacionesYPuestos";
 
-    const btnBuscar = document.getElementById('btnBuscar');
     const btnAsignar = document.getElementById('btnAsignar');
-    const propietarioSection = document.getElementById('propietarioSection');
-    const asignarSection = document.getElementById('asignarSection');
     const selectBonificacion = document.getElementById('selectBonificacion');
     const selectPuesto = document.getElementById('selectPuesto');
-    const bonificacionesBody = document.getElementById('bonificacionesBody');
     
     let cedulaActual = '';
-    let bonificacionesCargadas = false;
-    let puestosCargados = false;
 
     function mostrar_bonificaciones(bonificaciones) {
         selectBonificacion.innerHTML = '<option value="">Seleccione una bonificación</option>';
         bonificaciones.forEach(bonif => {
             const option = document.createElement('option');
-            option.value = bonif.tipo;
+            option.value = bonif.nombre;
             option.textContent = bonif.nombre;
             selectBonificacion.appendChild(option);
         });
-        bonificacionesCargadas = true;
-        cargarPuestosInicial();
-    }
-
-    function cargarPuestosInicial() {
-        if (!puestosCargados) {
-            submit("/admin/cargarPuestos", "");
-        }
     }
 
     function mostrar_puestos(puestos) {
@@ -96,17 +82,22 @@
             option.textContent = puesto.nombre + ' - ' + puesto.direccion;
             selectPuesto.appendChild(option);
         });
-        puestosCargados = true;
     }
 
+    btnAsignar.addEventListener('click', function() {
+        const bonificacionNombre = selectBonificacion.value;
+        const puestoNombre = selectPuesto.value;
+
+        const params = "cedula=" + encodeURIComponent(cedulaActual) + 
+                      "&bonificacionNombre=" + encodeURIComponent(bonificacionNombre) + 
+                      "&puestoNombre=" + encodeURIComponent(puestoNombre);
+        
+        submit("/admin/asignarBonificacion", params);
+    });
+
     btnBuscar.addEventListener('click', function() {
-        const cedula = document.getElementById('cedula').value;
-        if (!cedula) {
-            alert('Por favor ingrese una cédula');
-            return;
-        }
-        cedulaActual = cedula;
-        submit("/admin/buscarPropietario", "cedula=" + encodeURIComponent(cedula));
+        cedulaActual = document.getElementById('cedula').value;
+        submit("/admin/buscarPropietario", "cedula=" + encodeURIComponent(cedulaActual));
     });
 
     function mostrar_nombreCompleto(nombre) {
@@ -119,39 +110,19 @@
         document.getElementById('estado').textContent = estado;
     }
 
-    function mostrar_bonificaciones(bonificaciones) {
+    function mostrar_bonificacionesDeProp(bonificacionesDeProp) {
         bonificacionesBody.innerHTML = '';
-        if (bonificaciones.length === 0) {
+        if (bonificacionesDeProp.length === 0) {
             bonificacionesBody.innerHTML = '<tr><td colspan="2">No tiene bonificaciones asignadas</td></tr>';
             return;
         }
-        bonificaciones.forEach(bonif => {
+        bonificacionesDeProp.forEach(bonif => {
             const row = bonificacionesBody.insertRow();
             row.insertCell(0).textContent = bonif.bonificacion;
             row.insertCell(1).textContent = bonif.puesto;
         });
     }
 
-    btnAsignar.addEventListener('click', function() {
-        const bonificacionTipo = selectBonificacion.value;
-        const puestoNombre = selectPuesto.value;
-
-        if (!bonificacionTipo) {
-            mostrarMensaje('Debe especificar una bonificación');
-            return;
-        }
-
-        if (!puestoNombre) {
-            mostrarMensaje('Debe especificar un puesto');
-            return;
-        }
-
-        const params = "cedula=" + encodeURIComponent(cedulaActual) + 
-                      "&bonificacionTipo=" + encodeURIComponent(bonificacionTipo) + 
-                      "&puestoNombre=" + encodeURIComponent(puestoNombre);
-        
-        submit("/admin/asignarBonificacion", params);
-    });
 
     function mostrar_resultado(mensaje) {
         alert(mensaje);

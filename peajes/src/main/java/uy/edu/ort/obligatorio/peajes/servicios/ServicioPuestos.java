@@ -20,5 +20,15 @@ public class ServicioPuestos {
     public void agregarPuesto(Puesto puesto) {
         puestos.add(puesto);
     }
+
+    public Puesto getPuestoPorNombre(String puestoNombre){
+        for(Puesto p : puestos){
+            if(p.getNombre().equals(puestoNombre)){
+                return p;
+            }
+        }
+
+        return null;
+    }
     
 }

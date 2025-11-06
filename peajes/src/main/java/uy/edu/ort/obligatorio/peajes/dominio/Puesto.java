@@ -5,7 +5,6 @@ import java.util.List;
 
 public class Puesto {
 
-    private int id;
     private String nombre;
     private String direccion;
     private List<Tarifa> tarifas;
@@ -17,10 +16,6 @@ public class Puesto {
         this.direccion = direccion;
         tarifas = new ArrayList<>();
         transitos = new ArrayList<>();
-    }
-
-    public int getId() {
-        return id;
     }
 
     public String getNombre() {

@@ -20,11 +20,13 @@ public class Fachada {
     private ServicioPuestos servicioPuestos;
     private ServicioUsuarios servicioUsuarios;
     private ServicioTransitos servicioTransitos;
+    private ServicioBonificaciones servicioBonificaciones;
 
     private Fachada() {
         servicioPuestos = new ServicioPuestos();
         servicioUsuarios = new ServicioUsuarios();
         servicioTransitos = new ServicioTransitos();
+        servicioBonificaciones = new ServicioBonificaciones();
     }
 
     public static Fachada getInstancia() {
@@ -98,6 +100,18 @@ public class Fachada {
 
     public List<Transito> getTransitosPorPropietario(Propietario propietario) {
         return servicioTransitos.getTransitosPorPropietario(propietario);
+    }
+
+    public void agregarBonificacion(Bonificacion bonificacion){
+        servicioBonificaciones.agregarBonificacion(bonificacion);
+    }
+
+    public List<Bonificacion> getBonificaciones (){
+        return servicioBonificaciones.getBonificacions();
+    }
+
+    public Puesto getPuestoPorNombre(String puestoNombre){
+        return servicioPuestos.getPuestoPorNombre(puestoNombre);
     }
 
 }

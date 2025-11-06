@@ -46,7 +46,7 @@ public class PeajesApplication {
 				new EstadoPropietarioSuspendido());
 		Propietario propietario3 = new Propietario("45678901", "Usuario Propietario 3", "prop3.123", 400, 1000,
 				new EstadoPropietarioPenalizado());
-		Propietario propietario4 = new Propietario("49429904", "Usuario Propietario 4", "prop3.123", 400, 1000,
+		Propietario propietario4 = new Propietario("49429904", "Usuario Propietario 4", "prop4.123", 400, 1000,
 				new EstadoPropietarioDeshabilitado());
 
 		Fachada.getInstancia().agregarAdministrador(admin1);
@@ -147,19 +147,13 @@ public class PeajesApplication {
 
 		// Bonificaciones
 		Bonificacion bonifExonerados = new BonificacionExonerados();
-		bonifExonerados.setPuesto(puesto1);
-		bonifExonerados.setFechaAsignacion(LocalDateTime.now().minusDays(30));
-		propietario1.agregarBonificacion(bonifExonerados);
+		Fachada.getInstancia().agregarBonificacion(bonifExonerados);
 
 		Bonificacion bonifFrecuentes = new BonificacionFrecuentes();
-		bonifFrecuentes.setPuesto(puesto2);
-		bonifFrecuentes.setFechaAsignacion(LocalDateTime.now().minusDays(15));
-		propietario1.agregarBonificacion(bonifFrecuentes);
+		Fachada.getInstancia().agregarBonificacion(bonifFrecuentes);
 
 		Bonificacion bonifTrabajadores = new BonificacionTrabajadores();
-		bonifTrabajadores.setPuesto(puesto3);
-		bonifTrabajadores.setFechaAsignacion(LocalDateTime.now().minusDays(10));
-		propietario1.agregarBonificacion(bonifTrabajadores);
+		Fachada.getInstancia().agregarBonificacion(bonifTrabajadores);
 
 	}
 

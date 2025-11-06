@@ -49,7 +49,6 @@
 
 <script>
     var urlIniciarVista = "/admin/cargarPuestos";
-    var parametrosInicioVista = "";
     
     const selectPuesto = document.getElementById('selectPuesto');
     const tablaTarifas = document.getElementById('tablaTarifas');
@@ -76,7 +75,7 @@
         if (puestoNombre) {
             submit("/admin/cargarTarifas", "puestoNombre=" + encodeURIComponent(puestoNombre));
         } else {
-            tablaTarifas.innerHTML = '';
+            tablaTarifas.innerHTML = 'No hay tarifas para el puesto seleccionado';
         }
     });
 

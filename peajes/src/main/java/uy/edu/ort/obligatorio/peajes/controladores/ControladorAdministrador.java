@@ -29,6 +29,7 @@ import uy.edu.ort.obligatorio.peajes.dominio.Puesto;
 import uy.edu.ort.obligatorio.peajes.dominio.Tarifa;
 import uy.edu.ort.obligatorio.peajes.dominio.Transito;
 import uy.edu.ort.obligatorio.peajes.dominio.Usuario;
+import uy.edu.ort.obligatorio.peajes.dtos.BonificacionDto;
 import uy.edu.ort.obligatorio.peajes.dtos.PuestoDto;
 import uy.edu.ort.obligatorio.peajes.dtos.TarifaDto;
 import uy.edu.ort.obligatorio.peajes.estados.EstadoPropietarioDeshabilitado;
@@ -59,16 +60,16 @@ public class ControladorAdministrador {
 
     @PostMapping("/cargarTarifas")
     public List<Respuesta> cargarTarifas(@RequestParam String puestoNombre) {
-        List<PuestoDto> puestos = PuestoDto.listaDtos(Fachada.getInstancia().getPuestos());
-        for (PuestoDto puesto : puestos) {
-            if (puesto.getNombre().equals(puestoNombre)) {
-                List<TarifaDto> tarifas = TarifaDto.listaDtos(puesto.getTarifas());
-                return Respuesta.lista(new Respuesta("tarifas", tarifas));
-            }
-        }
+        Puesto puesto = Fachada.getInstancia().getPuestoPorNombre(puestoNombre);
+        List<TarifaDto> tarifas = TarifaDto.listaDtos(puesto.getTarifas());
 
-        return Respuesta.lista(new Respuesta("puestos", "No se encontraron tarifas para el puesto seleccionado"));
-    } 
+        if(tarifas.isEmpty()){
+                return Respuesta.lista(new Respuesta("tarifas", "No se encontraron tarifas para el puesto seleccionado"));
+        }else{
+                return Respuesta.lista(new Respuesta("tarifas", tarifas));
+        }
+    }
+
 
     @PostMapping("/emularTransito")
     public List<Respuesta> emularTransito(@RequestParam String matricula, @RequestParam String puestoNombre, @RequestParam String fechaHora) throws UsuarioException {
@@ -85,7 +86,7 @@ public class ControladorAdministrador {
         Transito transito = Fachada.getInstancia().emularTransito(matricula, puesto, fecha);
 
         Propietario propietario = transito.getVehiculo().getPropietario();
-        String estado = obtenerNombreEstado(propietario.getEstado());
+        String estado = propietario.getEstado().getNombreEstado();
         String categoria = transito.getVehiculo().getCategoria().getNombre();
 
         Bonificacion bonificacion = propietario.buscarBonificacionPorPuesto(puesto);
@@ -102,63 +103,27 @@ public class ControladorAdministrador {
                 new Respuesta("saldo", propietario.getSaldoActual()));
     }
 
-    @PostMapping("/cargarBonificaciones")
+    @PostMapping("/cargarBonificacionesYPuestos")
     public List<Respuesta> cargarBonificaciones() {
-        List<Map<String, String>> bonificaciones = new ArrayList<>();
-
-        Map<String, String> exonerados = new HashMap<>();
-        exonerados.put("tipo", "Exonerados");
-        exonerados.put("nombre", "Exonerados");
-        bonificaciones.add(exonerados);
-
-        Map<String, String> frecuentes = new HashMap<>();
-        frecuentes.put("tipo", "Frecuentes");
-        frecuentes.put("nombre", "Bonificación para vehículos frecuentes");
-        bonificaciones.add(frecuentes);
-
-        Map<String, String> trabajadores = new HashMap<>();
-        trabajadores.put("tipo", "Trabajadores");
-        trabajadores.put("nombre", "Bonificación para trabajadores del peaje");
-        bonificaciones.add(trabajadores);
-
-        return Respuesta.lista(new Respuesta("bonificaciones", bonificaciones));
-    }
-
-    @PostMapping("/buscarPropietario")
-    public List<Respuesta> buscarPropietario(@RequestParam String cedula) throws UsuarioException {
-        Propietario propietario = Fachada.getInstancia().buscarPropietarioPorCedula(cedula);
-        if (propietario == null) {
-            throw new UsuarioException("No existe el propietario");
-        }
-
-        String estado = obtenerNombreEstado(propietario.getEstado());
-
-        List<Map<String, String>> bonificaciones = new ArrayList<>();
-        for (Bonificacion bonif : propietario.getBonificaciones()) {
-            Map<String, String> bonifMap = new HashMap<>();
-            bonifMap.put("bonificacion", bonif.getNombre());
-            bonifMap.put("puesto", bonif.getPuesto().getNombre());
-            bonificaciones.add(bonifMap);
-        }
+        List<BonificacionDto> bonificaciones = BonificacionDto.listaDtos(Fachada.getInstancia().getBonificaciones());
+        List<PuestoDto> puestos = PuestoDto.listaDtos(Fachada.getInstancia().getPuestos());
 
         return Respuesta.lista(
-                new Respuesta("nombreCompleto", propietario.getNombreCompleto()),
-                new Respuesta("estado", estado),
-                new Respuesta("bonificaciones", bonificaciones));
+            new Respuesta("bonificaciones", bonificaciones),
+            new Respuesta("puestos", puestos));
     }
 
     @PostMapping("/asignarBonificacion")
-    public List<Respuesta> asignarBonificacion(@RequestParam String cedula, @RequestParam String bonificacionTipo,
+    public List<Respuesta> asignarBonificacion(@RequestParam String cedula, @RequestParam String bonificacionNombre,
             @RequestParam String puestoNombre) throws UsuarioException {
-        Bonificacion bonificacion = null;
-        if (bonificacionTipo.equals("Exonerados")) {
-            bonificacion = new BonificacionExonerados();
-        } else if (bonificacionTipo.equals("Frecuentes")) {
-            bonificacion = new BonificacionFrecuentes();
-        } else if (bonificacionTipo.equals("Trabajadores")) {
-            bonificacion = new BonificacionTrabajadores();
-        }
 
+        Bonificacion bonificacion = null;
+        for(Bonificacion b : Fachada.getInstancia().getBonificaciones()){
+            if(b.getNombre().equals(bonificacionNombre)){
+                bonificacion = b;
+                break;
+            }
+        }
         Puesto puesto = null;
         for (Puesto p : Fachada.getInstancia().getPuestos()) {
             if (p.getNombre().equals(puestoNombre)) {
@@ -170,6 +135,24 @@ public class ControladorAdministrador {
         Fachada.getInstancia().asignarBonificacion(cedula, bonificacion, puesto, LocalDateTime.now());
         return Respuesta.lista(new Respuesta("resultado", "Bonificación asignada exitosamente"));
     }
+
+    @PostMapping("/buscarPropietario")
+    public List<Respuesta> buscarPropietario(@RequestParam String cedula) throws UsuarioException {
+        Propietario propietario = Fachada.getInstancia().buscarPropietarioPorCedula(cedula);
+        if (propietario == null) {
+            throw new UsuarioException("No existe el propietario");
+        }
+
+        String estado = propietario.getEstado().getNombreEstado();
+        List<BonificacionDto> bonificacionesDeProp = BonificacionDto.listaDtos(propietario.getBonificaciones());
+
+        return Respuesta.lista(
+                new Respuesta("nombreCompleto", propietario.getNombreCompleto()),
+                new Respuesta("estado", estado),
+                new Respuesta("bonificacionesDeProp", bonificacionesDeProp));
+    }
+
+    
 
     @PostMapping("/cargarEstados")
     public List<Respuesta> cargarEstados() {
@@ -222,17 +205,5 @@ public class ControladorAdministrador {
         return Respuesta.lista(new Respuesta("resultado", "Logout exitoso"));
     }
 
-    private String obtenerNombreEstado(EstadoPropietario estado) {
-        if (estado.estaHabilitado()) {
-            return "Habilitado";
-        } else if (estado.estaDeshabilitado()) {
-            return "Deshabilitado";
-        } else if (estado.estaSuspendido()) {
-            return "Suspendido";
-        } else if (estado.estaPenalizado()) {
-            return "Penalizado";
-        }
-        return "Desconocido";
-    }
 
 }
