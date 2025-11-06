@@ -9,6 +9,7 @@ import uy.edu.ort.obligatorio.peajes.interfaces.EstadoPropietario;
 
 public class Propietario extends Usuario {
 
+    private boolean estaLogueado;
     private double saldoMinimo;
     private double saldoActual;
     private List<Vehiculo> vehiculos;
@@ -25,8 +26,13 @@ public class Propietario extends Usuario {
         this.vehiculos = new ArrayList<>();
         this.bonificaciones = new ArrayList<>();
         this.notificaciones = new ArrayList<>();
+        this.estaLogueado = false;
     }
 
+    public boolean estaLogueado() {
+        return estaLogueado;
+    }
+    
     public double getSaldoMinimo() {
         return saldoMinimo;
     }
@@ -125,8 +131,7 @@ public class Propietario extends Usuario {
 
     @Override
     public void logout() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'logout'");
+        this.estaLogueado = false;
     }
 
     @Override
@@ -191,14 +196,6 @@ public class Propietario extends Usuario {
                 agregarNotificacion(notificacionSaldo);
             }
         }
-    }
-
-    public List<Transito> getTransitos() {
-        List<Transito> transitosPropietario = new ArrayList<>();
-        for (Vehiculo vehiculo : vehiculos) {
-            transitosPropietario.addAll(vehiculo.getTransitos());
-        }
-        return transitosPropietario;
     }
 
 }

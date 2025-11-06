@@ -14,16 +14,14 @@ public class BonificacionDto {
     @Getter
     private String fechaAsignacion;
 
-    public BonificacionDto(String nombre, String puesto, String fechaAsignacion) {
+    public BonificacionDto(String nombre) {
         this.nombre = nombre;
-        this.puesto = puesto;
-        this.fechaAsignacion = fechaAsignacion;
     }
 
     public static List<BonificacionDto> listaDtos(List<Bonificacion> bonificaciones) {
         List<BonificacionDto> lista = new ArrayList<>();
         for (Bonificacion b : bonificaciones) {
-            BonificacionDto dto = new BonificacionDto(b.getNombre(),b.getPuesto().getNombre(),b.getFechaAsignacion().toString());
+            BonificacionDto dto = new BonificacionDto(b.getNombre());
             lista.add(dto);
         }
         return lista;

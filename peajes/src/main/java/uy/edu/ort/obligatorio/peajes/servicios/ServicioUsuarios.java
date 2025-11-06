@@ -49,7 +49,15 @@ public class ServicioUsuarios {
     }
 
     public Propietario loginPropietario(String cedula, String contrasenia) throws UsuarioException {
-        return (Propietario) login(cedula, contrasenia, propietarios, "Acceso denegado");
+        Propietario usuario =  (Propietario) login(cedula, contrasenia, propietarios, "Acceso denegado");
+    
+        if (usuario.validarLogin()) {
+            Sesion sesion = new Sesion(usuario);
+            sesion.setFechaInicio(new Date());
+            sesionesActivas.add(sesion);
+        }
+
+        return usuario;
     }
 
     private Usuario login(String cedula, String contrasenia, List<? extends Usuario> usuarios,
@@ -105,7 +113,7 @@ public class ServicioUsuarios {
 
         Propietario propietario = buscarPropietarioPorCedula(cedulaPropietario);
         if (propietario == null) {
-            throw new UsuarioException("no existe el propietario");
+            throw new UsuarioException("No existe el propietario");
         }
 
         if (propietario.getEstado().estaDeshabilitado()) {
