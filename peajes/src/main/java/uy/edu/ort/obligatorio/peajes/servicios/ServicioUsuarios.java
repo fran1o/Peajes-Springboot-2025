@@ -95,7 +95,7 @@ public class ServicioUsuarios {
         return null;
     }
 
-    public Propietario buscarPropietarioPorCedula(String cedula) {
+    public Propietario buscarPropietarioPorCedula(String cedula) throws UsuarioException{
         for (Propietario propietario : propietarios) {
             if (propietario.getCedula().equals(cedula)) {
                 return propietario;
@@ -109,6 +109,11 @@ public class ServicioUsuarios {
         if (propietario == null) {
             throw new UsuarioException("No existe el propietario");
         }
+
+        if (nuevoEstado == null) {
+            throw new UsuarioException("Por favor seleccione un nuevo estado");
+        }
+
         propietario.setEstado(nuevoEstado);
     }
 

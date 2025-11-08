@@ -23,7 +23,7 @@ public class ServicioPuestos {
 
     public Puesto getPuestoPorNombre(String puestoNombre){
         for(Puesto p : puestos){
-            if(p.getNombre().equals(puestoNombre)){
+            if(p.getNombre().equalsIgnoreCase(puestoNombre.trim())){
                 return p;
             }
         }

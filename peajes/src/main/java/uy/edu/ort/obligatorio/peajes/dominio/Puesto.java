@@ -34,7 +34,7 @@ public class Puesto {
         return transitos;
     }
 
-    public void registrarTransito(Transito transito) {
+    public void agregarTransito(Transito transito) {
         transitos.add(transito);
     }
 

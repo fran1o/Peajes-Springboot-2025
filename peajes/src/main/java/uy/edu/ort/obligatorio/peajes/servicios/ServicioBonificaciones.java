@@ -19,5 +19,15 @@ public class ServicioBonificaciones {
     public List<Bonificacion> getBonificacions(){
         return bonificaciones;
     }
+
+    public Bonificacion getBonificacion(String bonificacionNombre) {
+        for(Bonificacion b : bonificaciones){
+            if (b.getNombre().equalsIgnoreCase(bonificacionNombre.trim())) { 
+                return b;
+            }
+        }
+
+        return null;
+    }
     
 }

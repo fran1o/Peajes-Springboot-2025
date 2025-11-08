@@ -73,7 +73,7 @@ public class Fachada {
         return servicioUsuarios.buscarVehiculoPorMatricula(matricula);
     }
 
-    public Propietario buscarPropietarioPorCedula(String cedula) {
+    public Propietario buscarPropietarioPorCedula(String cedula) throws UsuarioException{
         return servicioUsuarios.buscarPropietarioPorCedula(cedula);
     }
 
@@ -89,7 +89,7 @@ public class Fachada {
     public Transito emularTransito(String matricula, Puesto puesto, LocalDateTime fechaHora) throws UsuarioException {
         Vehiculo vehiculo = servicioUsuarios.buscarVehiculoPorMatricula(matricula);
         if (vehiculo == null) {
-            throw new UsuarioException("No se encontró el vehículo con matrícula: " + matricula);
+            throw new UsuarioException("No existe el vehículo: " + matricula);
         }
         Propietario propietario = vehiculo.getPropietario();
         if (propietario == null) {
@@ -109,6 +109,11 @@ public class Fachada {
     public List<Bonificacion> getBonificaciones (){
         return servicioBonificaciones.getBonificacions();
     }
+
+    public Bonificacion getBonificacion(String bonificacionNombre){
+        return servicioBonificaciones.getBonificacion(bonificacionNombre);
+    }
+
 
     public Puesto getPuestoPorNombre(String puestoNombre){
         return servicioPuestos.getPuestoPorNombre(puestoNombre);

@@ -51,7 +51,7 @@ public class Propietario extends Usuario {
 
     public void setEstado(EstadoPropietario nuevoEstado) throws UsuarioException {
 
-        if (estado.equals(nuevoEstado)) {
+        if (estado != null && estado.equals(nuevoEstado)) {
             throw new UsuarioException("El propietario ya esta en estado " + estado.getNombreEstado());
         }
         Notificacion notificacion = new Notificacion(LocalDateTime.now(),

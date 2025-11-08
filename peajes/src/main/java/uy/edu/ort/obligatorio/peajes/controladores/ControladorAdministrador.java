@@ -118,16 +118,18 @@ public class ControladorAdministrador {
     
     @PostMapping("/buscarPropietario")
     public List<Respuesta> buscarPropietario(@RequestParam String cedula) throws UsuarioException {
+        if(cedula == null){
+            throw new UsuarioException("Ingrese una cedula");
+        }
         Propietario propietario = Fachada.getInstancia().buscarPropietarioPorCedula(cedula);
         if (propietario == null) {
             throw new UsuarioException("No existe el propietario");
         }
 
-        String estado = propietario.getEstado().getNombreEstado();
         List<BonificacionPropietarioPuestoDto> bonificacionesDeProp = BonificacionPropietarioPuestoDto.listaDtos(propietario.getBonificaciones());
         return Respuesta.lista(
                 new Respuesta("nombreCompleto", propietario.getNombreCompleto()),
-                new Respuesta("estado", estado),
+                new Respuesta("estado", propietario.getEstado().getNombreEstado()),
                 new Respuesta("bonificacionesDeProp", bonificacionesDeProp));
     }
 
@@ -135,20 +137,8 @@ public class ControladorAdministrador {
     public List<Respuesta> asignarBonificacion(@RequestParam String cedula, @RequestParam String bonificacionNombre,
             @RequestParam String puestoNombre) throws UsuarioException {
 
-        Bonificacion bonificacion = null;
-        for(Bonificacion b : Fachada.getInstancia().getBonificaciones()){
-            if(b.getNombre().equals(bonificacionNombre)){
-                bonificacion = b;
-                break;
-            }
-        }
-        Puesto puesto = null;
-        for (Puesto p : Fachada.getInstancia().getPuestos()) {
-            if (p.getNombre().equals(puestoNombre)) {
-                puesto = p;
-                break;
-            }
-        }
+        Bonificacion bonificacion = Fachada.getInstancia().getBonificacion(bonificacionNombre);
+        Puesto puesto = Fachada.getInstancia().getPuestoPorNombre(puestoNombre);
 
         Fachada.getInstancia().asignarBonificacion(cedula, bonificacion, puesto, LocalDateTime.now());
         List<BonificacionPropietarioPuestoDto> bonificacionesDeProp = BonificacionPropietarioPuestoDto.listaDtos(Fachada.getInstancia().getPropietario(cedula).getBonificaciones());

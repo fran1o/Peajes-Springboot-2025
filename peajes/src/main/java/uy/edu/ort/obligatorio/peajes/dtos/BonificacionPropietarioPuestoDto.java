@@ -4,10 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import lombok.Getter;
-import uy.edu.ort.obligatorio.peajes.dominio.Bonificacion;
 import uy.edu.ort.obligatorio.peajes.dominio.BonificacionPropietarioPuesto;
-import uy.edu.ort.obligatorio.peajes.dominio.Propietario;
-import uy.edu.ort.obligatorio.peajes.dominio.Puesto;
 
 public class BonificacionPropietarioPuestoDto {
     @Getter

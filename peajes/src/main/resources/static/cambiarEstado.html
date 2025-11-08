@@ -58,10 +58,6 @@
 
     btnBuscar.addEventListener('click', function() {
         const cedula = document.getElementById('cedula').value;
-        if (!cedula) {
-            alert('Por favor ingrese una cédula');
-            return;
-        }
         cedulaActual = cedula;
         submit("/admin/buscarPropietario", "cedula=" + encodeURIComponent(cedula));
     });
@@ -79,17 +75,6 @@
 
     btnCambiar.addEventListener('click', function() {
         const nuevoEstado = selectEstado.value;
-
-        if (!nuevoEstado) {
-            alert('Por favor seleccione un nuevo estado');
-            return;
-        }
-
-        if (nuevoEstado === estadoActualValue) {
-            alert('El propietario ya esta en estado ' + estadoActualValue);
-            return;
-        }
-
         const params = "cedula=" + encodeURIComponent(cedulaActual) + 
                       "&nuevoEstado=" + encodeURIComponent(nuevoEstado);
         
@@ -97,12 +82,10 @@
     });
 
     function mostrar_resultado(mensaje) {
-        alert(mensaje);
         submit("/admin/buscarPropietario", "cedula=" + encodeURIComponent(cedulaActual));
     }
 
     async function excepcionDeAplicacion(mensaje) {
-        alert(mensaje);
         if (mensaje === "no existe el propietario") {
             propietarioSection.style.display = 'none';
         }

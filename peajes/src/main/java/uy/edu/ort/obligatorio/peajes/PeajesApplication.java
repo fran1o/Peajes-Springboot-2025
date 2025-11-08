@@ -40,9 +40,9 @@ public class PeajesApplication {
 		// Datos de prueba usuarios
 		Administrador admin1 = new Administrador("12345678", "Usuario Administrador", "admin.123");
 		Administrador admin2 = new Administrador("87654321", "Admin Secundario", "admin.456");
-		Propietario propietario1 = new Propietario("23456789", "Usuario Propietario 1", "prop.123", 500, 1000,
+		Propietario propietario1 = new Propietario("23456789", "Usuario Propietario 1", "prop.123", 500, 15,
 				new EstadoPropietarioHabilitado());
-		Propietario propietario2 = new Propietario("34567890", "Usuario Propietario 2", "prop2.123", 300, 15,
+		Propietario propietario2 = new Propietario("34567890", "Usuario Propietario 2", "prop2.123", 300, 1000,
 				new EstadoPropietarioSuspendido());
 		Propietario propietario3 = new Propietario("45678901", "Usuario Propietario 3", "prop3.123", 400, 1000,
 				new EstadoPropietarioPenalizado());
