@@ -13,7 +13,7 @@ public class Propietario extends Usuario {
     private double saldoMinimo;
     private double saldoActual;
     private List<Vehiculo> vehiculos;
-    private List<Bonificacion> bonificaciones;
+    private List<BonificacionPropietarioPuesto> bonificaciones;
     private EstadoPropietario estado;
     private List<Notificacion> notificaciones;
 
@@ -65,7 +65,7 @@ public class Propietario extends Usuario {
         return vehiculos;
     }
 
-    public List<Bonificacion> getBonificaciones() {
+    public List<BonificacionPropietarioPuesto> getBonificaciones() {
         return bonificaciones;
     }
 
@@ -108,7 +108,7 @@ public class Propietario extends Usuario {
     }
 
     public boolean tieneBonificacionEnPuesto(Puesto puesto) {
-        for (Bonificacion bonificacion : bonificaciones) {
+        for (BonificacionPropietarioPuesto bonificacion : bonificaciones) {
             if (bonificacion.getPuesto().equals(puesto)) {
                 return true;
             }
@@ -116,8 +116,8 @@ public class Propietario extends Usuario {
         return false;
     }
 
-    public Bonificacion buscarBonificacionPorPuesto(Puesto puesto) {
-        for (Bonificacion bonificacion : bonificaciones) {
+    public BonificacionPropietarioPuesto buscarBonificacionPorPuesto(Puesto puesto) {
+        for (BonificacionPropietarioPuesto bonificacion : bonificaciones) {
             if (bonificacion.getPuesto().equals(puesto)) {
                 return bonificacion;
             }
@@ -125,7 +125,7 @@ public class Propietario extends Usuario {
         return null;
     }
 
-    public void agregarBonificacion(Bonificacion bonificacion) {
+    public void agregarBonificacion(BonificacionPropietarioPuesto bonificacion) {
         bonificaciones.add(bonificacion);
     }
 
@@ -170,10 +170,10 @@ public class Propietario extends Usuario {
             return 0;
         }
 
-        Bonificacion bonificacion = buscarBonificacionPorPuesto(puesto);
+        BonificacionPropietarioPuesto bonificacion = buscarBonificacionPorPuesto(puesto);
         if (bonificacion != null) {
             Transito transitoTemp = new Transito(vehiculo, puesto, fechaHora, montoTarifa, 0);
-            return bonificacion.calcularDescuento(transitoTemp);
+            return bonificacion.getBonificacion().calcularDescuento(transitoTemp);
         }
 
         return 0;

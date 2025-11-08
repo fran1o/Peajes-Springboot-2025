@@ -61,7 +61,8 @@
     const btnAsignar = document.getElementById('btnAsignar');
     const selectBonificacion = document.getElementById('selectBonificacion');
     const selectPuesto = document.getElementById('selectPuesto');
-    
+    const propietarioSection = document.getElementById('propietarioSection');
+
     let cedulaActual = '';
 
     function mostrar_bonificaciones(bonificaciones) {
@@ -103,7 +104,6 @@
     function mostrar_nombreCompleto(nombre) {
         document.getElementById('nombreCompleto').textContent = nombre;
         propietarioSection.style.display = 'block';
-        asignarSection.style.display = 'block';
     }
 
     function mostrar_estado(estado) {
@@ -111,31 +111,42 @@
     }
 
     function mostrar_bonificacionesDeProp(bonificacionesDeProp) {
+
+        selectBonificacion.value = '';
+        selectPuesto.value = '';
+
         bonificacionesBody.innerHTML = '';
         if (bonificacionesDeProp.length === 0) {
             bonificacionesBody.innerHTML = '<tr><td colspan="2">No tiene bonificaciones asignadas</td></tr>';
             return;
         }
+        
         bonificacionesDeProp.forEach(bonif => {
             const row = bonificacionesBody.insertRow();
-            row.insertCell(0).textContent = bonif.bonificacion;
-            row.insertCell(1).textContent = bonif.puesto;
+            row.insertCell(0).textContent = bonif.bonifiacionNombre;
+            row.insertCell(1).textContent = bonif.puestoNombre;
         });
     }
 
 
-    function mostrar_resultado(mensaje) {
-        alert(mensaje);
+    function mostrar_resultado(bonificacionesDeProp) {
         selectBonificacion.value = '';
         selectPuesto.value = '';
-        submit("/admin/buscarPropietario", "cedula=" + encodeURIComponent(cedulaActual));
+        bonificacionesBody.innerHTML = '';
+        alert("Bonificacion creada correctamente")
+        bonificacionesDeProp.forEach(bonif => {
+            const row = bonificacionesBody.insertRow();
+
+            //TODO CORREGIR ACA
+            row.insertCell(0).textContent = bonif.bonifiacionNombre;
+            row.insertCell(1).textContent = bonif.puestoNombre;
+        });
     }
 
     async function excepcionDeAplicacion(mensaje) {
         await mostrarMensaje(mensaje);
-        if (mensaje === "no existe el propietario") {
+        if (mensaje === "No existe el propietario") {
             propietarioSection.style.display = 'none';
-            asignarSection.style.display = 'none';
         }
     }
 </script>

@@ -8,6 +8,7 @@ import java.util.List;
 import lombok.Getter;
 import uy.edu.ort.obligatorio.peajes.dominio.Administrador;
 import uy.edu.ort.obligatorio.peajes.dominio.Bonificacion;
+import uy.edu.ort.obligatorio.peajes.dominio.BonificacionPropietarioPuesto;
 import uy.edu.ort.obligatorio.peajes.dominio.Propietario;
 import uy.edu.ort.obligatorio.peajes.dominio.Puesto;
 import uy.edu.ort.obligatorio.peajes.dominio.Sesion;
@@ -38,6 +39,15 @@ public class ServicioUsuarios {
         propietarios.add(propietario);
     }
 
+    public Propietario getPropietario(String cedula){
+        for(Propietario p : propietarios){
+            if(p.getCedula().equals(cedula)){
+                return p;
+            }
+        }
+
+        return null;
+    }
     public Administrador loginAdministrador(String cedula, String contrasenia) throws UsuarioException {
         Administrador usuario = (Administrador) login(cedula, contrasenia, administradores, "Acceso denegado");
         if (usuario.validarLogin()) {
@@ -124,9 +134,10 @@ public class ServicioUsuarios {
             throw new UsuarioException("Ya tiene una bonificación asignada para ese puesto");
         }
 
-        bonificacion.setPuesto(puesto);
-        bonificacion.setFechaAsignacion(fecha);
-        propietario.agregarBonificacion(bonificacion);
+        BonificacionPropietarioPuesto boniPropPuesto = new BonificacionPropietarioPuesto(bonificacion, propietario, puesto);
+        propietario.agregarBonificacion(boniPropPuesto);
     }
+
+
 
 }

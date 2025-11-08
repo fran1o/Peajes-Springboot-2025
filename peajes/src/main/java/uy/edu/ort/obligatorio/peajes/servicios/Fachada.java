@@ -114,4 +114,8 @@ public class Fachada {
         return servicioPuestos.getPuestoPorNombre(puestoNombre);
     }
 
+    public Propietario getPropietario(String cedula) {
+        return servicioUsuarios.getPropietario(cedula);
+    }
+
 }

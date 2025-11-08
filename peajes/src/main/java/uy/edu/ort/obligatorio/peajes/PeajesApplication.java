@@ -40,7 +40,7 @@ public class PeajesApplication {
 		// Datos de prueba usuarios
 		Administrador admin1 = new Administrador("12345678", "Usuario Administrador", "admin.123");
 		Administrador admin2 = new Administrador("87654321", "Admin Secundario", "admin.456");
-		Propietario propietario1 = new Propietario("23456789", "Usuario Propietario", "prop.123", 500, 1000,
+		Propietario propietario1 = new Propietario("23456789", "Usuario Propietario 1", "prop.123", 500, 1000,
 				new EstadoPropietarioHabilitado());
 		Propietario propietario2 = new Propietario("34567890", "Usuario Propietario 2", "prop2.123", 300, 15,
 				new EstadoPropietarioSuspendido());
@@ -154,6 +154,7 @@ public class PeajesApplication {
 
 		Bonificacion bonifTrabajadores = new BonificacionTrabajadores();
 		Fachada.getInstancia().agregarBonificacion(bonifTrabajadores);
+
 
 	}
 

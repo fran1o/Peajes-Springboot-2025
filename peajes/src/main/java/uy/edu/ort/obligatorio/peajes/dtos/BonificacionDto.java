@@ -9,10 +9,6 @@ import uy.edu.ort.obligatorio.peajes.dominio.Bonificacion;
 public class BonificacionDto {
     @Getter
     private String nombre;
-    @Getter
-    private String puesto;
-    @Getter
-    private String fechaAsignacion;
 
     public BonificacionDto(String nombre) {
         this.nombre = nombre;
