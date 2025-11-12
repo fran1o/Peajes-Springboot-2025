@@ -35,7 +35,7 @@ public class ServicioTransitos {
 
         Transito transito = new Transito(vehiculo, puesto, fechaHora, montoACobrar, montoBonificacion);
         transitos.add(transito);
-        puesto.registrarTransito(transito);
+        puesto.agregarTransito(transito);
         vehiculo.agregarTransito(transito);
 
         propietario.crearNotificacionesTransito(vehiculo, puesto);

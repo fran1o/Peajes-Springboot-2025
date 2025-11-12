@@ -56,12 +56,14 @@
 </body>
 
 <script>
-    var urlIniciarVista = "/admin/cargarBonificacionesYPuestos";
+    var urlIniciarVista = "/admin/bonificaciones/cargarBonificacionesYPuestos";
 
     const btnAsignar = document.getElementById('btnAsignar');
+    const btnBuscar = document.getElementById('btnBuscar');
     const selectBonificacion = document.getElementById('selectBonificacion');
     const selectPuesto = document.getElementById('selectPuesto');
-    
+    const propietarioSection = document.getElementById('propietarioSection');
+
     let cedulaActual = '';
 
     function mostrar_bonificaciones(bonificaciones) {
@@ -92,18 +94,17 @@
                       "&bonificacionNombre=" + encodeURIComponent(bonificacionNombre) + 
                       "&puestoNombre=" + encodeURIComponent(puestoNombre);
         
-        submit("/admin/asignarBonificacion", params);
+        submit("/admin/bonificaciones/asignarBonificacion", params);
     });
 
     btnBuscar.addEventListener('click', function() {
         cedulaActual = document.getElementById('cedula').value;
-        submit("/admin/buscarPropietario", "cedula=" + encodeURIComponent(cedulaActual));
+        submit("/admin/bonificaciones/buscarPropietario", "cedula=" + encodeURIComponent(cedulaActual));
     });
 
     function mostrar_nombreCompleto(nombre) {
         document.getElementById('nombreCompleto').textContent = nombre;
         propietarioSection.style.display = 'block';
-        asignarSection.style.display = 'block';
     }
 
     function mostrar_estado(estado) {
@@ -111,31 +112,40 @@
     }
 
     function mostrar_bonificacionesDeProp(bonificacionesDeProp) {
+
+        selectBonificacion.value = '';
+        selectPuesto.value = '';
+
         bonificacionesBody.innerHTML = '';
         if (bonificacionesDeProp.length === 0) {
             bonificacionesBody.innerHTML = '<tr><td colspan="2">No tiene bonificaciones asignadas</td></tr>';
             return;
         }
+        
         bonificacionesDeProp.forEach(bonif => {
             const row = bonificacionesBody.insertRow();
-            row.insertCell(0).textContent = bonif.bonificacion;
+            row.insertCell(0).textContent = bonif.nombre;
             row.insertCell(1).textContent = bonif.puesto;
         });
     }
 
 
-    function mostrar_resultado(mensaje) {
-        alert(mensaje);
+    function mostrar_resultado(bonificacionesDeProp) {
         selectBonificacion.value = '';
         selectPuesto.value = '';
-        submit("/admin/buscarPropietario", "cedula=" + encodeURIComponent(cedulaActual));
+        bonificacionesBody.innerHTML = '';
+        alert("Bonificacion creada correctamente")
+        bonificacionesDeProp.forEach(bonif => {
+            const row = bonificacionesBody.insertRow();
+            row.insertCell(0).textContent = bonif.nombre;
+            row.insertCell(1).textContent = bonif.puesto;
+        });
     }
 
     async function excepcionDeAplicacion(mensaje) {
         await mostrarMensaje(mensaje);
-        if (mensaje === "no existe el propietario") {
+        if (mensaje === "No existe el propietario") {
             propietarioSection.style.display = 'none';
-            asignarSection.style.display = 'none';
         }
     }
 </script>

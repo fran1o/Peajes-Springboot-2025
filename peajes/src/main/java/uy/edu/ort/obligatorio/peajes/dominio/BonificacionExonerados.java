@@ -1,6 +1,6 @@
 package uy.edu.ort.obligatorio.peajes.dominio;
 
-public class BonificacionExonerados extends Bonificacion {
+public class BonificacionExonerados extends TipoBonificacion {
 
     public BonificacionExonerados() {
         super("Exonerados", 100);

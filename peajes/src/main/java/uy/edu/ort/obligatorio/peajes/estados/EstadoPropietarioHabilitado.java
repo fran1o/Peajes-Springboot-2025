@@ -26,7 +26,7 @@ public class EstadoPropietarioHabilitado implements EstadoPropietario{
 
     @Override
     public String getNombreEstado() {
-        return "Deshabilitado";
+        return "Habilitado";
     }
     
 }

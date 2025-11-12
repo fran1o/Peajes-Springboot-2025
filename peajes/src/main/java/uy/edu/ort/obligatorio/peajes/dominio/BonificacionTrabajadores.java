@@ -2,7 +2,7 @@ package uy.edu.ort.obligatorio.peajes.dominio;
 
 import java.time.DayOfWeek;
 
-public class BonificacionTrabajadores extends Bonificacion {
+public class BonificacionTrabajadores extends TipoBonificacion {
 
     public BonificacionTrabajadores() {
         super("Bonificación para trabajadores del peaje", 80);

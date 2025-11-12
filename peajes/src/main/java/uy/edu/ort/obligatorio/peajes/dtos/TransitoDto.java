@@ -53,7 +53,7 @@ public class TransitoDto {
                 t.getVehiculo().getMatricula(),
                 t.getVehiculo().getCategoria().getNombre(),
                 montoTarifa,
-                bonif != null ? bonif.getNombre() : "",
+                bonif != null ? bonif.getTipoBonificacion().getNombre() : "",
                 t.getMontoBonificacion(),
                 t.getMontoACobrar(),
                 t.getFechaHora().toString()

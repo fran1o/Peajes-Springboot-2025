@@ -173,7 +173,7 @@ public class Propietario extends Usuario {
         Bonificacion bonificacion = buscarBonificacionPorPuesto(puesto);
         if (bonificacion != null) {
             Transito transitoTemp = new Transito(vehiculo, puesto, fechaHora, montoTarifa, 0);
-            return bonificacion.calcularDescuento(transitoTemp);
+            return bonificacion.getTipoBonificacion().calcularDescuento(transitoTemp);
         }
 
         return 0;

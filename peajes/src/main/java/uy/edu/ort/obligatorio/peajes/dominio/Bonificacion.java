@@ -2,41 +2,24 @@ package uy.edu.ort.obligatorio.peajes.dominio;
 
 import java.time.LocalDateTime;
 
-public abstract class Bonificacion {
-    private String nombre;
-    private double porcentaje;
+
+import lombok.Getter;
+
+public class Bonificacion {
+    @Getter
+    private TipoBonificacion tipoBonificacion;
+    @Getter
+    private Propietario propietario;
+    @Getter
     private Puesto puesto;
-    private LocalDateTime fechaAsignacion;
+    private LocalDateTime fecha;
 
-    public Bonificacion(String nombre, double porcentaje) {
-        this.nombre = nombre;
-        this.porcentaje = porcentaje;
-    }
-
-    public String getNombre() {
-        return nombre;
-    }
-
-    public double getPorcentaje() {
-        return porcentaje;
-    }
-
-    public Puesto getPuesto() {
-        return puesto;
-    }
-
-    public void setPuesto(Puesto puesto) {
+    public Bonificacion(TipoBonificacion tipo, Propietario prop, Puesto puesto, LocalDateTime fecha){
+        this.tipoBonificacion = tipo;
+        this.propietario = prop;
         this.puesto = puesto;
+        this.fecha = fecha;
     }
 
-    public LocalDateTime getFechaAsignacion() {
-        return fechaAsignacion;
-    }
 
-    public void setFechaAsignacion(LocalDateTime fechaAsignacion) {
-        this.fechaAsignacion = fechaAsignacion;
-    }
-
-    public abstract double calcularDescuento(Transito transito);
-    
 }

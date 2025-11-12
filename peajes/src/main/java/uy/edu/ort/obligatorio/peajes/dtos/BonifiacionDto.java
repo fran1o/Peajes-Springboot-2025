@@ -6,24 +6,24 @@ import java.util.List;
 import lombok.Getter;
 import uy.edu.ort.obligatorio.peajes.dominio.Bonificacion;
 
-public class BonificacionDto {
+public class BonifiacionDto {
     @Getter
     private String nombre;
     @Getter
     private String puesto;
-    @Getter
-    private String fechaAsignacion;
 
-    public BonificacionDto(String nombre) {
+    public BonifiacionDto(String nombre, String puesto){
         this.nombre = nombre;
+        this.puesto = puesto;
     }
 
-    public static List<BonificacionDto> listaDtos(List<Bonificacion> bonificaciones) {
-        List<BonificacionDto> lista = new ArrayList<>();
+    public static List<BonifiacionDto> listaDtos(List<Bonificacion> bonificaciones) {
+        List<BonifiacionDto> lista = new ArrayList<>();
         for (Bonificacion b : bonificaciones) {
-            BonificacionDto dto = new BonificacionDto(b.getNombre());
+            BonifiacionDto dto = new BonifiacionDto(b.getTipoBonificacion().getNombre(), b.getPuesto().getNombre());
             lista.add(dto);
         }
         return lista;
     }
+
 }
