@@ -7,7 +7,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.kafka.KafkaProperties.Admin;
 
 import uy.edu.ort.obligatorio.peajes.dominio.Administrador;
-import uy.edu.ort.obligatorio.peajes.dominio.Bonificacion;
 import uy.edu.ort.obligatorio.peajes.dominio.BonificacionExonerados;
 import uy.edu.ort.obligatorio.peajes.dominio.BonificacionFrecuentes;
 import uy.edu.ort.obligatorio.peajes.dominio.BonificacionTrabajadores;
@@ -15,6 +14,7 @@ import uy.edu.ort.obligatorio.peajes.dominio.Categoria;
 import uy.edu.ort.obligatorio.peajes.dominio.Propietario;
 import uy.edu.ort.obligatorio.peajes.dominio.Puesto;
 import uy.edu.ort.obligatorio.peajes.dominio.Tarifa;
+import uy.edu.ort.obligatorio.peajes.dominio.TipoBonificacion;
 import uy.edu.ort.obligatorio.peajes.dominio.Usuario;
 import uy.edu.ort.obligatorio.peajes.dominio.Vehiculo;
 import uy.edu.ort.obligatorio.peajes.estados.EstadoPropietarioDeshabilitado;
@@ -49,12 +49,16 @@ public class PeajesApplication {
 		Propietario propietario4 = new Propietario("49429904", "Usuario Propietario 4", "prop4.123", 400, 1000,
 				new EstadoPropietarioDeshabilitado());
 
+				Propietario propietario5 = new Propietario("98765432", "Usuario Propietario 5", "prop5.123", 400, 1000,
+				new EstadoPropietarioHabilitado());
+
 		Fachada.getInstancia().agregarAdministrador(admin1);
 		Fachada.getInstancia().agregarAdministrador(admin2);
 		Fachada.getInstancia().agregarPropietario(propietario1);
 		Fachada.getInstancia().agregarPropietario(propietario2);
 		Fachada.getInstancia().agregarPropietario(propietario3);
 		Fachada.getInstancia().agregarPropietario(propietario4);
+		Fachada.getInstancia().agregarPropietario(propietario5);
 
 		// Datos de prueba puestos
 		Puesto puesto1 = new Puesto("Puesto 101", "Acceso Norte");
@@ -136,6 +140,8 @@ public class PeajesApplication {
 		Vehiculo vehiculo5 = new Vehiculo("MNO7890", "Ford Ranger", "Gris", automovil, propietario2);
 		Vehiculo vehiculo6 = new Vehiculo("UYU1234", "Fiat 147", "Azul", automovil, propietario3);
 		Vehiculo vehiculo7 = new Vehiculo("ARG1234", "Fiat Uno Sport", "Blanco", automovil, propietario4);
+		Vehiculo vehiculo8 = new Vehiculo("AAA1234", "Nissan Tida", "Negro", automovil, propietario5);
+		Vehiculo vehiculo9 = new Vehiculo("BBB1234", "Zanella", "Gris", motocicleta, propietario5);
 
 		propietario1.agregarVehiculo(vehiculo1);
 		propietario1.agregarVehiculo(vehiculo2);
@@ -144,15 +150,17 @@ public class PeajesApplication {
 		propietario2.agregarVehiculo(vehiculo5);
 		propietario3.agregarVehiculo(vehiculo6);
 		propietario4.agregarVehiculo(vehiculo7);
+		propietario5.agregarVehiculo(vehiculo8);
+		propietario5.agregarVehiculo(vehiculo9);
 
 		// Bonificaciones
-		Bonificacion bonifExonerados = new BonificacionExonerados();
+		TipoBonificacion bonifExonerados = new BonificacionExonerados();
 		Fachada.getInstancia().agregarBonificacion(bonifExonerados);
 
-		Bonificacion bonifFrecuentes = new BonificacionFrecuentes();
+		TipoBonificacion bonifFrecuentes = new BonificacionFrecuentes();
 		Fachada.getInstancia().agregarBonificacion(bonifFrecuentes);
 
-		Bonificacion bonifTrabajadores = new BonificacionTrabajadores();
+		TipoBonificacion bonifTrabajadores = new BonificacionTrabajadores();
 		Fachada.getInstancia().agregarBonificacion(bonifTrabajadores);
 
 

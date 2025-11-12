@@ -6,7 +6,6 @@ import java.util.List;
 
 import lombok.Getter;
 import uy.edu.ort.obligatorio.peajes.dominio.Bonificacion;
-import uy.edu.ort.obligatorio.peajes.dominio.BonificacionPropietarioPuesto;
 import uy.edu.ort.obligatorio.peajes.dominio.Propietario;
 import uy.edu.ort.obligatorio.peajes.dominio.Transito;
 
@@ -47,14 +46,14 @@ public class TransitoDto {
 
         for (Transito t : transitosList) {
             double montoTarifa = t.getMontoACobrar() + t.getMontoBonificacion();
-            BonificacionPropietarioPuesto bonif = propietario.buscarBonificacionPorPuesto(t.getPuesto());
+            Bonificacion bonif = propietario.buscarBonificacionPorPuesto(t.getPuesto());
 
             TransitoDto dto = new TransitoDto(
                 t.getPuesto().getNombre(),
                 t.getVehiculo().getMatricula(),
                 t.getVehiculo().getCategoria().getNombre(),
                 montoTarifa,
-                bonif != null ? bonif.getBonificacion().getNombre() : "",
+                bonif != null ? bonif.getTipoBonificacion().getNombre() : "",
                 t.getMontoBonificacion(),
                 t.getMontoACobrar(),
                 t.getFechaHora().toString()

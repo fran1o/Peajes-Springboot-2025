@@ -4,16 +4,14 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import uy.edu.ort.obligatorio.peajes.dominio.Administrador;
-import uy.edu.ort.obligatorio.peajes.dominio.Bonificacion;
 import uy.edu.ort.obligatorio.peajes.dominio.Propietario;
 import uy.edu.ort.obligatorio.peajes.dominio.Puesto;
 import uy.edu.ort.obligatorio.peajes.dominio.Sesion;
+import uy.edu.ort.obligatorio.peajes.dominio.TipoBonificacion;
 import uy.edu.ort.obligatorio.peajes.dominio.Transito;
 import uy.edu.ort.obligatorio.peajes.dominio.Usuario;
 import uy.edu.ort.obligatorio.peajes.dominio.Vehiculo;
 import uy.edu.ort.obligatorio.peajes.excepciones.UsuarioException;
-import uy.edu.ort.obligatorio.peajes.interfaces.EstadoPropietario;
-
 public class Fachada {
 
     private static Fachada instancia;
@@ -77,13 +75,14 @@ public class Fachada {
         return servicioUsuarios.buscarPropietarioPorCedula(cedula);
     }
 
-    public void cambiarEstadoPropietario(String cedula, EstadoPropietario nuevoEstado) throws UsuarioException {
-        servicioUsuarios.cambiarEstadoPropietario(cedula, nuevoEstado);
+    public void cambiarEstadoPropietario(String cedula, String estado) throws UsuarioException {
+
+        servicioUsuarios.cambiarEstadoPropietario(cedula, estado);
     }
 
-    public void asignarBonificacion(String cedulaPropietario, Bonificacion bonificacion, Puesto puesto,
+    public void asignarBonificacion(String cedulaPropietario, TipoBonificacion tipoBonificacion, Puesto puesto,
             LocalDateTime fecha) throws UsuarioException {
-        servicioUsuarios.asignarBonificacion(cedulaPropietario, bonificacion, puesto, fecha);
+        servicioUsuarios.asignarBonificacion(cedulaPropietario, tipoBonificacion, puesto, fecha);
     }
 
     public Transito emularTransito(String matricula, Puesto puesto, LocalDateTime fechaHora) throws UsuarioException {
@@ -102,16 +101,16 @@ public class Fachada {
         return servicioTransitos.getTransitosPorPropietario(propietario);
     }
 
-    public void agregarBonificacion(Bonificacion bonificacion){
-        servicioBonificaciones.agregarBonificacion(bonificacion);
+    public void agregarBonificacion(TipoBonificacion bonificacion){
+        servicioBonificaciones.agregarTipoBonificacion(bonificacion);
     }
 
-    public List<Bonificacion> getBonificaciones (){
-        return servicioBonificaciones.getBonificacions();
+    public List<TipoBonificacion> getTipoBonificaciones (){
+        return servicioBonificaciones.getTipoBonificaciones();
     }
 
-    public Bonificacion getBonificacion(String bonificacionNombre){
-        return servicioBonificaciones.getBonificacion(bonificacionNombre);
+    public TipoBonificacion getTipoBonificacion(String bonificacionNombre){
+        return servicioBonificaciones.getTipoBonificacion(bonificacionNombre);
     }
 
 

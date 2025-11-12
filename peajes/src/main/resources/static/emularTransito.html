@@ -13,7 +13,7 @@
     <p>Seleccione un puesto, verifique sus tarifas, ingrese una matrícula y emule un tránsito.</p>
 
     <main class="container">
-        <form id="formEmular" action="/admin/emularTransito" method="post">
+        <form id="formEmular" action="/admin/emular/emularTransito" method="post">
             <section>
                 <h3>Puesto</h3>
                 <select id="selectPuesto" name="puestoNombre">
@@ -48,7 +48,7 @@
 </body>
 
 <script>
-    var urlIniciarVista = "/admin/cargarPuestos";
+    var urlIniciarVista = "/admin/emular/cargarPuestos";
     
     const selectPuesto = document.getElementById('selectPuesto');
     const tablaTarifas = document.getElementById('tablaTarifas');
@@ -73,7 +73,7 @@
     selectPuesto.addEventListener('change', function() {
         const puestoNombre = this.value;
         if (puestoNombre) {
-            submit("/admin/cargarTarifas", "puestoNombre=" + encodeURIComponent(puestoNombre));
+            submit("/admin/emular/cargarTarifas", "puestoNombre=" + encodeURIComponent(puestoNombre));
         } else {
             tablaTarifas.innerHTML = 'No hay tarifas para el puesto seleccionado';
         }
@@ -85,7 +85,7 @@
 
     formEmular.addEventListener('submit', function(e) {
             e.preventDefault();
-            submit("/admin/emularTransito",serializarFormulario('formEmular'));
+            submit("/admin/emular/emularTransito",serializarFormulario('formEmular'));
           
         });
 

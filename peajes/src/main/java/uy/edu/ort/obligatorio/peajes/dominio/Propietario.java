@@ -13,7 +13,7 @@ public class Propietario extends Usuario {
     private double saldoMinimo;
     private double saldoActual;
     private List<Vehiculo> vehiculos;
-    private List<BonificacionPropietarioPuesto> bonificaciones;
+    private List<Bonificacion> bonificaciones;
     private EstadoPropietario estado;
     private List<Notificacion> notificaciones;
 
@@ -51,7 +51,7 @@ public class Propietario extends Usuario {
 
     public void setEstado(EstadoPropietario nuevoEstado) throws UsuarioException {
 
-        if (estado != null && estado.equals(nuevoEstado)) {
+        if (estado.equals(nuevoEstado)) {
             throw new UsuarioException("El propietario ya esta en estado " + estado.getNombreEstado());
         }
         Notificacion notificacion = new Notificacion(LocalDateTime.now(),
@@ -65,7 +65,7 @@ public class Propietario extends Usuario {
         return vehiculos;
     }
 
-    public List<BonificacionPropietarioPuesto> getBonificaciones() {
+    public List<Bonificacion> getBonificaciones() {
         return bonificaciones;
     }
 
@@ -108,7 +108,7 @@ public class Propietario extends Usuario {
     }
 
     public boolean tieneBonificacionEnPuesto(Puesto puesto) {
-        for (BonificacionPropietarioPuesto bonificacion : bonificaciones) {
+        for (Bonificacion bonificacion : bonificaciones) {
             if (bonificacion.getPuesto().equals(puesto)) {
                 return true;
             }
@@ -116,8 +116,8 @@ public class Propietario extends Usuario {
         return false;
     }
 
-    public BonificacionPropietarioPuesto buscarBonificacionPorPuesto(Puesto puesto) {
-        for (BonificacionPropietarioPuesto bonificacion : bonificaciones) {
+    public Bonificacion buscarBonificacionPorPuesto(Puesto puesto) {
+        for (Bonificacion bonificacion : bonificaciones) {
             if (bonificacion.getPuesto().equals(puesto)) {
                 return bonificacion;
             }
@@ -125,7 +125,7 @@ public class Propietario extends Usuario {
         return null;
     }
 
-    public void agregarBonificacion(BonificacionPropietarioPuesto bonificacion) {
+    public void agregarBonificacion(Bonificacion bonificacion) {
         bonificaciones.add(bonificacion);
     }
 
@@ -170,10 +170,10 @@ public class Propietario extends Usuario {
             return 0;
         }
 
-        BonificacionPropietarioPuesto bonificacion = buscarBonificacionPorPuesto(puesto);
+        Bonificacion bonificacion = buscarBonificacionPorPuesto(puesto);
         if (bonificacion != null) {
             Transito transitoTemp = new Transito(vehiculo, puesto, fechaHora, montoTarifa, 0);
-            return bonificacion.getBonificacion().calcularDescuento(transitoTemp);
+            return bonificacion.getTipoBonificacion().calcularDescuento(transitoTemp);
         }
 
         return 0;

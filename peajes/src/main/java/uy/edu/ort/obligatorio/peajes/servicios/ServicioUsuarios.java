@@ -8,12 +8,16 @@ import java.util.List;
 import lombok.Getter;
 import uy.edu.ort.obligatorio.peajes.dominio.Administrador;
 import uy.edu.ort.obligatorio.peajes.dominio.Bonificacion;
-import uy.edu.ort.obligatorio.peajes.dominio.BonificacionPropietarioPuesto;
 import uy.edu.ort.obligatorio.peajes.dominio.Propietario;
 import uy.edu.ort.obligatorio.peajes.dominio.Puesto;
 import uy.edu.ort.obligatorio.peajes.dominio.Sesion;
+import uy.edu.ort.obligatorio.peajes.dominio.TipoBonificacion;
 import uy.edu.ort.obligatorio.peajes.dominio.Usuario;
 import uy.edu.ort.obligatorio.peajes.dominio.Vehiculo;
+import uy.edu.ort.obligatorio.peajes.estados.EstadoPropietarioDeshabilitado;
+import uy.edu.ort.obligatorio.peajes.estados.EstadoPropietarioHabilitado;
+import uy.edu.ort.obligatorio.peajes.estados.EstadoPropietarioPenalizado;
+import uy.edu.ort.obligatorio.peajes.estados.EstadoPropietarioSuspendido;
 import uy.edu.ort.obligatorio.peajes.excepciones.UsuarioException;
 import uy.edu.ort.obligatorio.peajes.interfaces.EstadoPropietario;
 
@@ -104,12 +108,22 @@ public class ServicioUsuarios {
         return null;
     }
 
-    public void cambiarEstadoPropietario(String cedula, EstadoPropietario nuevoEstado) throws UsuarioException {
+    public void cambiarEstadoPropietario(String cedula, String estado) throws UsuarioException {
         Propietario propietario = buscarPropietarioPorCedula(cedula);
         if (propietario == null) {
             throw new UsuarioException("No existe el propietario");
         }
 
+        EstadoPropietario nuevoEstado = null;
+        if (estado.equals("Habilitado")) {
+            nuevoEstado = new EstadoPropietarioHabilitado();
+        } else if (estado.equals("Deshabilitado")) {
+            nuevoEstado = new EstadoPropietarioDeshabilitado();
+        } else if (estado.equals("Suspendido")) {
+            nuevoEstado = new EstadoPropietarioSuspendido();
+        } else if (estado.equals("Penalizado")) {
+            nuevoEstado = new EstadoPropietarioPenalizado();
+        }
         if (nuevoEstado == null) {
             throw new UsuarioException("Por favor seleccione un nuevo estado");
         }
@@ -117,9 +131,9 @@ public class ServicioUsuarios {
         propietario.setEstado(nuevoEstado);
     }
 
-    public void asignarBonificacion(String cedulaPropietario, Bonificacion bonificacion, Puesto puesto,
+    public void asignarBonificacion(String cedulaPropietario, TipoBonificacion tipoBonificacion, Puesto puesto,
             LocalDateTime fecha) throws UsuarioException {
-        if (bonificacion == null) {
+        if (tipoBonificacion == null) {
             throw new UsuarioException("Debe especificar una bonificación");
         }
         if (puesto == null) {
@@ -138,9 +152,8 @@ public class ServicioUsuarios {
         if (propietario.tieneBonificacionEnPuesto(puesto)) {
             throw new UsuarioException("Ya tiene una bonificación asignada para ese puesto");
         }
-
-        BonificacionPropietarioPuesto boniPropPuesto = new BonificacionPropietarioPuesto(bonificacion, propietario, puesto);
-        propietario.agregarBonificacion(boniPropPuesto);
+        Bonificacion nuevaBonificacion = new Bonificacion(tipoBonificacion, propietario, puesto, fecha);
+        propietario.agregarBonificacion(nuevaBonificacion);
     }
 
 

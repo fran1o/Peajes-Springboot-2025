@@ -35,7 +35,7 @@
 </body>
 
 <script>
-    var urlIniciarVista = "/admin/cargarEstados";
+    var urlIniciarVista = "/admin/propietarios/cargarEstados";
     var parametrosInicioVista = "";
 
     const btnBuscar = document.getElementById('btnBuscar');
@@ -59,7 +59,7 @@
     btnBuscar.addEventListener('click', function() {
         const cedula = document.getElementById('cedula').value;
         cedulaActual = cedula;
-        submit("/admin/buscarPropietario", "cedula=" + encodeURIComponent(cedula));
+        submit("/admin/propietarios/buscarPropietario", "cedula=" + encodeURIComponent(cedula));
     });
 
     function mostrar_nombreCompleto(nombre) {
@@ -78,15 +78,16 @@
         const params = "cedula=" + encodeURIComponent(cedulaActual) + 
                       "&nuevoEstado=" + encodeURIComponent(nuevoEstado);
         
-        submit("/admin/cambiarEstado", params);
+        submit("/admin/propietarios/cambiarEstado", params);
     });
 
     function mostrar_resultado(mensaje) {
-        submit("/admin/buscarPropietario", "cedula=" + encodeURIComponent(cedulaActual));
+        submit("/admin/propietarios/buscarPropietario", "cedula=" + encodeURIComponent(cedulaActual));
     }
 
     async function excepcionDeAplicacion(mensaje) {
-        if (mensaje === "no existe el propietario") {
+        await mostrarMensaje(mensaje);
+        if (mensaje === "No existe el propietario") {
             propietarioSection.style.display = 'none';
         }
     }

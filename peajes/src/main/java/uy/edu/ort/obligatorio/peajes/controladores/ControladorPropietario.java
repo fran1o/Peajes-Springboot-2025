@@ -1,26 +1,16 @@
 package uy.edu.ort.obligatorio.peajes.controladores;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+
 
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.servlet.http.HttpSession;
-import uy.edu.ort.obligatorio.peajes.dominio.Bonificacion;
-import uy.edu.ort.obligatorio.peajes.dominio.BonificacionPropietarioPuesto;
-import uy.edu.ort.obligatorio.peajes.dominio.Notificacion;
 import uy.edu.ort.obligatorio.peajes.dominio.Propietario;
 import uy.edu.ort.obligatorio.peajes.dominio.Transito;
-import uy.edu.ort.obligatorio.peajes.dominio.Usuario;
-import uy.edu.ort.obligatorio.peajes.dominio.Vehiculo;
-import uy.edu.ort.obligatorio.peajes.dtos.BonificacionDto;
-import uy.edu.ort.obligatorio.peajes.dtos.BonificacionPropietarioPuestoDto;
+import uy.edu.ort.obligatorio.peajes.dtos.BonifiacionDto;
 import uy.edu.ort.obligatorio.peajes.dtos.NotificacionDto;
 import uy.edu.ort.obligatorio.peajes.dtos.TransitoDto;
 import uy.edu.ort.obligatorio.peajes.dtos.VehiculoDto;
@@ -41,7 +31,7 @@ public class ControladorPropietario {
         String estado = obtenerNombreEstado(propietario);
         double saldoActual = propietario.getSaldoActual();
 
-        List<BonificacionPropietarioPuestoDto> bonificaciones = BonificacionPropietarioPuestoDto.listaDtos(propietario.getBonificaciones());
+        List<BonifiacionDto> bonificaciones = BonifiacionDto.listaDtos(propietario.getBonificaciones());
         List<VehiculoDto> vehiculos = VehiculoDto.listaDtos(propietario.getVehiculos());
         List<Transito> transitosList = Fachada.getInstancia().getTransitosPorPropietario(propietario);
         List<TransitoDto> transitos = TransitoDto.listaDtos(transitosList, propietario);
