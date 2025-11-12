@@ -40,15 +40,7 @@
             <p><strong>Estado:</strong> <span id="estado"></span></p>
 
             <h3>Bonificaciones Asignadas</h3>
-            <table id="tablaBonificacionesAsignadas">
-                <thead>
-                    <tr>
-                        <th>Bonificación</th>
-                        <th>Puesto</th>
-                    </tr>
-                </thead>
-                <tbody id="bonificacionesBody"></tbody>
-            </table>
+            <div id="tablaBonificacionesAsignadas"></div>
         </section>
 
         
@@ -59,8 +51,10 @@
     var urlIniciarVista = "/admin/cargarBonificacionesYPuestos";
 
     const btnAsignar = document.getElementById('btnAsignar');
+    const btnBuscar = document.getElementById('btnBuscar');
     const selectBonificacion = document.getElementById('selectBonificacion');
     const selectPuesto = document.getElementById('selectPuesto');
+    const propietarioSection = document.getElementById('propietarioSection');
     
     let cedulaActual = '';
 
@@ -103,7 +97,6 @@
     function mostrar_nombreCompleto(nombre) {
         document.getElementById('nombreCompleto').textContent = nombre;
         propietarioSection.style.display = 'block';
-        asignarSection.style.display = 'block';
     }
 
     function mostrar_estado(estado) {
@@ -111,16 +104,12 @@
     }
 
     function mostrar_bonificacionesDeProp(bonificacionesDeProp) {
-        bonificacionesBody.innerHTML = '';
+        const tablaBonificacionesAsignadas = document.getElementById('tablaBonificacionesAsignadas');
         if (bonificacionesDeProp.length === 0) {
-            bonificacionesBody.innerHTML = '<tr><td colspan="2">No tiene bonificaciones asignadas</td></tr>';
+            tablaBonificacionesAsignadas.innerHTML = '<p>No tiene bonificaciones asignadas</p>';
             return;
         }
-        bonificacionesDeProp.forEach(bonif => {
-            const row = bonificacionesBody.insertRow();
-            row.insertCell(0).textContent = bonif.bonificacion;
-            row.insertCell(1).textContent = bonif.puesto;
-        });
+        tablaBonificacionesAsignadas.innerHTML = crearTablaDesdeJson(bonificacionesDeProp);
     }
 
 

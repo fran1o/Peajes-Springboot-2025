@@ -2,15 +2,19 @@ package uy.edu.ort.obligatorio.peajes.dominio;
 
 import java.time.LocalDateTime;
 
-public abstract class Bonificacion {
+import uy.edu.ort.obligatorio.peajes.interfaces.EstrategiaCalculoDescuento;
+
+public class Bonificacion {
     private String nombre;
     private double porcentaje;
     private Puesto puesto;
     private LocalDateTime fechaAsignacion;
+    private EstrategiaCalculoDescuento estrategiaCalculo;
 
-    public Bonificacion(String nombre, double porcentaje) {
+    public Bonificacion(String nombre, double porcentaje, EstrategiaCalculoDescuento estrategiaCalculo) {
         this.nombre = nombre;
         this.porcentaje = porcentaje;
+        this.estrategiaCalculo = estrategiaCalculo;
     }
 
     public String getNombre() {
@@ -37,6 +41,8 @@ public abstract class Bonificacion {
         this.fechaAsignacion = fechaAsignacion;
     }
 
-    public abstract double calcularDescuento(Transito transito);
-    
+    public double calcularDescuento(Transito transito) {
+        return estrategiaCalculo.calcularDescuento(transito);
+    }
+
 }

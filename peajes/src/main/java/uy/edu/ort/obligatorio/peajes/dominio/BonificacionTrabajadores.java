@@ -1,24 +1,11 @@
 package uy.edu.ort.obligatorio.peajes.dominio;
 
-import java.time.DayOfWeek;
+import uy.edu.ort.obligatorio.peajes.dominio.estrategias.EstrategiaTrabajadores;
 
-public class BonificacionTrabajadores extends Bonificacion {
+public class BonificacionTrabajadores {
 
-    public BonificacionTrabajadores() {
-        super("Bonificación para trabajadores del peaje", 80);
+    public static Bonificacion crear() {
+        return new Bonificacion("Bonificación para trabajadores del peaje", 80, new EstrategiaTrabajadores());
     }
 
-    @Override
-    public double calcularDescuento(Transito transito) {
-        DayOfWeek diaSemana = transito.getFechaHora().getDayOfWeek();
-        boolean esFinDeSemana = (diaSemana == DayOfWeek.SATURDAY || diaSemana == DayOfWeek.SUNDAY);
-        
-        if (esFinDeSemana) {
-            return 0;
-        } else {
-            Tarifa tarifa = transito.getPuesto().buscarTarifaPorCategoria(transito.getVehiculo().getCategoria());
-            return tarifa.getMonto() * 0.8;
-        }
-    }
-    
 }

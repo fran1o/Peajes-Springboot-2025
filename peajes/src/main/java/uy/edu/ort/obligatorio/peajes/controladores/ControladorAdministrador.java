@@ -1,13 +1,9 @@
 package uy.edu.ort.obligatorio.peajes.controladores;
 
-
-import java.util.ArrayList;
-
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
-
 import java.util.List;
 import java.util.Map;
 
@@ -18,17 +14,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.servlet.http.HttpSession;
 
-import uy.edu.ort.obligatorio.peajes.dominio.Puesto;
 import uy.edu.ort.obligatorio.peajes.dominio.Administrador;
 import uy.edu.ort.obligatorio.peajes.dominio.Bonificacion;
-import uy.edu.ort.obligatorio.peajes.dominio.BonificacionExonerados;
-import uy.edu.ort.obligatorio.peajes.dominio.BonificacionFrecuentes;
-import uy.edu.ort.obligatorio.peajes.dominio.BonificacionTrabajadores;
-import uy.edu.ort.obligatorio.peajes.dominio.Propietario;
 import uy.edu.ort.obligatorio.peajes.dominio.Puesto;
-import uy.edu.ort.obligatorio.peajes.dominio.Tarifa;
+import uy.edu.ort.obligatorio.peajes.dominio.Propietario;
 import uy.edu.ort.obligatorio.peajes.dominio.Transito;
-import uy.edu.ort.obligatorio.peajes.dominio.Usuario;
 import uy.edu.ort.obligatorio.peajes.dtos.BonificacionDto;
 import uy.edu.ort.obligatorio.peajes.dtos.PuestoDto;
 import uy.edu.ort.obligatorio.peajes.dtos.TarifaDto;
@@ -40,8 +30,6 @@ import uy.edu.ort.obligatorio.peajes.excepciones.UsuarioException;
 import uy.edu.ort.obligatorio.peajes.interfaces.EstadoPropietario;
 import uy.edu.ort.obligatorio.peajes.servicios.Fachada;
 import uy.edu.ort.obligatorio.peajes.utils.Respuesta;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 @RestController
 @RequestMapping("/admin")
@@ -52,7 +40,7 @@ public class ControladorAdministrador {
 
         return Respuesta.lista(puestos());
     }
-    
+
     private Respuesta puestos() {
         List<PuestoDto> puestos = PuestoDto.listaDtos(Fachada.getInstancia().getPuestos());
         return new Respuesta("puestos", puestos);
@@ -63,16 +51,16 @@ public class ControladorAdministrador {
         Puesto puesto = Fachada.getInstancia().getPuestoPorNombre(puestoNombre);
         List<TarifaDto> tarifas = TarifaDto.listaDtos(puesto.getTarifas());
 
-        if(tarifas.isEmpty()){
-                return Respuesta.lista(new Respuesta("tarifas", "No se encontraron tarifas para el puesto seleccionado"));
-        }else{
-                return Respuesta.lista(new Respuesta("tarifas", tarifas));
+        if (tarifas.isEmpty()) {
+            return Respuesta.lista(new Respuesta("tarifas", "No se encontraron tarifas para el puesto seleccionado"));
+        } else {
+            return Respuesta.lista(new Respuesta("tarifas", tarifas));
         }
     }
 
-
     @PostMapping("/emularTransito")
-    public List<Respuesta> emularTransito(@RequestParam String matricula, @RequestParam String puestoNombre, @RequestParam String fechaHora) throws UsuarioException {
+    public List<Respuesta> emularTransito(@RequestParam String matricula, @RequestParam String puestoNombre,
+            @RequestParam String fechaHora) throws UsuarioException {
         Puesto puesto = null;
         for (Puesto p : Fachada.getInstancia().getPuestos()) {
             if (p.getNombre().trim().equalsIgnoreCase(puestoNombre.trim())) {
@@ -109,21 +97,15 @@ public class ControladorAdministrador {
         List<PuestoDto> puestos = PuestoDto.listaDtos(Fachada.getInstancia().getPuestos());
 
         return Respuesta.lista(
-            new Respuesta("bonificaciones", bonificaciones),
-            new Respuesta("puestos", puestos));
+                new Respuesta("bonificaciones", bonificaciones),
+                new Respuesta("puestos", puestos));
     }
 
     @PostMapping("/asignarBonificacion")
     public List<Respuesta> asignarBonificacion(@RequestParam String cedula, @RequestParam String bonificacionNombre,
             @RequestParam String puestoNombre) throws UsuarioException {
 
-        Bonificacion bonificacion = null;
-        for(Bonificacion b : Fachada.getInstancia().getBonificaciones()){
-            if(b.getNombre().equals(bonificacionNombre)){
-                bonificacion = b;
-                break;
-            }
-        }
+        Bonificacion bonificacion = buscarBonificacionPorNombre(bonificacionNombre);
         Puesto puesto = null;
         for (Puesto p : Fachada.getInstancia().getPuestos()) {
             if (p.getNombre().equals(puestoNombre)) {
@@ -134,6 +116,15 @@ public class ControladorAdministrador {
 
         Fachada.getInstancia().asignarBonificacion(cedula, bonificacion, puesto, LocalDateTime.now());
         return Respuesta.lista(new Respuesta("resultado", "Bonificación asignada exitosamente"));
+    }
+
+    private Bonificacion buscarBonificacionPorNombre(String bonificacionNombre) {
+        for (Bonificacion b : Fachada.getInstancia().getBonificaciones()) {
+            if (b.getNombre().equals(bonificacionNombre)) {
+                return b;
+            }
+        }
+        return null;
     }
 
     @PostMapping("/buscarPropietario")
@@ -151,8 +142,6 @@ public class ControladorAdministrador {
                 new Respuesta("estado", estado),
                 new Respuesta("bonificacionesDeProp", bonificacionesDeProp));
     }
-
-    
 
     @PostMapping("/cargarEstados")
     public List<Respuesta> cargarEstados() {
@@ -204,6 +193,5 @@ public class ControladorAdministrador {
         session.invalidate();
         return Respuesta.lista(new Respuesta("resultado", "Logout exitoso"));
     }
-
 
 }

@@ -1,15 +1,11 @@
 package uy.edu.ort.obligatorio.peajes.dominio;
 
-public class BonificacionExonerados extends Bonificacion {
+import uy.edu.ort.obligatorio.peajes.dominio.estrategias.EstrategiaExonerados;
 
-    public BonificacionExonerados() {
-        super("Exonerados", 100);
+public class BonificacionExonerados {
+
+    public static Bonificacion crear() {
+        return new Bonificacion("Exonerados", 100, new EstrategiaExonerados());
     }
 
-    @Override
-    public double calcularDescuento(Transito transito) {
-        Tarifa tarifa = transito.getPuesto().buscarTarifaPorCategoria(transito.getVehiculo().getCategoria());
-        return tarifa.getMonto();
-    }
-    
 }
