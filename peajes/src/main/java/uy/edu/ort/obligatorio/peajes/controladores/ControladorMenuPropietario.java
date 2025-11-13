@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.RestController;
 import jakarta.servlet.http.HttpSession;
 import uy.edu.ort.obligatorio.peajes.dominio.Usuario;
 import uy.edu.ort.obligatorio.peajes.excepciones.UsuarioException;
-import uy.edu.ort.obligatorio.peajes.servicios.Fachada;
 import uy.edu.ort.obligatorio.peajes.utils.Respuesta;
 
 @RestController
@@ -22,6 +21,7 @@ public class ControladorMenuPropietario {
         if(usuario != null) {
             sessionHttp.removeAttribute("usuarioLogueado");
             sessionHttp.invalidate();
+            
         }
         return Respuesta.lista(new Respuesta("usuarioNoConectado", "loginPropietario.html"));
     }

@@ -6,6 +6,7 @@
     <title>Cambiar Estado - Administrador</title>
     <link rel="stylesheet" href="base.css" />
     <script src="vistaWeb.js"></script>
+    <script src="sse.js"></script>
 </head>
 <body>
     <script src="utilesVista.js"></script>
@@ -36,6 +37,7 @@
 
 <script>
     var urlIniciarVista = "/admin/propietarios/cargarEstados";
+    var urlrRegistroSSE = "/admin/propietarios/registrarSSE"
     var parametrosInicioVista = "";
 
     const btnBuscar = document.getElementById('btnBuscar');
@@ -80,10 +82,6 @@
         
         submit("/admin/propietarios/cambiarEstado", params);
     });
-
-    function mostrar_resultado(mensaje) {
-        submit("/admin/propietarios/buscarPropietario", "cedula=" + encodeURIComponent(cedulaActual));
-    }
 
     async function excepcionDeAplicacion(mensaje) {
         await mostrarMensaje(mensaje);

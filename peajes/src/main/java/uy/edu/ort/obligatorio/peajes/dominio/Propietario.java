@@ -4,8 +4,12 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import lombok.Getter;
+import uy.edu.ort.obligatorio.peajes.dtos.TransitoDto;
 import uy.edu.ort.obligatorio.peajes.excepciones.UsuarioException;
 import uy.edu.ort.obligatorio.peajes.interfaces.EstadoPropietario;
+import uy.edu.ort.obligatorio.peajes.observer.ManejadorPropietarioObservable;
+import uy.edu.ort.obligatorio.peajes.observer.Observador.Evento;
 
 public class Propietario extends Usuario {
 
@@ -16,6 +20,8 @@ public class Propietario extends Usuario {
     private List<Bonificacion> bonificaciones;
     private EstadoPropietario estado;
     private List<Notificacion> notificaciones;
+    @Getter
+    private ManejadorPropietarioObservable manejador = new ManejadorPropietarioObservable();
 
     public Propietario(String cedula, String nombreCompleto, String contrasena, double saldoMinimo, double saldoActual,
             EstadoPropietario estado) {
@@ -59,6 +65,7 @@ public class Propietario extends Usuario {
                 this);
         agregarNotificacion(notificacion);
         this.estado = nuevoEstado;
+        manejador.notificar(Evento.ESTADOPROPIETARIO_ACTUALIZADO);
     }
 
     public List<Vehiculo> getVehiculos() {
@@ -173,7 +180,7 @@ public class Propietario extends Usuario {
         Bonificacion bonificacion = buscarBonificacionPorPuesto(puesto);
         if (bonificacion != null) {
             Transito transitoTemp = new Transito(vehiculo, puesto, fechaHora, montoTarifa, 0);
-            return bonificacion.getTipoBonificacion().calcularDescuento(transitoTemp);
+            return bonificacion.calcularDescuento(transitoTemp);
         }
 
         return 0;
@@ -196,6 +203,18 @@ public class Propietario extends Usuario {
                 agregarNotificacion(notificacionSaldo);
             }
         }
+    }
+
+    public List<Transito> getTransitos(){
+        List<Transito> transitos = new ArrayList<>();
+
+        for(Vehiculo v : vehiculos){
+            for(Transito t : v.getTransitos()){
+                transitos.add(t);
+            }
+        }
+
+        return transitos;
     }
 
 }

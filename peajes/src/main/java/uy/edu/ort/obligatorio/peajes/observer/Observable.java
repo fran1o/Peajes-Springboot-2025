@@ -11,7 +11,7 @@ public abstract class Observable {
         subscriptos = new ArrayList<Observador>();
     }
 
-    public void subscribir(Observador observador){
+    public void suscribir(Observador observador){
         subscriptos.add(observador);
     }
 

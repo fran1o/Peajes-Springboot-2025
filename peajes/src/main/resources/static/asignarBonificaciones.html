@@ -6,6 +6,7 @@
     <title>Asignar Bonificaciones - Administrador</title>
     <link rel="stylesheet" href="base.css" />
     <script src="vistaWeb.js"></script>
+    <script src="sse.js"></script>
 </head>
 <body>
     <script src="utilesVista.js"></script>
@@ -134,7 +135,6 @@
         selectBonificacion.value = '';
         selectPuesto.value = '';
         bonificacionesBody.innerHTML = '';
-        alert("Bonificacion creada correctamente")
         bonificacionesDeProp.forEach(bonif => {
             const row = bonificacionesBody.insertRow();
             row.insertCell(0).textContent = bonif.nombre;
