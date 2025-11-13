@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import jakarta.servlet.http.HttpSession;
 import uy.edu.ort.obligatorio.peajes.dominio.Propietario;
@@ -15,17 +16,39 @@ import uy.edu.ort.obligatorio.peajes.dtos.NotificacionDto;
 import uy.edu.ort.obligatorio.peajes.dtos.TransitoDto;
 import uy.edu.ort.obligatorio.peajes.dtos.VehiculoDto;
 import uy.edu.ort.obligatorio.peajes.excepciones.UsuarioException;
+import uy.edu.ort.obligatorio.peajes.observer.Observable;
+import uy.edu.ort.obligatorio.peajes.observer.Observador;
 import uy.edu.ort.obligatorio.peajes.servicios.Fachada;
+import uy.edu.ort.obligatorio.peajes.utils.ConexionNavegador;
 import uy.edu.ort.obligatorio.peajes.utils.Respuesta;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.GetMapping;
+
+
 
 @RestController
 @RequestMapping("/propietario")
-public class ControladorPropietario {
+public class ControladorPropietario implements Observador{
 
+    private Propietario propietario;
+    private final ConexionNavegador conexionNavegador;
+
+    public ControladorPropietario(@Autowired ConexionNavegador conexionNavegador){
+        this.conexionNavegador = conexionNavegador;
+    }
+
+
+    @GetMapping(value = "/registrarSSE", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
+    public SseEmitter registrarSSE() {
+        conexionNavegador.conectarSSE();
+        return conexionNavegador.getConexionSSE();
+    }
 
     @PostMapping("/cargarVistaInicial")
     public List<Respuesta> cargarDashboard(HttpSession session) {
-        Propietario propietario = (Propietario) session.getAttribute("usuarioLogueado");
+        propietario = (Propietario) session.getAttribute("usuarioLogueado");
 
         String nombreCompleto = propietario.getNombreCompleto();
         String estado = obtenerNombreEstado(propietario);
@@ -37,6 +60,8 @@ public class ControladorPropietario {
         List<TransitoDto> transitos = TransitoDto.listaDtos(transitosList, propietario);
         List<NotificacionDto> notificaciones = NotificacionDto.listaDtos(propietario.getNotificaciones());
 
+        propietario.getManejador().suscribir(this);
+        
         return Respuesta.lista(
                 new Respuesta("nombreCompleto", nombreCompleto),
                 new Respuesta("estado", estado),
@@ -48,10 +73,10 @@ public class ControladorPropietario {
     }
 
     
+    
 
     @PostMapping("/borrarNotificaciones")
     public List<Respuesta> borrarNotificaciones(HttpSession session) throws UsuarioException {
-        Propietario propietario = (Propietario) session.getAttribute("usuarioLogueado");
 
         if (propietario.getNotificaciones().isEmpty()) {
             throw new UsuarioException("No hay notificaciones para borrar");
@@ -63,6 +88,17 @@ public class ControladorPropietario {
 
     private String obtenerNombreEstado(Propietario propietario) {
         return propietario.getEstado().getNombreEstado();
+    }
+
+
+
+    @Override
+    public void actualizar(Observable origen, Object evento) {
+        if(evento == Evento.ESTADOPROPIETARIO_ACTUALIZADO){
+            System.out.println("Cambio el estado del propietario");
+            conexionNavegador.enviarJSON(Respuesta.lista(
+                new Respuesta("estado", propietario.getEstado().getNombreEstado())));
+        }
     }
 
 }

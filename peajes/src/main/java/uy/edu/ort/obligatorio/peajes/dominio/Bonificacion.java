@@ -21,5 +21,9 @@ public class Bonificacion {
         this.fecha = fecha;
     }
 
+    public double calcularDescuento(Transito transito){
+        return tipoBonificacion.calcularDescuento(transito);
+    }
+
 
 }

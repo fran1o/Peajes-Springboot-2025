@@ -1,7 +1,6 @@
 package uy.edu.ort.obligatorio.peajes.dominio;
 
 import uy.edu.ort.obligatorio.peajes.excepciones.UsuarioException;
-import uy.edu.ort.obligatorio.peajes.interfaces.EstadoPropietario;
 
 public abstract class Usuario {
     private String cedula;
