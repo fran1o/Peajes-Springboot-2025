@@ -42,6 +42,7 @@ public class ControladorMenuAdmin {
         if(usuario != null) {
             sessionHttp.removeAttribute("usuarioLogueado");
             sessionHttp.invalidate();
+            
             Fachada.getInstancia().logout(usuario);
         }
         return Respuesta.lista(new Respuesta("usuarioNoConectado", "loginAdmin.html"));

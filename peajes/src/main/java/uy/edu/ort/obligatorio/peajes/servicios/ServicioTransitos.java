@@ -10,6 +10,7 @@ import uy.edu.ort.obligatorio.peajes.dominio.Tarifa;
 import uy.edu.ort.obligatorio.peajes.dominio.Transito;
 import uy.edu.ort.obligatorio.peajes.dominio.Vehiculo;
 import uy.edu.ort.obligatorio.peajes.excepciones.UsuarioException;
+import uy.edu.ort.obligatorio.peajes.observer.Observador;
 
 public class ServicioTransitos {
 
@@ -39,7 +40,8 @@ public class ServicioTransitos {
         vehiculo.agregarTransito(transito);
 
         propietario.crearNotificacionesTransito(vehiculo, puesto);
-
+        Fachada.getInstancia().notificar(Observador.Evento.ESTADOPROPIETARIO_NUEVOTRANSITO);
+        Fachada.getInstancia().notificar(Observador.Evento.ESTADOPROPIETARIO_NUEVANOTIFICACION);
         return transito;
     }
 

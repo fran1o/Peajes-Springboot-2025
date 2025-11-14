@@ -40,7 +40,7 @@ public class PeajesApplication {
 		// Datos de prueba usuarios
 		Administrador admin1 = new Administrador("12345678", "Usuario Administrador", "admin.123");
 		Administrador admin2 = new Administrador("87654321", "Admin Secundario", "admin.456");
-		Propietario propietario1 = new Propietario("23456789", "Usuario Propietario 1", "prop.123", 500, 15,
+		Propietario propietario1 = new Propietario("23456789", "Usuario Propietario 1", "prop.123", 500, 1000,
 				new EstadoPropietarioHabilitado());
 		Propietario propietario2 = new Propietario("34567890", "Usuario Propietario 2", "prop2.123", 300, 1000,
 				new EstadoPropietarioSuspendido());
@@ -49,7 +49,7 @@ public class PeajesApplication {
 		Propietario propietario4 = new Propietario("49429904", "Usuario Propietario 4", "prop4.123", 400, 1000,
 				new EstadoPropietarioDeshabilitado());
 
-				Propietario propietario5 = new Propietario("98765432", "Usuario Propietario 5", "prop5.123", 400, 1000,
+				Propietario propietario5 = new Propietario("98765432", "Usuario Propietario 5", "prop5.123", 400, 15,
 				new EstadoPropietarioHabilitado());
 
 		Fachada.getInstancia().agregarAdministrador(admin1);

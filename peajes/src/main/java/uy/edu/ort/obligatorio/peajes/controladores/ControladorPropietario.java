@@ -94,8 +94,23 @@ public class ControladorPropietario implements Observador{
     @Override
     public void actualizar(Observable origen, Object evento) {
         if(evento == Evento.ESTADOPROPIETARIO_ACTUALIZADO){      
-            conexionNavegador.enviarJSON(Respuesta.lista(
-                new Respuesta("estado", propietario.getEstado().getNombreEstado())));
+            conexionNavegador.enviarJSON(Respuesta.lista(new Respuesta("estado", propietario.getEstado().getNombreEstado())));
+        }
+
+        if(evento == Evento.ESTADOPROPIETARIO_NUEVOTRANSITO){      
+            List<Transito> transitosList = Fachada.getInstancia().getTransitosPorPropietario(propietario);
+            List<TransitoDto> transitos = TransitoDto.listaDtos(transitosList, propietario);
+            conexionNavegador.enviarJSON(Respuesta.lista(new Respuesta("transitos", transitos)));
+        }
+
+        if(evento == Evento.ESTADOPROPIETARIO_NUEVANOTIFICACION){      
+            List<NotificacionDto> notificaciones = NotificacionDto.listaDtos(propietario.getNotificaciones());
+            conexionNavegador.enviarJSON(Respuesta.lista(new Respuesta("notificaciones", notificaciones)));
+        }
+
+        if(evento == Evento.ESTADOPROPIETARIO_NUEVABONIFICACION){      
+            List<BonifiacionDto> bonificaciones = BonifiacionDto.listaDtos(propietario.getBonificaciones());
+            conexionNavegador.enviarJSON(Respuesta.lista(new Respuesta("bonificaciones", bonificaciones)));
         }
     }
 
