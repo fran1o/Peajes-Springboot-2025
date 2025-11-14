@@ -131,6 +131,8 @@ public class ServicioUsuarios {
 
         propietario.setEstado(nuevoEstado);
         Fachada.getInstancia().notificar(Observador.Evento.ESTADOPROPIETARIO_ACTUALIZADO);
+        Fachada.getInstancia().notificar(Observador.Evento.ESTADOPROPIETARIO_NUEVANOTIFICACION);
+
     }
 
     public void asignarBonificacion(String cedulaPropietario, TipoBonificacion tipoBonificacion, Puesto puesto,
@@ -156,6 +158,7 @@ public class ServicioUsuarios {
         }
         Bonificacion nuevaBonificacion = new Bonificacion(tipoBonificacion, propietario, puesto, fecha);
         propietario.agregarBonificacion(nuevaBonificacion);
+        Fachada.getInstancia().notificar(Observador.Evento.ESTADOPROPIETARIO_NUEVABONIFICACION);
     }
 
 
