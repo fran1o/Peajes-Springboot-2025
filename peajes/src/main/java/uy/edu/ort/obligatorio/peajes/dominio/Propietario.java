@@ -3,14 +3,8 @@ package uy.edu.ort.obligatorio.peajes.dominio;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-
-import lombok.Getter;
-import uy.edu.ort.obligatorio.peajes.dtos.TransitoDto;
 import uy.edu.ort.obligatorio.peajes.excepciones.UsuarioException;
 import uy.edu.ort.obligatorio.peajes.interfaces.EstadoPropietario;
-import uy.edu.ort.obligatorio.peajes.observer.ManejadorPropietarioObservable;
-import uy.edu.ort.obligatorio.peajes.observer.Observador.Evento;
-
 public class Propietario extends Usuario {
 
     private boolean estaLogueado;
@@ -20,8 +14,6 @@ public class Propietario extends Usuario {
     private List<Bonificacion> bonificaciones;
     private EstadoPropietario estado;
     private List<Notificacion> notificaciones;
-    @Getter
-    private ManejadorPropietarioObservable manejador = new ManejadorPropietarioObservable();
 
     public Propietario(String cedula, String nombreCompleto, String contrasena, double saldoMinimo, double saldoActual,
             EstadoPropietario estado) {
@@ -34,7 +26,6 @@ public class Propietario extends Usuario {
         this.notificaciones = new ArrayList<>();
         this.estaLogueado = false;
     }
-
     public boolean estaLogueado() {
         return estaLogueado;
     }
@@ -65,7 +56,7 @@ public class Propietario extends Usuario {
                 this);
         agregarNotificacion(notificacion);
         this.estado = nuevoEstado;
-        manejador.notificar(Evento.ESTADOPROPIETARIO_ACTUALIZADO);
+        
     }
 
     public List<Vehiculo> getVehiculos() {
