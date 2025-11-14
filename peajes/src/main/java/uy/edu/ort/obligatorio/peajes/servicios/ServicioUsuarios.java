@@ -20,6 +20,7 @@ import uy.edu.ort.obligatorio.peajes.estados.EstadoPropietarioPenalizado;
 import uy.edu.ort.obligatorio.peajes.estados.EstadoPropietarioSuspendido;
 import uy.edu.ort.obligatorio.peajes.excepciones.UsuarioException;
 import uy.edu.ort.obligatorio.peajes.interfaces.EstadoPropietario;
+import uy.edu.ort.obligatorio.peajes.observer.Observador;
 
 public class ServicioUsuarios {
     @Getter
@@ -129,6 +130,7 @@ public class ServicioUsuarios {
         }
 
         propietario.setEstado(nuevoEstado);
+        Fachada.getInstancia().notificar(Observador.Evento.ESTADOPROPIETARIO_ACTUALIZADO);
     }
 
     public void asignarBonificacion(String cedulaPropietario, TipoBonificacion tipoBonificacion, Puesto puesto,

@@ -23,27 +23,21 @@ import uy.edu.ort.obligatorio.peajes.utils.ConexionNavegador;
 import uy.edu.ort.obligatorio.peajes.utils.Respuesta;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 
 
 
 @RestController
+@Scope("session")
 @RequestMapping("/propietario")
 public class ControladorPropietario implements Observador{
-
-    private Propietario propietario;
     private final ConexionNavegador conexionNavegador;
+    private Propietario propietario;
 
     public ControladorPropietario(@Autowired ConexionNavegador conexionNavegador){
         this.conexionNavegador = conexionNavegador;
-    }
-
-
-    @GetMapping(value = "/registrarSSE", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
-    public SseEmitter registrarSSE() {
-        conexionNavegador.conectarSSE();
-        return conexionNavegador.getConexionSSE();
     }
 
     @PostMapping("/cargarVistaInicial")
@@ -60,7 +54,7 @@ public class ControladorPropietario implements Observador{
         List<TransitoDto> transitos = TransitoDto.listaDtos(transitosList, propietario);
         List<NotificacionDto> notificaciones = NotificacionDto.listaDtos(propietario.getNotificaciones());
 
-        propietario.getManejador().suscribir(this);
+        Fachada.getInstancia().suscribir(this);
         
         return Respuesta.lista(
                 new Respuesta("nombreCompleto", nombreCompleto),
@@ -72,12 +66,17 @@ public class ControladorPropietario implements Observador{
                 new Respuesta("notificaciones", notificaciones));
     }
 
+    @GetMapping(value = "/registrarSSE", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
+    public SseEmitter registrarSSE() {
+        conexionNavegador.conectarSSE();
+        return conexionNavegador.getConexionSSE();
+    }
     
     
 
     @PostMapping("/borrarNotificaciones")
     public List<Respuesta> borrarNotificaciones(HttpSession session) throws UsuarioException {
-
+        propietario = (Propietario) session.getAttribute("usuarioLogueado");
         if (propietario.getNotificaciones().isEmpty()) {
             throw new UsuarioException("No hay notificaciones para borrar");
         }
@@ -94,8 +93,7 @@ public class ControladorPropietario implements Observador{
 
     @Override
     public void actualizar(Observable origen, Object evento) {
-        if(evento == Evento.ESTADOPROPIETARIO_ACTUALIZADO){
-            System.out.println("Cambio el estado del propietario");
+        if(evento == Evento.ESTADOPROPIETARIO_ACTUALIZADO){      
             conexionNavegador.enviarJSON(Respuesta.lista(
                 new Respuesta("estado", propietario.getEstado().getNombreEstado())));
         }
