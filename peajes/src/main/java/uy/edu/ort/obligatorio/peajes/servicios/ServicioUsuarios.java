@@ -20,7 +20,6 @@ import uy.edu.ort.obligatorio.peajes.estados.EstadoPropietarioPenalizado;
 import uy.edu.ort.obligatorio.peajes.estados.EstadoPropietarioSuspendido;
 import uy.edu.ort.obligatorio.peajes.excepciones.UsuarioException;
 import uy.edu.ort.obligatorio.peajes.interfaces.EstadoPropietario;
-import uy.edu.ort.obligatorio.peajes.observer.Observador;
 
 public class ServicioUsuarios {
     @Getter
@@ -130,8 +129,7 @@ public class ServicioUsuarios {
         }
 
         propietario.setEstado(nuevoEstado);
-        Fachada.getInstancia().notificar(Observador.Evento.ESTADOPROPIETARIO_ACTUALIZADO);
-        Fachada.getInstancia().notificar(Observador.Evento.ESTADOPROPIETARIO_NUEVANOTIFICACION);
+        
 
     }
 
@@ -158,7 +156,7 @@ public class ServicioUsuarios {
         }
         Bonificacion nuevaBonificacion = new Bonificacion(tipoBonificacion, propietario, puesto, fecha);
         propietario.agregarBonificacion(nuevaBonificacion);
-        Fachada.getInstancia().notificar(Observador.Evento.ESTADOPROPIETARIO_NUEVABONIFICACION);
+        
     }
 
 

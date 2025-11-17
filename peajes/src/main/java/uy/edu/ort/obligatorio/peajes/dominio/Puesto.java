@@ -3,7 +3,10 @@ package uy.edu.ort.obligatorio.peajes.dominio;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Puesto {
+import uy.edu.ort.obligatorio.peajes.observer.Observable;
+import uy.edu.ort.obligatorio.peajes.observer.Observador;
+
+public class Puesto extends Observable{
 
     private String nombre;
     private String direccion;
@@ -36,6 +39,7 @@ public class Puesto {
 
     public void agregarTransito(Transito transito) {
         transitos.add(transito);
+        
     }
 
     public Tarifa buscarTarifaPorCategoria(Categoria categoria) {

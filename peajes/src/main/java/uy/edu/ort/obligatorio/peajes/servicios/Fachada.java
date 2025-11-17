@@ -12,8 +12,8 @@ import uy.edu.ort.obligatorio.peajes.dominio.Transito;
 import uy.edu.ort.obligatorio.peajes.dominio.Usuario;
 import uy.edu.ort.obligatorio.peajes.dominio.Vehiculo;
 import uy.edu.ort.obligatorio.peajes.excepciones.UsuarioException;
-import uy.edu.ort.obligatorio.peajes.observer.Observable;
-public class Fachada extends Observable{
+
+public class Fachada{
 
     private static Fachada instancia;
     private ServicioPuestos servicioPuestos;
