@@ -23,6 +23,7 @@ public class ConexionNavegador  {
         
     }
     public void cerrarConexion(){
+        System.out.println("CERRANDO SSE DE SESION: " + this);
         try{
             if(conexionSSE!=null){
                 conexionSSE.complete();

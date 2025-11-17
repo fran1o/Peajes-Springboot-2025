@@ -61,7 +61,7 @@
         const tablaVehiculos = document.getElementById('tablaVehiculos');
         const tablaTransitos = document.getElementById('tablaTransitos');
         const tablaNotificaciones = document.getElementById('tablaNotificaciones');
-
+        const btnBorrarNotificaciones = document.getElementById('btnBorrarNotificaciones');
         
 
         function mostrar_nombreCompleto(nombre) {
@@ -80,6 +80,7 @@
             tablaBonificaciones.innerHTML = crearTablaDesdeJson(bonificaciones);
         }
         
+        
         function mostrar_vehiculos(vehiculos) {
             tablaVehiculos.innerHTML = crearTablaDesdeJson(vehiculos);
 
@@ -91,12 +92,17 @@
 
         function mostrar_notificaciones(notificaciones) {
             tablaNotificaciones.innerHTML = crearTablaDesdeJson(notificaciones);
-            document.getElementById('btnBorrarNotificaciones').addEventListener('click', function() {
-            submit("/propietario/borrarNotificaciones", "");
-            });
         }
 
+        btnBorrarNotificaciones.addEventListener('click', function() {
+            submit("/propietario/borrarNotificaciones");
+        });
+
         async function excepcionDeAplicacion(mensaje) {
+            await mostrarMensaje(mensaje);
+        }
+
+        async function mostrar_mensaje(mensaje) {
             await mostrarMensaje(mensaje);
         }
         
