@@ -43,7 +43,9 @@ public class ControladorPropietario implements Observador{
     @PostMapping("/cargarVistaInicial")
     public List<Respuesta> cargarDashboard(HttpSession session) {
         propietario = (Propietario) session.getAttribute("usuarioLogueado");
-
+        if(propietario != null){
+            propietario.suscribir(this);
+        }
         String nombreCompleto = propietario.getNombreCompleto();
         String estado = obtenerNombreEstado(propietario);
         double saldoActual = propietario.getSaldoActual();
@@ -53,8 +55,6 @@ public class ControladorPropietario implements Observador{
         List<Transito> transitosList = Fachada.getInstancia().getTransitosPorPropietario(propietario);
         List<TransitoDto> transitos = TransitoDto.listaDtos(transitosList, propietario);
         List<NotificacionDto> notificaciones = NotificacionDto.listaDtos(propietario.getNotificaciones());
-
-        Fachada.getInstancia().suscribir(this);
         
         return Respuesta.lista(
                 new Respuesta("nombreCompleto", nombreCompleto),
@@ -89,6 +89,14 @@ public class ControladorPropietario implements Observador{
         return propietario.getEstado().getNombreEstado();
     }
 
+    /* @PostMapping("/vistaDesconectada")
+    public void cerrarVista(){
+        if(propietario != null){
+            Fachada.getInstancia().desubscribir(this);
+        }
+    }*/
+    
+
 
 
     @Override
@@ -101,6 +109,7 @@ public class ControladorPropietario implements Observador{
             List<Transito> transitosList = Fachada.getInstancia().getTransitosPorPropietario(propietario);
             List<TransitoDto> transitos = TransitoDto.listaDtos(transitosList, propietario);
             conexionNavegador.enviarJSON(Respuesta.lista(new Respuesta("transitos", transitos)));
+            conexionNavegador.enviarJSON(Respuesta.lista(new Respuesta("saldoActual", propietario.getSaldoActual())));
         }
 
         if(evento == Evento.ESTADOPROPIETARIO_NUEVANOTIFICACION){      

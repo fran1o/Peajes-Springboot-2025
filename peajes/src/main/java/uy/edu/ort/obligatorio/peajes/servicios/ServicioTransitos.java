@@ -40,8 +40,7 @@ public class ServicioTransitos {
         vehiculo.agregarTransito(transito);
 
         propietario.crearNotificacionesTransito(vehiculo, puesto);
-        Fachada.getInstancia().notificar(Observador.Evento.ESTADOPROPIETARIO_NUEVOTRANSITO);
-        Fachada.getInstancia().notificar(Observador.Evento.ESTADOPROPIETARIO_NUEVANOTIFICACION);
+        propietario.notificar(Observador.Evento.ESTADOPROPIETARIO_NUEVOTRANSITO);
         return transito;
     }
 

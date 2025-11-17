@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.List;
 import uy.edu.ort.obligatorio.peajes.excepciones.UsuarioException;
 import uy.edu.ort.obligatorio.peajes.interfaces.EstadoPropietario;
+import uy.edu.ort.obligatorio.peajes.observer.ManejadorPropietarioObservable;
+import uy.edu.ort.obligatorio.peajes.observer.Observador;
 public class Propietario extends Usuario {
 
     private boolean estaLogueado;
@@ -14,6 +16,7 @@ public class Propietario extends Usuario {
     private List<Bonificacion> bonificaciones;
     private EstadoPropietario estado;
     private List<Notificacion> notificaciones;
+    private ManejadorPropietarioObservable manejadorPropietarioObservable = new ManejadorPropietarioObservable();
 
     public Propietario(String cedula, String nombreCompleto, String contrasena, double saldoMinimo, double saldoActual,
             EstadoPropietario estado) {
@@ -56,6 +59,8 @@ public class Propietario extends Usuario {
                 this);
         agregarNotificacion(notificacion);
         this.estado = nuevoEstado;
+        notificar(Observador.Evento.ESTADOPROPIETARIO_ACTUALIZADO);
+        
         
     }
 
@@ -73,6 +78,7 @@ public class Propietario extends Usuario {
 
     public void agregarNotificacion(Notificacion notificacion) {
         notificaciones.add(notificacion);
+        notificar(Observador.Evento.ESTADOPROPIETARIO_NUEVANOTIFICACION);
     }
 
     public void borrarNotificaciones() {
@@ -125,6 +131,7 @@ public class Propietario extends Usuario {
 
     public void agregarBonificacion(Bonificacion bonificacion) {
         bonificaciones.add(bonificacion);
+        notificar(Observador.Evento.ESTADOPROPIETARIO_NUEVABONIFICACION);
     }
 
     @Override
@@ -207,5 +214,18 @@ public class Propietario extends Usuario {
 
         return transitos;
     }
+
+    public void suscribir(Observador observador){
+        manejadorPropietarioObservable.suscribir(observador);
+    }
+
+    public void desubscribir(Observador observador){
+        manejadorPropietarioObservable.desubscribir(observador);
+    }
+
+    public void notificar(Object evento){
+        manejadorPropietarioObservable.notificar(evento);
+    }
+
 
 }
