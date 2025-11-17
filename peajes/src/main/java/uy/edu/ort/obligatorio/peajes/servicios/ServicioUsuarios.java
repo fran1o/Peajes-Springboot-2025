@@ -42,16 +42,6 @@ public class ServicioUsuarios {
     public void agregarPropietario(Propietario propietario) {
         propietarios.add(propietario);
     }
-
-    public Propietario getPropietario(String cedula){
-        for(Propietario p : propietarios){
-            if(p.getCedula().equals(cedula)){
-                return p;
-            }
-        }
-
-        return null;
-    }
     public Administrador loginAdministrador(String cedula, String contrasenia) throws UsuarioException {
         Administrador usuario = (Administrador) login(cedula, contrasenia, administradores, "Acceso denegado");
         if (usuario.validarLogin()) {

@@ -6,22 +6,22 @@ import java.util.List;
 import uy.edu.ort.obligatorio.peajes.dominio.TipoBonificacion;
 
 public class ServicioBonificaciones {
-    private List<TipoBonificacion> bonificaciones;
+    private List<TipoBonificacion> tipoBonificaciones;
 
     public ServicioBonificaciones(){
-        bonificaciones = new ArrayList<>();
+        tipoBonificaciones = new ArrayList<>();
     }
 
     public void agregarTipoBonificacion(TipoBonificacion bonificacion){
-        bonificaciones.add(bonificacion);
+        tipoBonificaciones.add(bonificacion);
     }
 
     public List<TipoBonificacion> getTipoBonificaciones(){
-        return bonificaciones;
+        return tipoBonificaciones;
     }
 
     public TipoBonificacion getTipoBonificacion(String bonificacionNombre) {
-        for(TipoBonificacion b : bonificaciones){
+        for(TipoBonificacion b : tipoBonificaciones){
             if (b.getNombre().equalsIgnoreCase(bonificacionNombre.trim())) { 
                 return b;
             }

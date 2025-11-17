@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import uy.edu.ort.obligatorio.peajes.observer.Observable;
-import uy.edu.ort.obligatorio.peajes.observer.Observador;
+
 
 public class Puesto extends Observable{
 
