@@ -50,18 +50,12 @@ public class Propietario extends Usuario {
     }
 
     public void setEstado(EstadoPropietario nuevoEstado) throws UsuarioException {
-
-        if (estado.equals(nuevoEstado)) {
-            throw new UsuarioException("El propietario ya esta en estado " + estado.getNombreEstado());
-        }
         Notificacion notificacion = new Notificacion(LocalDateTime.now(),
                 "Se ha cambiado tu estado en el sistema. Tu estado actual es " + nuevoEstado.getNombreEstado(),
                 this);
         agregarNotificacion(notificacion);
         this.estado = nuevoEstado;
-        notificar(Observador.Evento.ESTADOPROPIETARIO_ACTUALIZADO);
-        
-        
+        notificar(Observador.Evento.ESTADOPROPIETARIO_ACTUALIZADO); 
     }
 
     public List<Vehiculo> getVehiculos() {
@@ -83,6 +77,7 @@ public class Propietario extends Usuario {
 
     public void borrarNotificaciones() {
         notificaciones.clear();
+        notificar(Observador.Evento.ESTADOPROPIETARIO_NOTIFICACIONESBORRADAS);
     }
 
     public void deducirSaldo(double monto) {

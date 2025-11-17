@@ -123,14 +123,16 @@ public class ServicioUsuarios {
             nuevoEstado = new EstadoPropietarioSuspendido();
         } else if (estado.equals("Penalizado")) {
             nuevoEstado = new EstadoPropietarioPenalizado();
-        }
-        if (nuevoEstado == null) {
+        } else {
             throw new UsuarioException("Por favor seleccione un nuevo estado");
+        }
+
+        if (propietario.getEstado().getNombreEstado().equals(estado)) { 
+            throw new UsuarioException("El propietario ya esta en estado " + estado);
         }
 
         propietario.setEstado(nuevoEstado);
         
-
     }
 
     public void asignarBonificacion(String cedulaPropietario, TipoBonificacion tipoBonificacion, Puesto puesto,

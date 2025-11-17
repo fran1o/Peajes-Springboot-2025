@@ -80,15 +80,13 @@ public class ControladorPropietario implements Observador{
 
     @PostMapping("/borrarNotificaciones")
     public List<Respuesta> borrarNotificaciones(HttpSession session) throws UsuarioException {
-        propietario = (Propietario) session.getAttribute("usuarioLogueado");
         if (propietario.getNotificaciones().isEmpty()) {
             throw new UsuarioException("No hay notificaciones para borrar");
         }
 
         propietario.borrarNotificaciones();
-        return Respuesta.lista(new Respuesta("notificacionesBorradas", "Notificaciones eliminadas exitosamente"));
+        return Respuesta.lista(new Respuesta("mensaje" , "Notificaciones borradas correctamente"));
     }
-
     private String obtenerNombreEstado(Propietario propietario) {
         return propietario.getEstado().getNombreEstado();
     }
@@ -118,7 +116,7 @@ public class ControladorPropietario implements Observador{
             conexionNavegador.enviarJSON(Respuesta.lista(new Respuesta("saldoActual", propietario.getSaldoActual())));
         }
 
-        if(evento == Evento.ESTADOPROPIETARIO_NUEVANOTIFICACION){      
+        if(evento == Evento.ESTADOPROPIETARIO_NUEVANOTIFICACION || evento == Evento.ESTADOPROPIETARIO_NOTIFICACIONESBORRADAS){      
             List<NotificacionDto> notificaciones = NotificacionDto.listaDtos(propietario.getNotificaciones());
             conexionNavegador.enviarJSON(Respuesta.lista(new Respuesta("notificaciones", notificaciones)));
         }
