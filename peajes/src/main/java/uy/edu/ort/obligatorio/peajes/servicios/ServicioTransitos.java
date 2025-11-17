@@ -44,10 +44,6 @@ public class ServicioTransitos {
         return transito;
     }
 
-    public List<Transito> getAllTransitos() {
-        return transitos;
-    }
-
     public List<Transito> getTransitosPorPropietario(Propietario propietario) {
         List<Transito> transitosPropietario = new ArrayList<>();
         for(Transito t : transitos){

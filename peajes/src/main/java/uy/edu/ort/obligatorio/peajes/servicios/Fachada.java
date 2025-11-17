@@ -102,8 +102,8 @@ public class Fachada{
         return servicioTransitos.getTransitosPorPropietario(propietario);
     }
 
-    public void agregarBonificacion(TipoBonificacion bonificacion){
-        servicioBonificaciones.agregarTipoBonificacion(bonificacion);
+    public void agregarBonificacion(TipoBonificacion tipoBonificacion){
+        servicioBonificaciones.agregarTipoBonificacion(tipoBonificacion);
     }
 
     public List<TipoBonificacion> getTipoBonificaciones (){
@@ -117,10 +117,6 @@ public class Fachada{
 
     public Puesto getPuestoPorNombre(String puestoNombre){
         return servicioPuestos.getPuestoPorNombre(puestoNombre);
-    }
-
-    public Propietario getPropietario(String cedula) {
-        return servicioUsuarios.getPropietario(cedula);
     }
 
 }
