@@ -62,6 +62,6 @@ public class ControladorCambiarEstadoPropietario{
     @PostMapping("/cambiarEstado")
     public List<Respuesta> cambiarEstado(@RequestParam String cedula, @RequestParam String nuevoEstado) throws UsuarioException {
         Fachada.getInstancia().cambiarEstadoPropietario(cedula, nuevoEstado);
-        return Respuesta.lista(new Respuesta("estado", nuevoEstado));
+        return Respuesta.lista(new Respuesta("mensaje", "Estado cambiado con exito"),new Respuesta("estado", nuevoEstado));
     }
 }

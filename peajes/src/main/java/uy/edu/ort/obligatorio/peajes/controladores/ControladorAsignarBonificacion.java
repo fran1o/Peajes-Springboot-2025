@@ -59,7 +59,7 @@ public class ControladorAsignarBonificacion {
     
         Fachada.getInstancia().asignarBonificacion(cedula, tipoBonificacion, puesto, LocalDateTime.now());
         List<BonifiacionDto> bonificacionesDeProp = BonifiacionDto.listaDtos(Fachada.getInstancia().getPropietario(cedula).getBonificaciones());
-        return Respuesta.lista(new Respuesta("resultado", bonificacionesDeProp));
+        return Respuesta.lista(new Respuesta("mensaje", "Bonificacion asignada con exito"),new Respuesta("resultado", bonificacionesDeProp));
     }
 
 }

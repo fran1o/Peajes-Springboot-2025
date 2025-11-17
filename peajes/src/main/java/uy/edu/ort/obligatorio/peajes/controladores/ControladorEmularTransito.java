@@ -68,7 +68,7 @@ public class ControladorEmularTransito {
                 ? bonificacionPropietarioPuesto.getTipoBonificacion().getNombre()
                 : "";
 
-        return Respuesta.lista(
+        return Respuesta.lista(new Respuesta("mensaje", "Transito realizado con exito"),
                 new Respuesta("propietarioNombre", propietario.getNombreCompleto()),
                 new Respuesta("estado", estado),
                 new Respuesta("categoria", categoria),
