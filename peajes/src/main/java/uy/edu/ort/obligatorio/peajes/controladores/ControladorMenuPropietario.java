@@ -18,8 +18,12 @@ public class ControladorMenuPropietario {
 
     @PostMapping("/logout")
     public List<Respuesta> logout(HttpSession sessionHttp) throws UsuarioException {
-        Usuario usuario = (Usuario) sessionHttp.getAttribute("usuarioLogueado");
-        Fachada.getInstancia().logout(usuario);
+        Usuario usuario = (Usuario) sessionHttp.getAttribute("usuarioPropietario");
+        if(usuario != null) {
+            Fachada.getInstancia().logout(usuario);
+            sessionHttp.removeAttribute("usuarioPropietario");
+            sessionHttp.invalidate();
+        }
         return Respuesta.lista(new Respuesta("usuarioNoConectado", "loginPropietario.html"));
     }
 }

@@ -42,7 +42,7 @@ public class ControladorPropietario implements Observador{
 
     @PostMapping("/cargarVistaInicial")
     public List<Respuesta> cargarDashboard(HttpSession session) {
-        propietario = (Propietario) session.getAttribute("usuarioLogueado");
+        propietario = (Propietario) session.getAttribute("usuarioPropietario");
         if (propietario == null) {
              return Respuesta.lista(new Respuesta("usuarioNoAutenticado", "loginPropietario.html"));
         }
@@ -93,15 +93,16 @@ public class ControladorPropietario implements Observador{
 
     @PostMapping("/vistaDesconectada")
     public void cerrarVista(HttpSession session) {
-        Propietario propietario = (Propietario) session.getAttribute("usuarioLogueado");
+        Propietario propietario = (Propietario) session.getAttribute("usuarioPropietario");
 
         if (propietario != null) {
             propietario.desubscribir(this);
         }
-        session.removeAttribute("usuarioLogueado");
+        session.removeAttribute("usuarioPropietario");
         session.invalidate();
     }
 
+    
 
     @Override
     public void actualizar(Observable origen, Object evento) {

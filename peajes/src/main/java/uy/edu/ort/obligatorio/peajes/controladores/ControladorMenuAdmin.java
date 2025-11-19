@@ -24,13 +24,13 @@ public class ControladorMenuAdmin {
 
 
     @PostMapping("/vistaConectada")
-    public List<Respuesta> inicializarVista(@SessionAttribute (name = "usuarioLogueado", required = false) Usuario usuarioLogueado) {
-        if(usuarioLogueado == null) {
+    public List<Respuesta> inicializarVista(@SessionAttribute (name = "usuarioAdmin", required = false) Usuario usuarioAdmin) {
+        if(usuarioAdmin == null) {
             return Respuesta.lista(new Respuesta("usuarioNoConectado", "loginAdmin.html"));
             
         } 
         
-        return Respuesta.lista(new Respuesta("vistaConectada", usuarioLogueado.getNombreCompleto()));
+        return Respuesta.lista(new Respuesta("vistaConectada", usuarioAdmin.getNombreCompleto()));
         
         
     }
@@ -38,12 +38,11 @@ public class ControladorMenuAdmin {
 
     @PostMapping("/logout")
     public List<Respuesta> logout(HttpSession sessionHttp) throws UsuarioException {
-        Usuario usuario = (Usuario) sessionHttp.getAttribute("usuarioLogueado");
+        Usuario usuario = (Usuario) sessionHttp.getAttribute("usuarioAdmin");
         if(usuario != null) {
-            sessionHttp.removeAttribute("usuarioLogueado");
-            sessionHttp.invalidate();
-            
             Fachada.getInstancia().logout(usuario);
+            sessionHttp.removeAttribute("usuarioAdmin");
+            sessionHttp.invalidate();
         }
         return Respuesta.lista(new Respuesta("usuarioNoConectado", "loginAdmin.html"));
     }

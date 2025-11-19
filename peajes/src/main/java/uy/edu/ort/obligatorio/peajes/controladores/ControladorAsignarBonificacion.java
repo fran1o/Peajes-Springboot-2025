@@ -25,7 +25,6 @@ public class ControladorAsignarBonificacion {
 
     @PostMapping("/cargarBonificacionesYPuestos")
     public List<Respuesta> cargarBonificaciones() {
-        System.out.println("se ejecuta");
         List<TipoBonificacionDto> bonificaciones = TipoBonificacionDto.listaDtos(Fachada.getInstancia().getTipoBonificaciones());
         List<PuestoDto> puestos = PuestoDto.listaDtos(Fachada.getInstancia().getPuestos());
         return Respuesta.lista(
