@@ -27,10 +27,10 @@ public class Administrador extends Usuario {
     @Override
     public boolean validarLogin() throws UsuarioException {
         
-        if(estaLogueado) {
+        if(this.estaLogueado) {
             throw new UsuarioException("Ud. ya esta logueado");
         } else {
-            estaLogueado = true;
+            this.estaLogueado = true;
         }
 
         return true;
