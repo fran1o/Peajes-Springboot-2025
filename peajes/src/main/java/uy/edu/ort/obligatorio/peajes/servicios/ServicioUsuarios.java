@@ -42,6 +42,7 @@ public class ServicioUsuarios {
     public void agregarPropietario(Propietario propietario) {
         propietarios.add(propietario);
     }
+
     public Administrador loginAdministrador(String cedula, String contrasenia) throws UsuarioException {
         Administrador usuario = (Administrador) login(cedula, contrasenia, administradores, "Acceso denegado");
         if (usuario.validarLogin()) {
@@ -53,9 +54,11 @@ public class ServicioUsuarios {
     }
 
     public Propietario loginPropietario(String cedula, String contrasenia) throws UsuarioException {
-        Propietario usuario =  (Propietario) login(cedula, contrasenia, propietarios, "Acceso denegado");
-    
+        Propietario usuario = (Propietario) login(cedula, contrasenia, propietarios, "Acceso denegado");
+
         if (usuario.validarLogin()) {
+            // Propietario puede tener múltiples sesiones simultáneas,
+            // así que no actualizamos estaLogueado ni lo verificamos
             Sesion sesion = new Sesion(usuario);
             sesion.setFechaInicio(new Date());
             sesionesActivas.add(sesion);
@@ -75,8 +78,37 @@ public class ServicioUsuarios {
     }
 
     public void logout(Usuario usuario) throws UsuarioException {
-        usuario.logout();
-        sesionesActivas.removeIf(sesion -> sesion.getUsuario().equals(usuario));
+        // Buscar el usuario en la lista para asegurar que actualizamos el objeto
+        // correcto
+        // ya que el objeto de la sesión puede ser una copia por serialización
+        Usuario usuarioEnLista = buscarUsuarioEnLista(usuario.getCedula());
+        if (usuarioEnLista != null) {
+            // Solo actualizar estaLogueado para Administrador, no para Propietario
+            // ya que Propietario puede tener múltiples sesiones simultáneas
+            if (usuarioEnLista instanceof Administrador) {
+                usuarioEnLista.logout();
+            }
+        } else {
+            // Solo actualizar estaLogueado para Administrador, no para Propietario
+            if (usuario instanceof Administrador) {
+                usuario.logout();
+            }
+        }
+        sesionesActivas.removeIf(sesion -> sesion.getUsuario().getCedula().equals(usuario.getCedula()));
+    }
+
+    private Usuario buscarUsuarioEnLista(String cedula) {
+        for (Administrador admin : administradores) {
+            if (admin.getCedula().equals(cedula)) {
+                return admin;
+            }
+        }
+        for (Propietario prop : propietarios) {
+            if (prop.getCedula().equals(cedula)) {
+                return prop;
+            }
+        }
+        return null;
     }
 
     public Vehiculo buscarVehiculoPorMatricula(String matricula) {
@@ -89,7 +121,7 @@ public class ServicioUsuarios {
         return null;
     }
 
-    public Propietario buscarPropietarioPorCedula(String cedula) throws UsuarioException{
+    public Propietario buscarPropietarioPorCedula(String cedula) throws UsuarioException {
         for (Propietario propietario : propietarios) {
             if (propietario.getCedula().equals(cedula)) {
                 return propietario;
@@ -117,12 +149,12 @@ public class ServicioUsuarios {
             throw new UsuarioException("Por favor seleccione un nuevo estado");
         }
 
-        if (propietario.getEstado().getNombreEstado().equals(estado)) { 
+        if (propietario.getEstado().getNombreEstado().equals(estado)) {
             throw new UsuarioException("El propietario ya esta en estado " + estado);
         }
 
         propietario.setEstado(nuevoEstado);
-        
+
     }
 
     public void asignarBonificacion(String cedulaPropietario, TipoBonificacion tipoBonificacion, Puesto puesto,
@@ -148,9 +180,7 @@ public class ServicioUsuarios {
         }
         Bonificacion nuevaBonificacion = new Bonificacion(tipoBonificacion, propietario, puesto, fecha);
         propietario.agregarBonificacion(nuevaBonificacion);
-        
+
     }
-
-
 
 }

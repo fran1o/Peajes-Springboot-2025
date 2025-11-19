@@ -35,6 +35,7 @@ function submit(endPointUrl, urlEncodedData) {
         headers: {
             'Content-Type': 'application/x-www-form-urlencoded'
         },
+        credentials: 'same-origin',
         body: urlEncodedData
     }).then(async response => {
         const status = response.status;
