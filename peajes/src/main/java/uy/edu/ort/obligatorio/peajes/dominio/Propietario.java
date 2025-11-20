@@ -143,15 +143,6 @@ public class Propietario extends Usuario {
         return true;
     }
 
-    public void validarPuedeRealizarTransito() throws UsuarioException {
-        if (estado.estaDeshabilitado()) {
-            throw new UsuarioException("El propietario del vehículo está deshabilitado, no puede realizar tránsitos");
-        }
-        if (estado.estaSuspendido()) {
-            throw new UsuarioException("El propietario del vehículo está suspendido, no puede realizar tránsitos");
-        }
-    }
-
     public void validarSaldoSuficiente(double monto) throws UsuarioException {
         if (saldoActual < monto) {
             throw new UsuarioException("Saldo insuficiente: " + saldoActual);
@@ -180,7 +171,6 @@ public class Propietario extends Usuario {
     }
 
     public void crearNotificacionesTransito(Vehiculo vehiculo, Puesto puesto) {
-        if (!estado.estaPenalizado()) {
             Notificacion notificacionTransito = new Notificacion(
                     LocalDateTime.now(),
                     "Pasaste por el puesto " + puesto.getNombre() + " con el vehículo " + vehiculo.getMatricula(),
@@ -195,7 +185,7 @@ public class Propietario extends Usuario {
                         this);
                 agregarNotificacion(notificacionSaldo);
             }
-        }
+        
     }
 
     public List<Transito> getTransitos(){

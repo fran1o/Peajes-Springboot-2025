@@ -6,11 +6,12 @@ import java.util.List;
 
 import uy.edu.ort.obligatorio.peajes.dominio.Propietario;
 import uy.edu.ort.obligatorio.peajes.dominio.Puesto;
-import uy.edu.ort.obligatorio.peajes.dominio.Tarifa;
+
 import uy.edu.ort.obligatorio.peajes.dominio.Transito;
 import uy.edu.ort.obligatorio.peajes.dominio.Vehiculo;
 import uy.edu.ort.obligatorio.peajes.excepciones.UsuarioException;
 import uy.edu.ort.obligatorio.peajes.observer.Observador;
+
 
 public class ServicioTransitos {
 
@@ -20,30 +21,10 @@ public class ServicioTransitos {
         this.transitos = new ArrayList<>();
     }
 
-    public Transito emularTransito(String matricula, Puesto puesto, LocalDateTime fechaHora,
-            Vehiculo vehiculo, Propietario propietario) throws UsuarioException {
+    public Transito emularTransito(String matricula, Puesto puesto, LocalDateTime fechaHora,Vehiculo vehiculo, Propietario propietario) throws UsuarioException {
 
-        propietario.validarPuedeRealizarTransito();
-
-        if (puesto == null) {
-            throw new UsuarioException("Debe especificar un puesto");
-        }
-
-        Tarifa tarifa = puesto.buscarTarifaPorCategoria(vehiculo.getCategoria());
-        double montoTarifa = tarifa.getMonto();
-
-        double montoBonificacion = propietario.calcularMontoBonificacion(vehiculo, puesto, montoTarifa, fechaHora);
-        double montoACobrar = montoTarifa - montoBonificacion;
-
-        propietario.validarSaldoSuficiente(montoACobrar);
-        propietario.deducirSaldo(montoACobrar);
-
-        Transito transito = new Transito(vehiculo, puesto, fechaHora, montoACobrar, montoBonificacion);
+        Transito transito = propietario.getEstado().emularTransito(vehiculo, puesto, fechaHora, propietario);
         transitos.add(transito);
-        puesto.agregarTransito(transito);
-        vehiculo.agregarTransito(transito);
-
-        propietario.crearNotificacionesTransito(vehiculo, puesto);
         propietario.notificar(Observador.Evento.ESTADOPROPIETARIO_NUEVOTRANSITO);
         return transito;
     }

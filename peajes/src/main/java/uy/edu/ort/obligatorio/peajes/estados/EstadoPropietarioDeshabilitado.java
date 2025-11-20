@@ -1,8 +1,18 @@
 package uy.edu.ort.obligatorio.peajes.estados;
 
+import java.time.LocalDateTime;
+
+import uy.edu.ort.obligatorio.peajes.dominio.Bonificacion;
+import uy.edu.ort.obligatorio.peajes.dominio.Propietario;
+import uy.edu.ort.obligatorio.peajes.dominio.Puesto;
+import uy.edu.ort.obligatorio.peajes.dominio.TipoBonificacion;
+import uy.edu.ort.obligatorio.peajes.dominio.Transito;
+import uy.edu.ort.obligatorio.peajes.dominio.Vehiculo;
+import uy.edu.ort.obligatorio.peajes.excepciones.UsuarioException;
 import uy.edu.ort.obligatorio.peajes.interfaces.EstadoPropietario;
 
 public class EstadoPropietarioDeshabilitado implements EstadoPropietario{
+
 
     @Override
     public boolean estaDeshabilitado() {
@@ -28,4 +38,19 @@ public class EstadoPropietarioDeshabilitado implements EstadoPropietario{
     public String getNombreEstado() {
         return "Deshabilitado";
     }
+
+    @Override
+    public Transito emularTransito(Vehiculo vehiculo, Puesto puesto, LocalDateTime fechaHora, Propietario propietario)
+            throws UsuarioException {
+        throw new UsuarioException("El propietario está deshabilitado, no puede realizar tránsitos");
+    }
+
+    @Override
+    public void asignarBonificacion(TipoBonificacion tipoBonificacion, Propietario propietario, Puesto puesto,
+            LocalDateTime fecha) throws UsuarioException {
+       throw new UsuarioException("El propietario esta deshabilitado. No se pueden asignar bonificaciones");
+    }
+
+    
+    
 }
