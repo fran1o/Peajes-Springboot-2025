@@ -25,6 +25,10 @@ public class ServicioTransitos {
 
         propietario.validarPuedeRealizarTransito();
 
+        if (puesto == null) {
+            throw new UsuarioException("Debe especificar un puesto");
+        }
+
         Tarifa tarifa = puesto.buscarTarifaPorCategoria(vehiculo.getCategoria());
         double montoTarifa = tarifa.getMonto();
 
