@@ -49,7 +49,7 @@ public class PeajesApplication {
 		Propietario propietario4 = new Propietario("49429904", "Usuario Propietario 4", "prop4.123", 400, 1000,
 				new EstadoPropietarioDeshabilitado());
 
-		Propietario propietario5 = new Propietario("98765432", "Usuario Propietario 5", "prop5.123", 400, 15,
+				Propietario propietario5 = new Propietario("98765432", "Usuario Propietario 5", "prop5.123", 400, 15,
 				new EstadoPropietarioHabilitado());
 
 		Fachada.getInstancia().agregarAdministrador(admin1);
@@ -92,11 +92,11 @@ public class PeajesApplication {
 		Fachada.getInstancia().agregarPuesto(puesto10);
 
 		// Tarifas para cada puesto
-		puesto1.agregarTarifa(new Tarifa(automovil, 100));
+		puesto1.agregarTarifa(new Tarifa( automovil, 100));
 		puesto1.agregarTarifa(new Tarifa(camion, 200));
 		puesto1.agregarTarifa(new Tarifa(motocicleta, 50));
 
-		puesto2.agregarTarifa(new Tarifa(automovil, 120));
+		puesto2.agregarTarifa(new Tarifa(automovil,120));
 		puesto2.agregarTarifa(new Tarifa(camion, 240));
 		puesto2.agregarTarifa(new Tarifa(motocicleta, 60));
 
@@ -108,15 +108,15 @@ public class PeajesApplication {
 		puesto4.agregarTarifa(new Tarifa(camion, 260));
 		puesto4.agregarTarifa(new Tarifa(motocicleta, 65));
 
-		puesto5.agregarTarifa(new Tarifa(automovil, 140));
+		puesto5.agregarTarifa(new Tarifa(automovil,140));
 		puesto5.agregarTarifa(new Tarifa(camion, 280));
 		puesto5.agregarTarifa(new Tarifa(motocicleta, 70));
 
-		puesto6.agregarTarifa(new Tarifa(automovil, 150));
-		puesto6.agregarTarifa(new Tarifa(camion, 300));
-		puesto6.agregarTarifa(new Tarifa(motocicleta, 75));
+		puesto6.agregarTarifa(new Tarifa(automovil,150));
+		puesto6.agregarTarifa(new Tarifa(camion,300));
+		puesto6.agregarTarifa(new Tarifa(motocicleta,75));
 
-		puesto7.agregarTarifa(new Tarifa(automovil, 160));
+		puesto7.agregarTarifa(new Tarifa(automovil,160));
 		puesto7.agregarTarifa(new Tarifa(camion, 320));
 		puesto7.agregarTarifa(new Tarifa(motocicleta, 80));
 
@@ -162,6 +162,7 @@ public class PeajesApplication {
 
 		TipoBonificacion bonifTrabajadores = new BonificacionTrabajadores();
 		Fachada.getInstancia().agregarBonificacion(bonifTrabajadores);
+
 
 	}
 

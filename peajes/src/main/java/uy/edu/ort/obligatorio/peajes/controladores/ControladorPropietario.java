@@ -2,6 +2,7 @@ package uy.edu.ort.obligatorio.peajes.controladores;
 
 import java.util.List;
 
+
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -26,14 +27,16 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 
+
+
 @RestController
 @Scope("session")
 @RequestMapping("/propietario")
-public class ControladorPropietario implements Observador {
+public class ControladorPropietario implements Observador{
     private final ConexionNavegador conexionNavegador;
     private Propietario propietario;
 
-    public ControladorPropietario(@Autowired ConexionNavegador conexionNavegador) {
+    public ControladorPropietario(@Autowired ConexionNavegador conexionNavegador){
         this.conexionNavegador = conexionNavegador;
     }
 
@@ -41,9 +44,9 @@ public class ControladorPropietario implements Observador {
     public List<Respuesta> cargarDashboard(HttpSession session) {
         propietario = (Propietario) session.getAttribute("usuarioPropietario");
         if (propietario == null) {
-            return Respuesta.lista(new Respuesta("usuarioNoAutenticado", "loginPropietario.html"));
+             return Respuesta.lista(new Respuesta("usuarioNoAutenticado", "loginPropietario.html"));
         }
-        if (propietario != null) {
+        if(propietario != null){
             propietario.suscribir(this);
         }
 
@@ -56,7 +59,7 @@ public class ControladorPropietario implements Observador {
         List<Transito> transitosList = Fachada.getInstancia().getTransitosPorPropietario(propietario);
         List<TransitoDto> transitos = TransitoDto.listaDtos(transitosList, propietario);
         List<NotificacionDto> notificaciones = NotificacionDto.listaDtos(propietario.getNotificaciones());
-
+        
         return Respuesta.lista(
                 new Respuesta("nombreCompleto", nombreCompleto),
                 new Respuesta("estado", estado),
@@ -72,6 +75,8 @@ public class ControladorPropietario implements Observador {
         conexionNavegador.conectarSSE();
         return conexionNavegador.getConexionSSE();
     }
+    
+    
 
     @PostMapping("/borrarNotificaciones")
     public List<Respuesta> borrarNotificaciones(HttpSession session) throws UsuarioException {
@@ -80,9 +85,8 @@ public class ControladorPropietario implements Observador {
         }
 
         propietario.borrarNotificaciones();
-        return Respuesta.lista(new Respuesta("mensaje", "Notificaciones borradas correctamente"));
+        return Respuesta.lista(new Respuesta("mensaje" , "Notificaciones borradas correctamente"));
     }
-
     private String obtenerNombreEstado(Propietario propietario) {
         return propietario.getEstado().getNombreEstado();
     }
@@ -94,31 +98,31 @@ public class ControladorPropietario implements Observador {
         if (propietario != null) {
             propietario.desubscribir(this);
         }
-        // No modificar la sesión aquí, solo desuscribir el observador
-        // La sesión se maneja solo en login y logout explícitos
+        session.removeAttribute("usuarioPropietario");
+        session.invalidate();
     }
+
+    
 
     @Override
     public void actualizar(Observable origen, Object evento) {
-        if (evento == Evento.ESTADOPROPIETARIO_ACTUALIZADO) {
-            conexionNavegador
-                    .enviarJSON(Respuesta.lista(new Respuesta("estado", propietario.getEstado().getNombreEstado())));
+        if(evento == Evento.ESTADOPROPIETARIO_ACTUALIZADO){      
+            conexionNavegador.enviarJSON(Respuesta.lista(new Respuesta("estado", propietario.getEstado().getNombreEstado())));
         }
 
-        if (evento == Evento.ESTADOPROPIETARIO_NUEVOTRANSITO) {
+        if(evento == Evento.ESTADOPROPIETARIO_NUEVOTRANSITO){      
             List<Transito> transitosList = Fachada.getInstancia().getTransitosPorPropietario(propietario);
             List<TransitoDto> transitos = TransitoDto.listaDtos(transitosList, propietario);
             conexionNavegador.enviarJSON(Respuesta.lista(new Respuesta("transitos", transitos)));
             conexionNavegador.enviarJSON(Respuesta.lista(new Respuesta("saldoActual", propietario.getSaldoActual())));
         }
 
-        if (evento == Evento.ESTADOPROPIETARIO_NUEVANOTIFICACION
-                || evento == Evento.ESTADOPROPIETARIO_NOTIFICACIONESBORRADAS) {
+        if(evento == Evento.ESTADOPROPIETARIO_NUEVANOTIFICACION || evento == Evento.ESTADOPROPIETARIO_NOTIFICACIONESBORRADAS){      
             List<NotificacionDto> notificaciones = NotificacionDto.listaDtos(propietario.getNotificaciones());
             conexionNavegador.enviarJSON(Respuesta.lista(new Respuesta("notificaciones", notificaciones)));
         }
 
-        if (evento == Evento.ESTADOPROPIETARIO_NUEVABONIFICACION) {
+        if(evento == Evento.ESTADOPROPIETARIO_NUEVABONIFICACION){      
             List<BonifiacionDto> bonificaciones = BonifiacionDto.listaDtos(propietario.getBonificaciones());
             conexionNavegador.enviarJSON(Respuesta.lista(new Respuesta("bonificaciones", bonificaciones)));
         }

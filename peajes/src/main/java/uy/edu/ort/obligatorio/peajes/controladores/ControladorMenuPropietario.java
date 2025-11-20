@@ -16,20 +16,10 @@ import uy.edu.ort.obligatorio.peajes.utils.Respuesta;
 @RequestMapping("/menuPropietario")
 public class ControladorMenuPropietario {
 
-    @PostMapping("/vistaConectada")
-    public List<Respuesta> inicializarVista(HttpSession session) {
-        Usuario usuarioPropietario = (Usuario) session.getAttribute("usuarioPropietario");
-        if (usuarioPropietario == null) {
-            return Respuesta.lista(new Respuesta("usuarioNoConectado", "loginPropietario.html"));
-        }
-
-        return Respuesta.lista(new Respuesta("vistaConectada", usuarioPropietario.getNombreCompleto()));
-    }
-
     @PostMapping("/logout")
     public List<Respuesta> logout(HttpSession sessionHttp) throws UsuarioException {
         Usuario usuario = (Usuario) sessionHttp.getAttribute("usuarioPropietario");
-        if (usuario != null) {
+        if(usuario != null) {
             Fachada.getInstancia().logout(usuario);
             sessionHttp.removeAttribute("usuarioPropietario");
             sessionHttp.invalidate();
