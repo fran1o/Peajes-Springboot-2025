@@ -138,16 +138,10 @@ public class ServicioUsuarios {
         if (propietario == null) {
             throw new UsuarioException("No existe el propietario");
         }
-
-        if (propietario.getEstado().estaDeshabilitado()) {
-            throw new UsuarioException("El propietario esta deshabilitado. No se pueden asignar bonificaciones");
-        }
-
         if (propietario.tieneBonificacionEnPuesto(puesto)) {
             throw new UsuarioException("Ya tiene una bonificación asignada para ese puesto");
         }
-        Bonificacion nuevaBonificacion = new Bonificacion(tipoBonificacion, propietario, puesto, fecha);
-        propietario.agregarBonificacion(nuevaBonificacion);
+        propietario.getEstado().asignarBonificacion(tipoBonificacion, propietario, puesto, fecha);
         
     }
 
