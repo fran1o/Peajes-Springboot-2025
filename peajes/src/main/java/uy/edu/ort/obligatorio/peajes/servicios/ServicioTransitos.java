@@ -21,8 +21,15 @@ public class ServicioTransitos {
         this.transitos = new ArrayList<>();
     }
 
-    public Transito emularTransito(String matricula, Puesto puesto, LocalDateTime fechaHora,Vehiculo vehiculo, Propietario propietario) throws UsuarioException {
+    public Transito emularTransito(String matricula, Puesto puesto, LocalDateTime fechaHora,Vehiculo vehiculo) throws UsuarioException {
 
+        if (vehiculo == null) {
+            throw new UsuarioException("No existe el vehículo: " + matricula);
+        }
+        Propietario propietario = vehiculo.getPropietario();
+        if (propietario == null) {
+            throw new UsuarioException("No se encontró el propietario del vehículo con matrícula: " + matricula);
+        }
         Transito transito = propietario.getEstado().emularTransito(vehiculo, puesto, fechaHora, propietario);
         transitos.add(transito);
         propietario.notificar(Observador.Evento.ESTADOPROPIETARIO_NUEVOTRANSITO);

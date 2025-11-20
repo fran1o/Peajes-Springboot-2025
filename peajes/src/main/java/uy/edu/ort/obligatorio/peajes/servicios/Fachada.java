@@ -88,14 +88,7 @@ public class Fachada{
 
     public Transito emularTransito(String matricula, Puesto puesto, LocalDateTime fechaHora) throws UsuarioException {
         Vehiculo vehiculo = servicioUsuarios.buscarVehiculoPorMatricula(matricula);
-        if (vehiculo == null) {
-            throw new UsuarioException("No existe el vehículo: " + matricula);
-        }
-        Propietario propietario = vehiculo.getPropietario();
-        if (propietario == null) {
-            throw new UsuarioException("No se encontró el propietario del vehículo con matrícula: " + matricula);
-        }
-        return servicioTransitos.emularTransito(matricula, puesto, fechaHora, vehiculo, propietario);
+        return servicioTransitos.emularTransito(matricula, puesto, fechaHora, vehiculo);
     }
 
     public List<Transito> getTransitosPorPropietario(Propietario propietario) {
