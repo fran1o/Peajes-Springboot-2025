@@ -59,7 +59,8 @@
     btnBuscar.addEventListener('click', function() {
         const cedula = document.getElementById('cedula').value;
         cedulaActual = cedula;
-        submit("/admin/propietarios/buscarPropietario", "cedula=" + encodeURIComponent(cedula));
+        
+        submit("/admin/propietarios/buscarPropietario", "cedula=" + encodeURIComponent(cedula) + "&contexto=cambiarEstado");
     });
 
     function mostrar_nombreCompleto(nombre) {
