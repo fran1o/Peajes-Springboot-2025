@@ -99,7 +99,7 @@
 
     btnBuscar.addEventListener('click', function() {
         cedulaActual = document.getElementById('cedula').value;
-        submit("/admin/bonificaciones/buscarPropietario", "cedula=" + encodeURIComponent(cedulaActual));
+        submit("/admin/propietarios/buscarPropietario", "cedula=" + encodeURIComponent(cedulaActual) + "&contexto=asignarBonificacion");
     });
 
     function mostrar_nombreCompleto(nombre) {

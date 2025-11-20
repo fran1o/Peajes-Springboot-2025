@@ -98,8 +98,6 @@ public class ControladorPropietario implements Observador{
         if (propietario != null) {
             propietario.desubscribir(this);
         }
-        session.removeAttribute("usuarioPropietario");
-        session.invalidate();
     }
 
     
